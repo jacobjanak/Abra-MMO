@@ -4,7 +4,6 @@ const exjwt = require('express-jwt');
 const db = require('../models');
 
 const secret = 'my secret';
-
 const isAuthenticated = exjwt({ secret: secret });
 
 router.post('/api/login', (req, res) => {
@@ -42,8 +41,8 @@ router.get('/api/user/:id', isAuthenticated, (req, res) => {
   .catch(err => res.status(400).send(err))
 })
 
-router.get('/', isAuthenticated /* Using the express jwt MW here */, (req, res) => {
-  res.send('You are authenticated'); //Sending some response when authenticated
+router.get('/', isAuthenticated, (req, res) => {
+  res.send('You are authenticated')
 })
 
 module.exports = router;

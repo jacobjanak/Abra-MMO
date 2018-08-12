@@ -1,0 +1,31 @@
+{
+  "name": "App",
+  "description": "App",
+  "author": "Jacob Janak",
+  "version": "0.0.0",
+  "license": "ISC",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "client": "cd client && yarn start",
+    "dev": "concurrently \"nodemon server.js\" \"npm run client\"",
+    "build": "cd client && yarn run build",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install-deps": "npm install && cd client && yarn install",
+    "heroku-postbuild": "cd client && yarn install && yarn run build"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.0",
+    "nodemon": "^1.11.0"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "^0.0.3",
+    "body-parser": "^1.18.2",
+    "express": "^4.15.4",
+    "express-jwt": "^5.3.1",
+    "jsonwebtoken": "^8.2.1",
+    "mongoose": "^5.1.0",
+    "morgan": "^1.9.0",
+    "yarn": "^1.9.4"
+  }
+}

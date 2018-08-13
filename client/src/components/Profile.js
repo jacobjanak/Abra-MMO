@@ -20,6 +20,7 @@ class Profile extends Component {
   }
 
   render() {
+    console.log(this.props.user)
     return (
       <div className="container Profile">
         <h1>On the profile page!</h1>

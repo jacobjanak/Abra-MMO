@@ -1,60 +1,64 @@
 import decode from 'jwt-decode';
 import axios from 'axios';
-export default class AuthService {
+
+class AuthService {
+  user = () => {
+    const token = localStorage.getItem('id_token');
+    return token ? decode(token) : false;
+  };
+
+  // NOTE: I will impliment expiring tokens later
+  // isTokenExpired = token => {
+  //   try {
+  //     const decoded = decode(token);
+  //     if (decoded.exp < Date.now() / 1000) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   }
+  //   catch (err) {
+  //     return false;
+  //   }
+  // };
+
+  signUp = (email, password, firstName, lastName, role) => {
+    return new Promise((resolve, reject) => {
+      axios.post('api/signup', {
+        email: email,
+        password: password,
+        firstName: firstName,
+        lastName: lastName,
+        role: role
+      })
+      .then(() => this.login(email, password))
+      .then(user => resolve(user))
+      .catch(err => reject(err))
+    })
+  };
 
   login = (email, password) => {
-    // Get a token
-    return axios.post('api/login', {
+    return new Promise((resolve, reject) => {
+      // get token
+      axios.post('api/login', {
         email: email,
         password: password
       })
       .then(res => {
-        // set the token once the user logs in
-        this.setToken(res.data.token);
-        // return the rest of the response
-        return res;
-      });
+        const { token, user } = res.data;
+        localStorage.setItem('id_token', token);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        resolve(user)
+      })
+      .catch(err => reject(err))
+    })
   };
 
-  getProfile = () => {
-    return decode(this.getToken());
-  };
-
-  loggedIn() {
-    // Checks if there is a saved token and it's still valid
-    const token = this.getToken();
-    return !!token && !this.isTokenExpired(token) // handwaiving here
-  }
-
-  isTokenExpired(token) {
-    try {
-      const decoded = decode(token);
-      if (decoded.exp < Date.now() / 1000) {
-        return true;
-      } else
-        return false;
-    } catch (err) {
-      return false;
-    }
-  }
-
-  setToken(idToken) {
-    // Saves user token to localStorage
-    axios.defaults.headers.common['Authorization'] = `Bearer ${idToken}`;
-    localStorage.setItem('id_token', idToken);
-  }
-
-  getToken() {
-    // Retrieves the user token from localStorage
-    return localStorage.getItem('id_token');
-  }
-
-  logout() {
-    // Clear user token and profile data from localStorage
+  logout = () => {
+    // clear user token and profile data from localStorage
     axios.defaults.headers.common['Authorization'] = null;
     localStorage.removeItem('id_token');
-  }
-
-
-
+  };
 }
+
+export default AuthService;

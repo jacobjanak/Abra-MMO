@@ -10,7 +10,7 @@ class Signup extends Component {
   }
 
   componentWillMount() {
-    if (this.Auth.loggedIn()) {
+    if (this.Auth.user()) {
       this.props.history.replace('/');
     }
   }

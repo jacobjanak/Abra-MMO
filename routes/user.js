@@ -7,13 +7,15 @@ const secret = 'my secret';
 const isAuthenticated = exjwt({ secret: secret });
 
 router.post('/api/login', (req, res) => {
-  db.User.findOne({
-    email: req.body.email
-  })
+  db.User.findOne({ email: req.body.email })
   .then(user => {
     user.verifyPassword(req.body.password, (err, isMatch) => {
       if (isMatch && !err) {
-        const token = jwt.sign({ id: user._id }, secret, { expiresIn: 129600 })
+        const token = jwt.sign({
+          id: user._id,
+          email: user.email,
+          username: user.username,
+        }, secret, { expiresIn: 129600 })
         res.json({ success: true, message: 'Token issued', token: token, user: user })
       } else {
         res.status(401).json({ success: false, message: 'Authentication failed. Wrong password.' })

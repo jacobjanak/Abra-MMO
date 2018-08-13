@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import AuthService from './AuthService';
-import {Link} from 'react-router-dom';
 
 class Login extends Component {
   constructor() {
@@ -9,7 +9,7 @@ class Login extends Component {
   }
 
   componentWillMount() {
-    if (this.Auth.loggedIn()) {
+    if (this.Auth.user()) {
       this.props.history.replace('/');
     }
   }
@@ -18,22 +18,16 @@ class Login extends Component {
     event.preventDefault();
 
     this.Auth.login(this.state.email, this.state.password)
-      .then(res => {
-        // once user is logged in
-        // take them to their profile page
-        this.props.history.replace(`/profile/${res.data.user._id}`);
-      })
-      .catch(err => {
-        console.log(err.response);
-        alert(err.response.data.message)
-      });
+    .then(user => {
+      // take them to their profile page
+      this.props.history.replace(`/profile/${user._id}`);
+    })
+    .catch(err => alert(err.response.data.message))
   };
 
   handleChange = event => {
-    const {name, value} = event.target;
-    this.setState({
-        [name]: value
-    });
+    const { name, value } = event.target;
+    this.setState({ [name]: value })
   };
 
   render() {

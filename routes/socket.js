@@ -9,15 +9,17 @@ function socket(http) {
 
     // join game "room"
     client.join('test')
-
     console.log(client.id)
 
     client.on('subscribeToTimer', data => {
       console.log(data.user)
-      console.log('client is subscribing to timer with interval ', data.interval);
       setInterval(() => {
         io.to('test').emit('timer', new Date());
       }, data.interval);
+    })
+
+    client.on('move', move => {
+      console.log(move)
     })
 
     client.on('disconnect', () => {

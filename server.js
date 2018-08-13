@@ -20,6 +20,7 @@ app.use(morgan('dev'))
 
 // routing
 app.use('/', require('./routes/user'))
+app.use('/game', require('./routes/game'))
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/build/index.html'))
 })

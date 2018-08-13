@@ -15,6 +15,7 @@ router.post('/api/login', (req, res) => {
           id: user._id,
           email: user.email,
           username: user.username,
+          game: user.game || false
         }, secret, { expiresIn: 129600 })
         res.json({ success: true, message: 'Token issued', token: token, user: user })
       } else {
@@ -43,8 +44,17 @@ router.get('/api/user/:id', isAuthenticated, (req, res) => {
   .catch(err => res.status(400).send(err))
 })
 
-router.get('/', isAuthenticated, (req, res) => {
-  res.send('You are authenticated')
+router.post('/user/game', isAuthenticated, (req, res) => {
+  db.User.findById(req.body.id)
+  .populate('game')
+  .exec((err, user) => {
+    if (user) res.json(user.game);
+    else res.status(404).send('No user found');
+  })
 })
+
+// router.get('/', isAuthenticated, (req, res) => {
+//   res.send('You are authenticated')
+// })
 
 module.exports = router;

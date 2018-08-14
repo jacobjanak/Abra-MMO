@@ -4,23 +4,33 @@ import openSocket from 'socket.io-client';
 const socket = openSocket('http://localhost:3001');
 
 const API = {
-  // getUser: id => axios.get(`/api/user/${id}`),
-
+  getUser: (id = '') => axios.get('/user/' + id),
   signUpUser: (username, email, password) => {
     return axios.post('/api/signup', {username: username, email: email, password: password});
   },
+  queue: () => axios.get('/game/queue'),
+  getGame: () => axios.get('/user/game'),
 
-  subscribeToTimer: (user, cb) => {
-    socket.on('timer', timestamp => cb(null, timestamp))
-    socket.emit('subscribeToTimer', {
-      interval: 1000,
-      user: user
+  joinGame: (gameId, cb) => {
+    socket.emit('joinGame', gameId)
+    socket.on('gameJoined', game => cb(game))
+    socket.on('newMove', game => {
+      console.log(game)
+      cb(game)
     })
   },
 
-  join: id => axios.post('/game/join', { id }),
+  move: move => {
+    socket.emit('move', move)
+  }
 
-  getGame: id => axios.post('/user/game', { id }),
+  // subscribeToTimer: (user, cb) => {
+  //   socket.on('timer', timestamp => cb(null, timestamp))
+  //   socket.emit('subscribeToTimer', {
+  //     interval: 1000,
+  //     user: user
+  //   })
+  // },
 };
 
 export default API;

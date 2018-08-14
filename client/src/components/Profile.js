@@ -4,23 +4,12 @@ import API from '../API';
 import { Link } from 'react-router-dom';
 
 class Profile extends Component {
-
   state = {
-    username: "",
-    email: ""
+    username: this.props.user.username,
+    email: this.props.user.email
   };
 
-  componentDidMount() {
-    API.getUser(this.props.user.id).then(res => {
-      this.setState({
-        username: res.data.username,
-        email: res.data.email
-      })
-    });
-  }
-
   render() {
-    console.log(this.props.user)
     return (
       <div className="container Profile">
         <h1>On the profile page!</h1>

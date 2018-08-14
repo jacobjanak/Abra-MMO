@@ -8,13 +8,14 @@ class JoinGame extends Component {
 
   handleClick = () => {
     if (!this.state.queued) {
-      API.join(this.props.user.id)
+      API.queue()
       .then(res => {
         const { game, queued } = res.data;
         if (queued) {
           this.setState({ queued: true })
-        } else {
-          alert('send you to your game')
+        }
+        else if (game) {
+          this.props.history.push('/play')
         }
       })
       .catch(err => console.log(err))

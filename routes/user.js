@@ -3,9 +3,11 @@ const jwt = require('jsonwebtoken');
 const exjwt = require('express-jwt');
 const db = require('../models');
 
+// create req.user and redirect logged out users
 const secret = 'my secret';
 const isAuthenticated = exjwt({ secret: secret });
 
+// TEMPLATE CODE
 router.post('/api/login', (req, res) => {
   db.User.findOne({ email: req.body.email })
   .then(user => {
@@ -43,18 +45,27 @@ router.get('/api/user/:id', isAuthenticated, (req, res) => {
   })
   .catch(err => res.status(400).send(err))
 })
+// END TEMPLATE CODE
 
-router.post('/user/game', isAuthenticated, (req, res) => {
-  db.User.findById(req.body.id)
+router.get('/user/', isAuthenticated, (req, res) => {
+  db.User.findById(req.user.id)
+  .then(data => res.json(data))
+  .catch(err => res.status(404).send('No user found'))
+})
+
+router.get('/user/:id', (req, res) => {
+  db.User.findById(req.params.id)
+  .then(data => res.json(data))
+  .catch(err => res.status(404).send('No user found'))
+})
+
+router.get('/user/game', isAuthenticated, (req, res) => {
+  db.User.findById(req.user.id)
   .populate('game')
   .exec((err, user) => {
     if (user) res.json(user.game);
     else res.status(404).send('No user found');
   })
 })
-
-// router.get('/', isAuthenticated, (req, res) => {
-//   res.send('You are authenticated')
-// })
 
 module.exports = router;

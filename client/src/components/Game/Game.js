@@ -3,22 +3,40 @@ import API from '../../API';
 
 class Game extends Component {
   state = {
-    game: false
+    player1: false,
+    player2: false,
+    moves: [],
   };
 
   componentWillMount() {
-    API.getGame(this.props.user.id)
-    .then(res => this.setState({ game: res.data }))
-    .catch(err => console.log(err))
+    API.getUser()
+    .then(res => {
+      const user = res.data;
+      if (user.game) {
+        API.joinGame(user.game, game => {
+          this.setState({ ...game })
+        })
+      }
+    })
+    .catch(err => console.log('Error connecting to game'))
+  }
+
+  randomMove() {
+    API.move('' + Math.random())
   }
 
   render() {
-    console.log(this.props.user)
     return (
       <div>
-        <p>{this.state.game.player1}</p>
-        <p>{this.state.game.player2}</p>
+        <p>{this.state.player1}</p>
+        <p>{this.state.player2}</p>
         <h2>{this.props.user.id}</h2>
+        { this.state.moves.map((move, i) => (
+          <span key={i}>{move} </span>
+        ))}
+        <button onClick={this.randomMove}>
+          Move
+        </button>
       </div>
     );
   }

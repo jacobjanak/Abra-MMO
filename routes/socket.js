@@ -3,6 +3,15 @@
   then they can emit moves that will be added to their game's room.
 */
 
+const leaveRooms = socket => {
+  let room;
+  for (room in socket.rooms) {
+    if (socket.id !== room) {
+      socket.leave(room)
+    }
+  }
+}
+
 function socket(http) {
   const io = require('socket.io')(http);
   const db = require('../models');
@@ -16,16 +25,20 @@ function socket(http) {
       // NOTE: why is there already a room at this point?
       // if (!client.rooms || Object.keys(client.rooms).length === 0) {
       db.Game.findById(gameId)
-      .then(game => {
-        client.rooms = {};
-        client.join(gameId)
-        client.emit('gameJoined', game)
+      .populate('player1')
+      .populate('player2')
+      .exec((err, game) => {
+        if (game) {
+          leaveRooms(client)
+          client.join(gameId)
+          client.emit('gameJoined', game)
+        }
       })
     })
 
     client.on('move', move => {
       // NOTE: validate client.rooms length here
-      const gameId = Object.keys(client.rooms)[0];
+      const gameId = Object.keys(client.rooms)[1];
 
       // NOTE: validate move here
 
@@ -34,8 +47,9 @@ function socket(http) {
         game.moves.push(move)
         return game.save()
       })
-      // broadcast is used instead of emit for stuff like this
-      .then(game => io.to(gameId).emit('newMove', game))
+      .then(game => {
+        io.to(gameId).emit('newMove', move)
+      })
     })
 
     // client.on('disconnect', () => {

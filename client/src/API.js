@@ -13,16 +13,11 @@ const API = {
 
   joinGame: (gameId, cb) => {
     socket.emit('joinGame', gameId)
-    socket.on('gameJoined', game => cb(game))
-    socket.on('newMove', game => {
-      console.log(game)
-      cb(game)
-    })
+    socket.on('gameJoined', game => cb(game, null))
+    socket.on('newMove', move => cb(null, move))
   },
 
-  move: move => {
-    socket.emit('move', move)
-  }
+  move: move => socket.emit('move', move),
 
   // subscribeToTimer: (user, cb) => {
   //   socket.on('timer', timestamp => cb(null, timestamp))

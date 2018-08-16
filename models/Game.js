@@ -12,7 +12,10 @@ const GameSchema = new Schema({
     ref: 'User',
     required: true,
   },
-  moves: [String],
+  moves: {
+    type: [String],
+    default: ['a1', 'a2']
+  },
   createdAt: {
     type: Date,
     default: Date.now

@@ -1,14 +1,38 @@
-import React, Component from 'react';
+import React, { Component } from 'react';
 
 class Tile extends Component {
   state = {
-    owner: null
+    available: !this.props.owner,
+  };
+
+  handleClick = () => {
+    if (this.state.available) {
+      this.props.makeMove(this.props.index)
+    }
   };
 
   render() {
-    return (
-      <div className="tile"></div>
-    );
+    const { owner } = this.props;
+
+    if (!owner) {
+      return (
+        <div
+          className="tile"
+          onClick={this.handleClick}
+        ></div>
+      );
+    } else {
+      const style = {
+        backgroundColor: owner === 'player1' ? 'red' : 'blue'
+      };
+
+      return (
+        <div
+          className="tile"
+          style={style}
+        ></div>
+      );
+    }
   }
 }
 

@@ -12,26 +12,19 @@ class Tile extends Component {
   };
 
   render() {
-    const { owner } = this.props;
+    const { owner, available } = this.props;
 
-    if (!owner) {
-      return (
-        <div
-          className="tile"
-          onClick={this.handleClick}
-        ></div>
-      );
-    } else {
+    if (owner) {
       const style = {
         backgroundColor: owner === 'player1' ? 'red' : 'blue'
       };
-
-      return (
-        <div
-          className="tile"
-          style={style}
-        ></div>
-      );
+      return <div className="tile owned" style={style}></div>;
+    }
+    else if (available) {
+      return <div className="tile available" onClick={this.handleClick}></div>;
+    }
+    else {
+      return <div className="tile locked"></div>;
     }
   }
 }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import openSocket from 'socket.io-client';
 
-const socket = openSocket('http://localhost:3001');
+const socket = openSocket(window.location.origin);
 
 const API = {
   getUser: (id = '') => axios.get('/user/' + id),

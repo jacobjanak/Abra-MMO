@@ -45,13 +45,13 @@ class Game extends Component {
     return (
       <div>
         <div>
-          <p>
+          <p style={{ color: 'red' }}>
             Player 1: {this.state.player1.username}&nbsp;
             { moves.length % 2 === 0 && (
               <span>(active)</span>
             )}
           </p>
-          <p>
+          <p style={{ color: 'blue' }}>
             Player 2: {this.state.player2.username}&nbsp;
             { moves.length % 2 !== 0 && (
               <span>(active)</span>

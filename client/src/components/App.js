@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Route, BrowserRouter as Router } from 'react-router-dom';
 import withAuth from './withAuth';
 
-// pages
+// components
+import NavBar from './NavBar';
 import Home from './Home';
 import Login from './Login';
 import Profile from './Profile';
@@ -15,7 +16,8 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <Route exact path="/" component={Home} />
+          <NavBar />
+          <Route exact path="/" component={withAuth(Home)} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/profile/:id" component={Profile} />

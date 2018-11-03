@@ -4,18 +4,21 @@ import Tile from './Tile';
 import alphabet from '../data/alphabet'
 
 class Board extends Component {
-  state = {
-    width: 19, // should be an odd number
-    tileSize: 50,
-    tiles: [],
-    moveCount: 0,
-  };
+  constructor() {
+    super()
 
-  // keep track of a1 tile for move notation
-  a1 = false;
+    const width = 19; // should be an odd number
+
+    this.state = {
+      width: width,
+      tileSize: 50,
+      tiles: [],
+      middleTile: this.findMiddle(width),
+      moveCount: 0,
+    };
+  }
 
   componentDidMount() {
-    this.a1 = this.findMiddle();
     this.movesToTiles()
     this.centerView()
     this.setState(state => {
@@ -41,8 +44,7 @@ class Board extends Component {
     }
   }
 
-  findMiddle = () => {
-    const { width } = this.state;
+  findMiddle = width => {
     const middle = Math.floor(width ** 2 / 2);
     return middle;
   };
@@ -75,33 +77,13 @@ class Board extends Component {
   };
 
   moveToIndex = (move, optionalTiles) => {
+    console.log('move', move)
     const tiles = optionalTiles || this.state.tiles;
-    const { width } = this.state;
-    let index = this.a1;
+    const { width, middleTile } = this.state;
 
-    // moves look like b2 or a1(d) so let's break it down
-    const re = /([a-z]*)(\d*)(\([a-z]\))?/;
-    const match = move.match(re); // ex: ['a1(d)', 'a', '1', '(d)']
+    const xy = move.split(',');
 
-    const direction = match[3];
-    if (direction) {
-      index += direction === '(d)' ? width : -1;
-    } else {
-      const row = Number(match[2]) - 1;
-      const column = alphabet.indexOf(match[1]); // NOTE: will break on aa
-      index += -(row * width) + column;
-
-      // need to add row or column if tile is taken
-      if (tiles[index].owner) {
-        this.a1 += row === 0 ? width : -1;
-        index += row === 0 ? width : -1;
-      }
-    }
-
-    // update the a1 tile
-    if (match[1] === 'a' && match[2] === '1') {
-      this.a1 = index;
-    }
+    let index = middleTile + Number(xy[0]) + (Number(xy[1]) * width);
 
     return index;
   }
@@ -109,20 +91,12 @@ class Board extends Component {
   indexToMove = index => {
     const { width } = this.state;
 
-    // get distances from the a1 square
-    let relativeX = (index % width) - (this.a1 % width);
-    let relativeY = Math.floor(this.a1 / width) - Math.floor(index / width);
+    // get distances from the middle square
+    let relativeX = (index % width) - (this.middleTile % width);
+    let relativeY = Math.floor(this.middleTile / width) - Math.floor(index / width);
 
-    // prevent negatives
-    if (relativeX < 0) relativeX = 0;
-    if (relativeY < 0) relativeY = 0;
-
-    let move = alphabet[relativeX] + (relativeY + 1)
-
-    // a1(l) and a1(d) edge case
-    if (relativeX === 0 && relativeY === 0 && this.a1 !== index) {
-      move += index > this.a1 ? '(d)' : '(l)';
-    }
+    const move = relativeX + ',' + relativeY;
+    console.log("move: ", move)
 
     return move;
   }

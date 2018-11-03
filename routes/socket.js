@@ -4,8 +4,7 @@
 */
 
 const leaveRooms = socket => {
-  let room;
-  for (room in socket.rooms) {
+  for (let room in socket.rooms) {
     if (socket.id !== room) {
       socket.leave(room)
     }

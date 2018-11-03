@@ -14,7 +14,7 @@ const GameSchema = new Schema({
   },
   moves: {
     type: [String],
-    default: ['a1', 'a2']
+    default: ['0,0', '0,1']
   },
   createdAt: {
     type: Date,

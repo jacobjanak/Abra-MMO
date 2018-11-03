@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 
 // database
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/app')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/abra')
 
 // server
 const PORT = process.env.PORT || 3001;
@@ -29,6 +29,4 @@ app.get('*', (req, res) => {
 require('./routes/socket')(http)
 
 // start server
-http.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`)
-})
+http.listen(PORT, () => console.log(`http://localhost:${PORT}`))

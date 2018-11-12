@@ -16,8 +16,7 @@ router.post('/api/login', (req, res) => {
         const token = jwt.sign({
           id: user._id,
           email: user.email,
-          username: user.username,
-          game: user.game || false
+          username: user.username
         }, secret, { expiresIn: 129600 })
         res.json({ success: true, message: 'Token issued', token: token, user: user })
       } else {
@@ -53,19 +52,24 @@ router.get('/user/', isAuthenticated, (req, res) => {
   .catch(err => res.status(404).send('No user found'))
 })
 
+router.get('/user/game', isAuthenticated, (req, res) => {
+  db.Game.find({ 
+    $or: [
+      { player1: req.user.id }, 
+      { player2: req.user.id }
+    ] 
+  })
+  .then(game => {
+    if (game) res.json(game[game.length - 1]);
+    else res.status(404).send('No game found');
+  })
+  .catch(err => console.log(err))
+})
+
 router.get('/user/:id', (req, res) => {
   db.User.findById(req.params.id)
   .then(data => res.json(data))
   .catch(err => res.status(404).send('No user found'))
-})
-
-router.get('/user/game', isAuthenticated, (req, res) => {
-  db.User.findById(req.user.id)
-  .populate('game')
-  .exec((err, user) => {
-    if (user) res.json(user.game);
-    else res.status(404).send('No user found');
-  })
 })
 
 module.exports = router;

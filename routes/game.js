@@ -9,6 +9,7 @@ const isAuthenticated = exjwt({ secret: secret });
 const queue = [];
 
 router.get('/queue', isAuthenticated, (req, res) => {
+  // make sure they aren't already queued
   if (!queue.includes(req.user.id)) {
     if (queue.length > 0) {
       // NOTE: matchmaking logic here
@@ -17,19 +18,6 @@ router.get('/queue', isAuthenticated, (req, res) => {
       db.Game.create({
         player1: random ? req.user.id : queue.pop(),
         player2: random ? queue.pop() : req.user.id,
-      })
-      .then(newGame => {
-        game = newGame;
-        return db.User.findById(game.player1)
-      })
-      .then(player1 => {
-        player1.game = game._id;
-        return player1.save();
-      })
-      .then(() => db.User.findById(game.player2))
-      .then(player2 => {
-        player2.game = game._id;
-        return player2.save();
       })
       .then(game => res.json({ game: game, queued: false }))
       .catch(err => res.status(500).send('Error creating game'))

@@ -14,15 +14,11 @@ const leaveRooms = socket => {
 function socket(http) {
   const io = require('socket.io')(http);
   const db = require('../models');
-
-  // const clients = {};
-
   io.on('connection', client => {
-    // clients[client.id] = client;
 
     client.on('joinGame', gameId => {
-      // NOTE: why is there already a room at this point?
-      // if (!client.rooms || Object.keys(client.rooms).length === 0) {
+      console.log(gameId)
+      console.log('^^^^^^^^^^^^^^')
       db.Game.findById(gameId)
       .populate('player1')
       .populate('player2')
@@ -37,6 +33,8 @@ function socket(http) {
 
     client.on('move', move => {
       // NOTE: validate client.rooms length here
+      console.log(move)
+      console.log(client.rooms)
       const gameId = Object.keys(client.rooms)[1];
 
       // NOTE: validate move here

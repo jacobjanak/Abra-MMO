@@ -10,11 +10,13 @@ class Game extends Component {
   };
 
   componentDidMount() {
-    API.getUser()
+    //NOTE; change this to getGame()
+    API.getGame()
     .then(res => {
-      const user = res.data;
-      if (user.game) {
-        API.joinGame(user.game, (game, newMove) => {
+      const game = res.data;
+      console.log(game)
+      if (game) {
+        API.joinGame(game._id, (game, newMove) => {
           if (game) this.setState({ ...game });
           else if (newMove) {
             this.setState(state => {

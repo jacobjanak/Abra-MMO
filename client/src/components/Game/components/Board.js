@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Tile from './Tile';
-import alphabet from '../data/alphabet'
 
 class Board extends Component {
   constructor() {
     super()
 
-    const width = 19; // should be an odd number
+    const width = 19; // must be an odd number
+    const middleTile = Math.ceil(width ** 2 / 2);
+    console.log(middleTile)
 
     this.state = {
-      width: width,
+      width,
+      middleTile,
       tileSize: 50,
       tiles: [],
-      middleTile: this.findMiddle(width),
       moveCount: 0,
     };
   }
@@ -44,18 +45,13 @@ class Board extends Component {
     }
   }
 
-  findMiddle = width => {
-    const middle = Math.floor(width ** 2 / 2);
-    return middle;
-  };
-
   centerView = () => {
+    //NOTE: this function is not working perfectly. The game looks slightly off-center
     const { width, tileSize } = this.state;
     const container = ReactDOM.findDOMNode(this.refs.container);
 
-    // NOTE: figure out a way to remove the sevens
-    container.scrollTop = (width * tileSize / 2 - container.offsetHeight / 2 + 7);
-    container.scrollLeft = (width * tileSize / 2 - container.offsetWidth / 2 + 7);
+    container.scrollTop = width * tileSize / 2 - container.offsetHeight / 2;
+    container.scrollLeft = width * tileSize / 2 - container.offsetWidth / 2;
   };
 
   movesToTiles = () => {
@@ -77,24 +73,24 @@ class Board extends Component {
   };
 
   moveToIndex = (move, optionalTiles) => {
-    console.log('move', move)
-    const tiles = optionalTiles || this.state.tiles;
     const { width, middleTile } = this.state;
 
     const xy = move.split(',');
 
-    let index = middleTile + Number(xy[0]) + (Number(xy[1]) * width);
+    console.log(move) // 0,-2
 
+    let index = middleTile + Number(xy[0]) - (Number(xy[1]) * width);
+    console.log(index)
     return index;
   }
 
   indexToMove = index => {
-    const { width } = this.state;
+    const { width, middleTile } = this.state;
 
     // get distances from the middle square
-    let relativeX = (index % width) - (this.middleTile % width);
-    let relativeY = Math.floor(this.middleTile / width) - Math.floor(index / width);
-
+    const relativeX = (index % width) - (middleTile % width);
+    const relativeY = Math.floor(middleTile / width) - Math.floor(index / width);
+  
     const move = relativeX + ',' + relativeY;
     console.log("move: ", move)
 

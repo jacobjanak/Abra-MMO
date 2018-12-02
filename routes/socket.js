@@ -42,27 +42,39 @@ function socket(http) {
 
       const gameId = Object.keys(client.rooms)[1];
 
-      console.log(client.userId)
-      console.log('^^^^^')
-
       db.Game.findById(gameId)
       .then(game => {
 
-        console.log(client.id)
+        console.log(client.userId)
+        console.log(game.player1)
+        console.log(game.player2)
+        console.log(game.moves.length)
+        console.log(client.userId === game.player1)
+        console.log('--------------')
 
         //NOTE: validate that the right user is sending this move
+        if ((game.moves.length % 2 === 0 && game.player1 == client.userId)
+         || (game.moves.length % 2 === 1 && game.player2 == client.userId)) {
 
-        if (abraLogic.checkLegality(move, game.moves)) {
+          if (abraLogic.checkLegality(move, game.moves)) {
 
-          game.moves.push(move)
-          const winner = abraLogic.findWinner(game.moves);
-          if (winner) {
-            console.log(winner)
-          }
-          return game.save()
-        } else {
-          return false;
-        }
+            // add the move to the game
+            game.moves.push(move)
+
+            // check if someone has won the game
+            const winner = abraLogic.findWinner(game.moves);
+            if (winner) {
+              console.log(winner)
+            }
+
+            return game.save()
+
+          // move was not legal
+          } else return false;
+        
+        // wrong user sent the move
+        } else return false;
+
       })
       .then(game => {
         if (game) {

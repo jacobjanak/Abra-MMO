@@ -18,14 +18,6 @@ const API = {
   },
 
   move: move => socket.emit('move', move),
-
-  // subscribeToTimer: (user, cb) => {
-  //   socket.on('timer', timestamp => cb(null, timestamp))
-  //   socket.emit('subscribeToTimer', {
-  //     interval: 1000,
-  //     user: user
-  //   })
-  // },
 };
 
 export default API;

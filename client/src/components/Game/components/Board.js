@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import game from 'abra-logic';
 import Tile from './Tile';
 
 class Board extends Component {
@@ -9,6 +10,7 @@ class Board extends Component {
     const width = 19; // must be an odd number
     const middleTile = Math.ceil(width ** 2 / 2);
     console.log(middleTile)
+    console.log(game)
 
     this.state = {
       width,

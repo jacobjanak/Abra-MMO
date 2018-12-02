@@ -33,15 +33,16 @@ function socket(http) {
 
     client.on('move', move => {
       // NOTE: validate client.rooms length here
-      console.log(move)
-      console.log(client.rooms)
-      const gameId = Object.keys(client.rooms)[1];
 
       // NOTE: validate move here
+      // if (validateMove(move))
+
+      const gameId = Object.keys(client.rooms)[1];
 
       db.Game.findById(gameId)
       .then(game => {
         game.moves.push(move)
+        // findWinner(game.moves)
         return game.save()
       })
       .then(game => {

@@ -16,8 +16,9 @@ const API = {
   joinGame: (gameId, cb) => {
     const userId = Auth.user().id;
     socket.emit('joinGame', { gameId, userId })
-    socket.on('gameJoined', game => cb(game, null))
-    socket.on('newMove', move => cb(null, move))
+    socket.on('gameJoined', game => cb(game, null, null))
+    socket.on('newMove', move => cb(null, move, null))
+    socket.on('winner', winner => cb(null, null, winner))
   },
 
   move: move => socket.emit('move', move),

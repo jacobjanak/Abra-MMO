@@ -104,9 +104,10 @@ class Board extends Component {
 
   checkAvailability = tiles => {
     const { width } = this.state;
+    const { winner } = this.props;
 
     tiles.forEach((tile, i) => {
-      if (tile.owner) {
+      if (tile.owner || winner) {
         return tile.available = false
       }
 

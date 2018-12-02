@@ -22,6 +22,14 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+  wins: {
+    type: Number,
+    default: 0,
+  },
+  losses: {
+    type: Number,
+    default: 0,
+  },
   createdAt: {
     type: Date,
     default: Date.now

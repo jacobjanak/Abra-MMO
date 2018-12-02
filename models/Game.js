@@ -16,6 +16,9 @@ const GameSchema = new Schema({
     type: [String],
     default: ['0,0', '0,1']
   },
+  winner: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now

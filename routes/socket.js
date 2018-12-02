@@ -41,40 +41,52 @@ function socket(http) {
       // NOTE: validate client.rooms length here
 
       const gameId = Object.keys(client.rooms)[1];
+      console.log('gameId is:')
+      console.log(gameId)
 
       db.Game.findById(gameId)
       .then(game => {
 
-        console.log(client.userId)
-        console.log(game.player1)
-        console.log(game.player2)
-        console.log(game.moves.length)
-        console.log(client.userId === game.player1)
-        console.log('--------------')
+        if (!game.winner) {
 
-        //NOTE: validate that the right user is sending this move
-        if ((game.moves.length % 2 === 0 && game.player1 == client.userId)
-         || (game.moves.length % 2 === 1 && game.player2 == client.userId)) {
+          // validate that the correct user is sending the move
+          if ((game.moves.length % 2 === 0 && game.player1 == client.userId)
+          || (game.moves.length % 2 === 1 && game.player2 == client.userId)) {
 
-          if (abraLogic.checkLegality(move, game.moves)) {
+            // check that the move is legal
+            if (abraLogic.checkLegality(move, game.moves)) {
 
-            // add the move to the game
-            game.moves.push(move)
+              // add the move to the game
+              game.moves.push(move)
 
-            // check if someone has won the game
-            const winner = abraLogic.findWinner(game.moves);
-            if (winner) {
-              console.log(winner)
-            }
+              // check if someone has won the game
+              const winner = abraLogic.findWinner(game.moves);
+              if (winner) {
+                game.winner = winner;
+                io.to(gameId).emit('winner', winner)
 
-            return game.save()
+                // add wins and losses to user objects
+                db.User.findById(game[winner])
+                .then(user => {
+                  user.wins++
+                  user.save()
+                })
+                db.User.findById(game[winner === 'player1' ? 'player2' : 'player1'])
+                .then(user => {
+                  user.losses++
+                  user.save()
+                })
+              }
 
-          // move was not legal
+              return game.save()
+
+            // move was not legal
+            } else return false;
+          
+          // wrong user sent the move
           } else return false;
-        
-        // wrong user sent the move
-        } else return false;
 
+        }
       })
       .then(game => {
         if (game) {

@@ -7,6 +7,7 @@ class Game extends Component {
     player1: false,
     player2: false,
     moves: false,
+    winner: false,
   };
 
   componentDidMount() {
@@ -16,7 +17,7 @@ class Game extends Component {
       const game = res.data;
       console.log(game)
       if (game) {
-        API.joinGame(game._id, (game, newMove) => {
+        API.joinGame(game._id, (game, newMove, winner) => {
           if (game) this.setState({ ...game });
           else if (newMove) {
             this.setState(state => {
@@ -25,6 +26,9 @@ class Game extends Component {
               // state.newMove = newMove;
               return state;
             })
+          }
+          else if (winner) {
+            this.setState({ winner })
           }
         })
       }
@@ -43,27 +47,33 @@ class Game extends Component {
   }
 
   render() {
-    const { moves } = this.state;
+    const { moves, winner } = this.state;
 
     return (
       <div>
         <div>
           <p style={{ color: 'red' }}>
             Player 1: {this.state.player1.username}&nbsp;
-            { moves.length % 2 === 0 && (
+            { moves.length % 2 === 0 && !winner && (
               <span>(active)</span>
+            )}
+            { winner === 'player1' && (
+              <span>(winner)</span>
             )}
           </p>
           <p style={{ color: 'blue' }}>
             Player 2: {this.state.player2.username}&nbsp;
-            { moves.length % 2 !== 0 && (
+            { moves.length % 2 !== 0 && !winner && (
               <span>(active)</span>
+            )}
+            { winner === 'player2' && (
+              <span>(winner)</span>
             )}
           </p>
         </div>
 
         { moves && (
-          <Board moves={moves} makeMove={this.makeMove} />
+          <Board moves={moves} winner={winner} makeMove={this.makeMove} />
         )}
       </div>
     );

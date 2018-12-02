@@ -3,6 +3,8 @@
   then they can emit moves that will be added to their game's room.
 */
 
+const abraLogic = require('../abra-logic/');
+
 const leaveRooms = socket => {
   for (let room in socket.rooms) {
     if (socket.id !== room) {
@@ -42,7 +44,10 @@ function socket(http) {
       db.Game.findById(gameId)
       .then(game => {
         game.moves.push(move)
-        // findWinner(game.moves)
+        const winner = abraLogic.findWinner(game.moves);
+        if (winner) {
+          console.log(winner)
+        }
         return game.save()
       })
       .then(game => {

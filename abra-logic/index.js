@@ -1,9 +1,9 @@
-const game = {
+const abraLogic = {
     width: 19,
 
     get middle() {
         // index of the middle tile
-        return Math.ceil(this.width ** 2 / 2);
+        return Math.ceil(abraLogic.width ** 2 / 2);
     },
 
     findWinner: moves => {
@@ -12,22 +12,53 @@ const game = {
             I am using the outer for loop so that the code runs once for each player.
         */
 
-        for (let j = 0; j < 2; j++) {
-            for (let i = 0; i < moves.length; i += 2) {
+        let winner = false;
+        const tiles = abraLogic.movesToTiles(moves);
 
+        tiles.forEach((tile, i) => {
+            if (tile.owner) {
+                // horizontal
+                if (tile.owner === tiles[i + 2].owner
+                    && tile.owner === tiles[i + 1].owner
+                    && tile.owner === tiles[i - 1].owner
+                    && tile.owner === tiles[i - 2].owner) {
+                    winner = tile.owner;
+                }
+                // vertical
+                else if (tile.owner === tiles[i + abraLogic.width * 2].owner
+                    && tile.owner === tiles[i + abraLogic.width].owner
+                    && tile.owner === tiles[i - abraLogic.width].owner
+                    && tile.owner === tiles[i - abraLogic.width * 2].owner) {
+                    winner = tile.owner;
+                }
+                // diagonal
+                else if (tile.owner === tiles[i + abraLogic.width * 2 - 2].owner
+                    && tile.owner === tiles[i + abraLogic.width - 1].owner
+                    && tile.owner === tiles[i - abraLogic.width + 1].owner
+                    && tile.owner === tiles[i - abraLogic.width * 2 + 2].owner) {
+                    winner = tile.owner;
+                }
+                else if (tile.owner === tiles[i + abraLogic.width * 2 + 2].owner
+                    && tile.owner === tiles[i + abraLogic.width + 1].owner
+                    && tile.owner === tiles[i - abraLogic.width - 1].owner
+                    && tile.owner === tiles[i - abraLogic.width * 2 - 2].owner) {
+                    winner = tile.owner;
+                }
             }
-        }
+        })
+
+        return winner;
     },
 
     movesToTiles: moves => {
         const tiles = [];
 
-        for (let i = 0; i < width ** 2; i++) {
+        for (let i = 0; i < abraLogic.width ** 2; i++) {
             tiles.push({})
         }
 
         moves.forEach((move, i) => {
-            const tileIndex = this.moveToIndex(move, tiles);
+            const tileIndex = abraLogic.moveToIndex(move, tiles);
             tiles[tileIndex].owner = i % 2 === 0 ? 'player1' : 'player2';
         })
 
@@ -36,13 +67,13 @@ const game = {
 
     moveToIndex: move => {
         const xy = move.split(',');
-        const index = middleTile + Number(xy[0]) - (Number(xy[1]) * this.width);
+        const index = abraLogic.middle + Number(xy[0]) - (Number(xy[1]) * abraLogic.width);
 
         return index;
     }
 
 };
 
-console.log(game.middle)
+console.log(abraLogic.middle)
 
-module.exports = game;
+module.exports = abraLogic;

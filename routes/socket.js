@@ -18,18 +18,19 @@ function socket(http) {
   const db = require('../models');
 
   io.on('connection', client => {
-    client.on('queue', userId => {
+    // client.on('queue', userId => {
 
-    })
+    // })
 
-    client.on('joinGame', (gameId) => {
+    client.on('joinGame', data => {
+      client.userId = data.userId;
+      const gameId = data.gameId;
       db.Game.findById(gameId)
       .populate('player1')
       .populate('player2')
       .exec((err, game) => {
         if (game) {
           leaveRooms(client)
-          client.userId = game.player1;
           client.join(gameId)
           client.emit('gameJoined', game) 
         }
@@ -40,6 +41,9 @@ function socket(http) {
       // NOTE: validate client.rooms length here
 
       const gameId = Object.keys(client.rooms)[1];
+
+      console.log(client.userId)
+      console.log('^^^^^')
 
       db.Game.findById(gameId)
       .then(game => {

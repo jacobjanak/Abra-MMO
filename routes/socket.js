@@ -16,19 +16,22 @@ const leaveRooms = socket => {
 function socket(http) {
   const io = require('socket.io')(http);
   const db = require('../models');
-  io.on('connection', client => {
 
-    client.on('joinGame', gameId => {
-      console.log(gameId)
-      console.log('^^^^^^^^^^^^^^')
+  io.on('connection', client => {
+    client.on('queue', userId => {
+
+    })
+
+    client.on('joinGame', (gameId) => {
       db.Game.findById(gameId)
       .populate('player1')
       .populate('player2')
       .exec((err, game) => {
         if (game) {
           leaveRooms(client)
+          client.userId = game.player1;
           client.join(gameId)
-          client.emit('gameJoined', game)
+          client.emit('gameJoined', game) 
         }
       })
     })
@@ -36,22 +39,31 @@ function socket(http) {
     client.on('move', move => {
       // NOTE: validate client.rooms length here
 
-      // NOTE: validate move here
-      // if (validateMove(move))
-
       const gameId = Object.keys(client.rooms)[1];
 
       db.Game.findById(gameId)
       .then(game => {
-        game.moves.push(move)
-        const winner = abraLogic.findWinner(game.moves);
-        if (winner) {
-          console.log(winner)
+
+        console.log(client.id)
+
+        //NOTE: validate that the right user is sending this move
+
+        if (abraLogic.checkLegality(move, game.moves)) {
+
+          game.moves.push(move)
+          const winner = abraLogic.findWinner(game.moves);
+          if (winner) {
+            console.log(winner)
+          }
+          return game.save()
+        } else {
+          return false;
         }
-        return game.save()
       })
       .then(game => {
-        io.to(gameId).emit('newMove', move)
+        if (game) {
+          io.to(gameId).emit('newMove', move)
+        }
       })
     })
 

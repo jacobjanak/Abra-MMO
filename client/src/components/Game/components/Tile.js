@@ -18,6 +18,7 @@ class Tile extends Component {
       const style = {
         backgroundColor: owner === 'player1' ? 'red' : 'blue'
       };
+      
       return <div className="tile owned" style={style}></div>;
     }
     else if (available) {

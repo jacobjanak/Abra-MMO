@@ -21,7 +21,8 @@ class Game extends Component {
           else if (newMove) {
             this.setState(state => {
               state.moves.push(newMove)
-              state.newMove = newMove;
+              //NOTE: why did I write this code:
+              // state.newMove = newMove;
               return state;
             })
           }

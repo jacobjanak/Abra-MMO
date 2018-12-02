@@ -1,17 +1,12 @@
 const abraLogic = {
     width: 19,
 
+    // index of the middle tile. using get allows this to update as width changes.
     get middle() {
-        // index of the middle tile
         return Math.ceil(abraLogic.width ** 2 / 2);
     },
 
     findWinner: moves => {
-        /*
-            Here I am checking if either player has 5 tiles in a row.
-            I am using the outer for loop so that the code runs once for each player.
-        */
-
         let winner = false;
         const tiles = abraLogic.movesToTiles(moves);
 
@@ -38,6 +33,7 @@ const abraLogic = {
                     && tile.owner === tiles[i - abraLogic.width * 2 + 2].owner) {
                     winner = tile.owner;
                 }
+                // diagonal
                 else if (tile.owner === tiles[i + abraLogic.width * 2 + 2].owner
                     && tile.owner === tiles[i + abraLogic.width + 1].owner
                     && tile.owner === tiles[i - abraLogic.width - 1].owner
@@ -70,6 +66,56 @@ const abraLogic = {
         const index = abraLogic.middle + Number(xy[0]) - (Number(xy[1]) * abraLogic.width);
 
         return index;
+    },
+
+    checkLegality: (move, movesOrTiles) => {
+        let tiles;
+        const index = abraLogic.moveToIndex(move);
+
+        // if movesOrTiles is moves then convert it to tiles
+        if (typeof movesOrTiles[0] === "string") {
+            tiles = abraLogic.movesToTiles(movesOrTiles);
+        } else {
+            tiles = movesOrTiles;
+        }
+
+        // not legal to move to a taken tile
+        if (tiles[index].owner) return false;
+
+        // check wether or not each tile is available
+        tiles = abraLogic.checkAvailability(tiles);
+        if (tiles[index].available) {
+            return true
+        } else {
+            return false;
+        }
+    },
+
+    checkAvailability: tiles => {
+        tiles.forEach((tile, i) => {
+            if (tile.owner) {
+                return tile.available = false
+            }
+      
+            // check all 4 neighbouring tiles
+            if (i >= abraLogic.width && tiles[i - abraLogic.width].owner) {
+                tile.available = true; // up
+            }
+            else if (i < abraLogic.width * (abraLogic.width - 1) && tiles[i + abraLogic.width].owner) {
+                tile.available = true; // down
+            }
+            else if (i % abraLogic.width !== 0 && tiles[i - 1].owner) {
+                tile.available = true; // left
+            }
+            else if (i % abraLogic.width !== abraLogic.width - 1 && tiles[i + 1].owner) {
+                tile.available = true; // right
+            }
+            else if (tile.available) {
+                tile.available = false;
+            }
+        })
+
+        return tiles;
     }
 
 };

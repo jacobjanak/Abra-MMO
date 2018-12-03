@@ -120,6 +120,4 @@ const abraLogic = {
 
 };
 
-console.log(abraLogic.middle)
-
 module.exports = abraLogic;

@@ -53,7 +53,8 @@ router.get('/user/', isAuthenticated, (req, res) => {
 })
 
 router.get('/user/game', isAuthenticated, (req, res) => {
-  db.Game.find({ 
+  db.Game.find({
+    winner: { $exists: false },
     $or: [
       { player1: req.user.id }, 
       { player2: req.user.id }

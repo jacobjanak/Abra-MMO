@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 
 // database
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/abra')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/abra', { useNewUrlParser: true })
 
 // server
 const PORT = process.env.PORT || 3001;

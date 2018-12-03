@@ -5,6 +5,9 @@
 
 const abraLogic = require('../abra-logic/');
 
+const clients = {};
+const queue = [];
+
 const leaveRooms = socket => {
   for (let room in socket.rooms) {
     if (socket.id !== room) {
@@ -18,9 +21,51 @@ function socket(http) {
   const db = require('../models');
 
   io.on('connection', client => {
-    // client.on('queue', userId => {
 
-    // })
+    client.on('queue', userId => {
+      //NOTE: move the user id stuff here
+      if (!queue.includes(userId)) {
+
+        // storing the client so that we can send the game once they're queued
+        clients[userId] = client;
+
+        // storing the userId in the client to create a link between clients and user objects
+        client.userId = userId;
+
+        if (queue.length > 0) {
+          // NOTE: matchmaking logic here
+          const random = Math.random() >= 0.5;
+          db.Game.create({
+            player1: random ? userId : queue.pop(),
+            player2: random ? queue.pop() : userId,
+          })
+          .then(game => {
+            //NOTE: this seems excessive
+            //NOTE: also very repetitive except for the last lines
+            db.Game.findById(game._id)
+            .populate('player1')
+            .populate('player2')
+            .exec((err, game) => {
+              if (err) console.log(err);
+              if (game) {
+                // update current client
+                leaveRooms(client)
+                client.join(game._id)
+                client.emit('gameJoined', game)
+
+                // update the opponents client
+                const opponentId = game.player1._id == userId ? game.player2._id : game.player1._id;
+                leaveRooms(clients[opponentId])
+                clients[opponentId].join(game._id)
+                clients[opponentId].emit('gameJoined', game)
+              }
+            })
+          })
+        } else {
+          queue.push(userId)
+        }
+      }
+    })
 
     client.on('joinGame', data => {
       client.userId = data.userId;
@@ -32,6 +77,7 @@ function socket(http) {
         if (game) {
           leaveRooms(client)
           client.join(gameId)
+          //NOTE: seems sketchy to send all the user data to both users
           client.emit('gameJoined', game) 
         }
       })
@@ -46,15 +92,20 @@ function socket(http) {
 
       db.Game.findById(gameId)
       .then(game => {
-
         if (!game.winner) {
+
+          console.log('here')
 
           // validate that the correct user is sending the move
           if ((game.moves.length % 2 === 0 && game.player1 == client.userId)
           || (game.moves.length % 2 === 1 && game.player2 == client.userId)) {
 
+            console.log('here2')
+
             // check that the move is legal
             if (abraLogic.checkLegality(move, game.moves)) {
+
+              console.log('here3')
 
               // add the move to the game
               game.moves.push(move)
@@ -95,11 +146,9 @@ function socket(http) {
       })
     })
 
-    // client.on('disconnect', () => {
-    //   // const i = clients.indexOf(client);
-    //   // if (i >= 0) clients.splice(i, 1);
-    //   delete clients[client.id];
-    // })
+    client.on('disconnect', () => {
+      delete clients[client.id];
+    })
   })
 }
 

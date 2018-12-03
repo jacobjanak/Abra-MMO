@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import game from 'abra-logic';
 import Tile from './Tile';
 
 class Board extends Component {

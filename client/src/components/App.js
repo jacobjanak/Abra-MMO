@@ -9,7 +9,6 @@ import Login from './Login';
 import Profile from './Profile';
 import Signup from './Signup';
 import Game from './Game';
-import JoinGame from './JoinGame';
 
 class App extends Component {
   render() {
@@ -22,7 +21,6 @@ class App extends Component {
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/profile/:id" component={Profile} />
           <Route exact path="/play" component={withAuth(Game)} />
-          <Route exact path="/join" component={withAuth(JoinGame)} />
         </div>
       </Router>
     );

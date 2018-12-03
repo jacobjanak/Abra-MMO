@@ -28,26 +28,20 @@ class Game extends Component {
     const { user } = this.props;
     const { player1, player2, moves } = this.state;
 
-    console.log('calling makeMove')
-    console.log(player1)
-    console.log(player2)
-    console.log(user.id)
     if ((user.id == player1._id && moves.length % 2 === 0) ||
         (user.id == player2._id && moves.length % 2 !== 0)) {
-      console.log('calling api.move')
       API.move(move)
     }
   };
 
   queue = () => {
     if (!this.state.queued) {
-      console.log('queued now')
       API.queue(this.socketCallback)
+      this.setState({ queued: true })
     }
   };
 
   socketCallback = (game, newMove, winner) => {
-    console.log('using the socketCallbakc')
     if (game) this.setState({ ...game });
     else if (newMove) {
       this.setState(state => {
@@ -63,7 +57,7 @@ class Game extends Component {
   };
 
   render() {
-    const { player1, player2, moves, winner } = this.state;
+    const { player1, player2, moves, winner, queued } = this.state;
 
     if (player1 && player2) {
       // game in progress
@@ -98,8 +92,10 @@ class Game extends Component {
     } else {
       // no game, user should queue up
       return (
-        <div>
-          <button onClick={this.queue}>Queue</button>
+        <div className="container pt-4">
+          <button className={"btn btn-" + (queued ? 'secondary' : 'primary')} onClick={this.queue}>
+            { queued ? "Waiting for Opponent" : "Enter Queue"}
+          </button>
         </div>
       );
     }

@@ -5,16 +5,28 @@ import { Link } from 'react-router-dom';
 
 class Profile extends Component {
   state = {
-    username: this.props.user.username,
-    email: this.props.user.email
+    username: '',
+    wins: false,
+    losses: false,
   };
+
+  componentDidMount() {
+    API.getUser(this.props.match.params.username)
+    .then(res => {
+      console.log(res)
+      const user = res.data;
+      this.setState({ ...user })
+    })
+  }
 
   render() {
     return (
-      <div className="container Profile">
-        <h1>On the profile page!</h1>
-        <p>Username: {this.state.username}</p>
-        <p>Email: {this.state.email}</p>
+      <div className="container">
+        <p></p>
+        <h1>{this.state.username}</h1>
+        <p></p>
+        <p>Wins: {this.state.wins}</p>
+        <p>Losses: {this.state.losses}</p>
         <Link to="/">Go home</Link>
       </div>
     )

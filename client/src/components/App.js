@@ -16,10 +16,10 @@ class App extends Component {
       <Router>
         <div>
           <NavBar />
-          <Route exact path="/" component={withAuth(Home)} />
+          <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
-          <Route exact path="/profile/:id" component={Profile} />
+          <Route exact path="/profile/:username" component={Profile} />
           <Route exact path="/play" component={withAuth(Game)} />
         </div>
       </Router>

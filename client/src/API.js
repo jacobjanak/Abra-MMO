@@ -6,7 +6,7 @@ const socket = openSocket(window.location.origin);
 const Auth = new AuthService();
 
 const API = {
-  getUser: (id = '') => axios.get('/user/' + id),
+  getUser: (username = '') => axios.get('/user/' + username),
   signUpUser: (username, email, password) => {
     return axios.post('/api/signup', {username: username, email: email, password: password});
   },

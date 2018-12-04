@@ -94,10 +94,23 @@ class Game extends Component {
       );  
     } else {
       // no game, user should queue up
+      const style = {
+        textAlign: 'center',
+      };
+
+      const buttonStyle = {
+        marginTop: 48,
+      };
+
       return (
-        <div className="container pt-4">
-          
-          <button className={"btn btn-" + (queued ? 'secondary' : 'primary')} onClick={this.queue}>
+        <div className="container pt-4" style={style}>
+          <h1 className="display-4">Play Now</h1>
+          <p className="lead">435 players currently playing</p>
+          <button
+            className={"btn btn-lg btn-" + (queued ? 'secondary' : 'primary')}
+            style={buttonStyle}
+            onClick={this.queue}
+          >
             { queued ? "Leave Queue" : "Enter Queue"}
           </button>
         </div>

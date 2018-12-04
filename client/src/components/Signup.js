@@ -40,21 +40,21 @@ class Signup extends Component {
         <h1>Signup</h1>
         <form onSubmit={this.handleFormSubmit}>
           <div className="form-group">
-            <label htmlFor="username">Username:</label>
-            <input className="form-control"
-                   placeholder="Username goes here..."
-                   name="username"
-                   type="text"
-                   id="username"
-                   onChange={this.handleChange}/>
-          </div>
-          <div className="form-group">
             <label htmlFor="email">Email address:</label>
             <input className="form-control"
                    placeholder="Email goes here..."
                    name="email"
                    type="email"
                    id="email"
+                   onChange={this.handleChange}/>
+          </div>
+          <div className="form-group">
+            <label htmlFor="username">Username:</label>
+            <input className="form-control"
+                   placeholder="Username goes here..."
+                   name="username"
+                   type="text"
+                   id="username"
                    onChange={this.handleChange}/>
           </div>
           <div className="form-group">

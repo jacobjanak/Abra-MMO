@@ -7,17 +7,22 @@ const Auth = new AuthService();
 
 class Home extends Component {
   render() {
-    return (
-      <div className="App">
-        <div className="jumbotron">
-          <Logo />
+    const style = {
+      paddingTop: 24,
+      textAlign: 'center',
+    };
 
-          <h1 className="display-4">The Strategy Game</h1>
-          {/* <p className="lead">Welcome to the best game you've ever played.</p> */}
-          <a id="play-now" className="btn btn-dark btn-lg" href="/play">
-            Play Now <i className="fas fa-play" style={{ marginLeft: 4 }}></i>
-          </a>
-        </div>
+    return (
+      <div style={style}>
+        <Logo />
+
+        <h1 id="logo-subtext" className="display-4">The Strategy Game</h1>
+
+        {/* <p className="lead">Welcome to the best game you've ever played.</p> */}
+
+        <a id="play-now" className="btn btn-dark btn-lg" href="/play">
+          Play Now <i className="fas fa-play" style={{ marginLeft: 4 }}></i>
+        </a>
       </div>
     );
   }

@@ -17,14 +17,13 @@ class Signup extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    API.signUpUser(this.state.username, this.state.email, this.state.password)
-      .then(res => {
-        console.log(res.data);
-        // once the user has signed up
-        // send them to the login page
-        this.props.history.replace('/login');
-      })
-      .catch(err => alert(err));
+    API.signUpUser({
+      username: this.state.username,
+      email: this.state.email,
+      password: this.state.password
+    })
+    .then(res => this.props.history.replace('/login'))
+    .catch(err => alert(err));
   };
 
   handleChange = event => {

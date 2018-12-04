@@ -4,7 +4,7 @@ import withAuth from './withAuth';
 
 // components
 import NavBar from './NavBar';
-import Home from './Home';
+import Home from './Home/';
 import Login from './Login';
 import Profile from './Profile';
 import Signup from './Signup';

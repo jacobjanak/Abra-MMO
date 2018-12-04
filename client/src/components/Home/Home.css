@@ -1,0 +1,9 @@
+.jumbotron {
+    margin-bottom: 0;
+    min-height: calc(100vh - 56px); /* 56 is the height of navbar */
+    text-align: center;
+}
+
+#play-now {
+    margin-top: 24px;
+}

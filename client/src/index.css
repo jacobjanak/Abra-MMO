@@ -5,14 +5,8 @@ body {
   overflow-x: hidden;
 }
 
+/* Game */
 #game-container {
-  /* margin: 40px auto;
-  height: 400px;
-  width: 600px;
-  max-width: 100%;
-  resize: both;
-  font-size: 0px; */
-
   position: absolute;
   top: 0;
   left: 0;
@@ -46,10 +40,19 @@ body {
   cursor: pointer;
   background-color: white;
 }
+
 .tile.available:hover {
   background-color: darkgrey;
 }
 
 .tile.locked {
   background-color: transparent;
+}
+
+/* NavBar */
+@media screen and (max-width: 768px) {
+  .nav-item > .btn {
+    width: 100%;
+    margin-top: .5rem;
+  }
 }

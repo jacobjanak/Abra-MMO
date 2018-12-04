@@ -18,6 +18,11 @@ class Tile extends Component {
       const style = {
         backgroundColor: owner === 'player1' ? 'red' : 'blue'
       };
+
+      // offCenter is just for the homepage
+      if (this.props.offCenter) {
+        style.transform = "translateX(-50%)";
+      }
       
       return <div className="tile owned" style={style}></div>;
     }

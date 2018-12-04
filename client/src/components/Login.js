@@ -18,10 +18,7 @@ class Login extends Component {
     event.preventDefault();
 
     this.Auth.login(this.state.email, this.state.password)
-    .then(user => {
-      // take them to their profile page
-      this.props.history.replace(`/profile/${user.username}`);
-    })
+    .then(user => window.location.reload())
     .catch(err => alert(err.response.data.message))
   };
 

@@ -38,6 +38,9 @@ class Game extends Component {
     if (!this.state.queued) {
       API.queue(this.socketCallback)
       this.setState({ queued: true })
+    } else {
+      // they want to leave the queue so we'll refresh the window
+      window.location.reload()
     }
   };
 
@@ -93,8 +96,9 @@ class Game extends Component {
       // no game, user should queue up
       return (
         <div className="container pt-4">
+          
           <button className={"btn btn-" + (queued ? 'secondary' : 'primary')} onClick={this.queue}>
-            { queued ? "Waiting for Opponent" : "Enter Queue"}
+            { queued ? "Leave Queue" : "Enter Queue"}
           </button>
         </div>
       );

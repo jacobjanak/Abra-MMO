@@ -87,25 +87,17 @@ function socket(http) {
       // NOTE: validate client.rooms length here
 
       const gameId = Object.keys(client.rooms)[1];
-      console.log('gameId is:')
-      console.log(gameId)
 
       db.Game.findById(gameId)
       .then(game => {
         if (!game.winner) {
 
-          console.log('here')
-
           // validate that the correct user is sending the move
           if ((game.moves.length % 2 === 0 && game.player1 == client.userId)
           || (game.moves.length % 2 === 1 && game.player2 == client.userId)) {
 
-            console.log('here2')
-
             // check that the move is legal
             if (abraLogic.checkLegality(move, game.moves)) {
-
-              console.log('here3')
 
               // add the move to the game
               game.moves.push(move)
@@ -147,6 +139,13 @@ function socket(http) {
     })
 
     client.on('disconnect', () => {
+      console.log(queue)
+      queue.forEach((id, i) => {
+        if (id === client.userId) {
+          queue.splice(i, 1)
+        }
+      })
+      console.log(queue)
       delete clients[client.id];
     })
   })

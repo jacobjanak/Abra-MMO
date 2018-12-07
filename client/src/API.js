@@ -24,6 +24,10 @@ const API = {
     socket.on('newMove', move => cb(null, move, null))
     socket.on('winner', winner => cb(null, null, winner))
   },
+  getPlayerCount: cb => {
+    socket.emit('getPlayerCount')
+    socket.on('playerCount', playerCount => cb(playerCount))
+  },
   move: move => socket.emit('move', move)
 };
 

@@ -9,6 +9,7 @@ class Game extends Component {
     player2: false,
     moves: false,
     winner: false,
+    playerCount: false
   };
 
   componentDidMount() {
@@ -19,6 +20,8 @@ class Game extends Component {
       console.log(game)
       if (game) {
         API.joinGame(game._id, this.socketCallback)
+      } else {
+        API.getPlayerCount(playerCount => this.setState({ playerCount }))
       }
     })
     .catch(err => alert('Error connecting to game'))
@@ -60,7 +63,7 @@ class Game extends Component {
   };
 
   render() {
-    const { player1, player2, moves, winner, queued } = this.state;
+    const { player1, player2, moves, winner, queued, playerCount } = this.state;
 
     if (player1 && player2) {
       // game in progress
@@ -105,7 +108,11 @@ class Game extends Component {
       return (
         <div className="container pt-4" style={style}>
           <h1 className="display-4">Play Now</h1>
-          <p className="lead">435 players currently playing</p>
+          {(playerCount || playerCount === 0) && (
+            <p className="lead">
+              {playerCount} players currently playing
+            </p>
+          )}
           <button
             className={"btn btn-lg btn-" + (queued ? 'secondary' : 'primary')}
             style={buttonStyle}

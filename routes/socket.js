@@ -32,6 +32,8 @@ function socket(http) {
         // storing the userId in the client to create a link between clients and user objects
         client.userId = userId;
 
+        updatePlayerCount()
+
         if (queue.length > 0) {
           // NOTE: matchmaking logic here
           const random = Math.random() >= 0.5;
@@ -138,16 +140,25 @@ function socket(http) {
       })
     })
 
+    client.on('getPlayerCount', () => {
+      const playerCount = Object.keys(clients).length;
+      client.emit('playerCount', playerCount)
+    })
+
     client.on('disconnect', () => {
-      console.log(queue)
       queue.forEach((id, i) => {
         if (id === client.userId) {
           queue.splice(i, 1)
         }
       })
-      console.log(queue)
-      delete clients[client.id];
+      delete clients[client.userId];
+      updatePlayerCount()
     })
+
+    function updatePlayerCount() {
+      const playerCount = Object.keys(clients).length;
+      io.emit('playerCount', playerCount)
+    }
   })
 }
 

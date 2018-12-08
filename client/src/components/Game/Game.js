@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import API from '../../API';
 import Board from './components/Board';
+import Scoreboard from './components/Scoreboard/';
 
 class Game extends Component {
   state = {
@@ -69,26 +70,7 @@ class Game extends Component {
       // game in progress
       return (
         <div>
-          <div>
-            <p style={{ color: 'red' }}>
-              Player 1: {this.state.player1.username}&nbsp;
-              { moves.length % 2 === 0 && !winner && (
-                <span>(active)</span>
-              )}
-              { winner === 'player1' && (
-                <span>(winner)</span>
-              )}
-            </p>
-            <p style={{ color: 'blue' }}>
-              Player 2: {this.state.player2.username}&nbsp;
-              { moves.length % 2 !== 0 && !winner && (
-                <span>(active)</span>
-              )}
-              { winner === 'player2' && (
-                <span>(winner)</span>
-              )}
-            </p>
-          </div>
+          <Scoreboard player1={player1} player2={player2} moves={moves} winner={winner} />
   
           { moves && (
             <Board moves={moves} winner={winner} makeMove={this.makeMove} />

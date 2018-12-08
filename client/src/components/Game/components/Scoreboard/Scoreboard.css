@@ -1,0 +1,62 @@
+#scoreboard {
+    z-index: 100;
+    position: absolute;
+    right: 41px; /* adding 17px to account for scrollbar */
+    bottom: 24px;
+    width: 200px;
+}
+
+#scoreboard .lead {
+    margin-bottom: 0;
+}
+
+.timer {
+    float: right;
+}
+
+/* Move Controls */
+#move-controls {
+    display: flex;
+    height: 28px;
+    border: 1px solid black;
+    border-bottom: 0; /* prevent doubled up border */
+}
+
+.move-control {
+    flex-grow: 1;
+    font-size: 18px;
+    text-align: center;
+}
+
+.vertical-align {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.move-control i {
+    cursor: pointer;
+}
+
+/* Move List */
+#move-list-container {
+    padding-left: 8px;
+    padding-right: 8px;
+    border: 1px solid black;
+    height: 75px;
+    font-size: 12px;
+    overflow-y: scroll;
+}
+
+#move-list {
+
+}
+
+.move-row {
+    display: flex;
+}
+
+.move {
+    flex-grow: 1;
+    text-align: center;
+}

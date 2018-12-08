@@ -16,7 +16,7 @@ class Home extends Component {
       <div style={style}>
         <Logo />
 
-        <h1 id="logo-subtext" className="display-4">The Strategy Game</h1>
+        <h1 id="logo-subtext" className="display-6">the Strategy Game</h1>
 
         {/* <p className="lead">Welcome to the best game you've ever played.</p> */}
 

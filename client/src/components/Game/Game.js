@@ -24,7 +24,7 @@ class Game extends Component {
         API.getPlayerCount(playerCount => this.setState({ playerCount }))
       }
     })
-    .catch(err => alert('Error connecting to game'))
+    // .catch(err => alert('No game found'))
   }
 
   makeMove = move => {

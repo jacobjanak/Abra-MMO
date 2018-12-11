@@ -19,7 +19,7 @@ class Tile extends Component {
         backgroundColor: owner === 'player1' ? 'red' : 'blue'
       };
 
-      // offCenter is just for the homepage
+      // offCenter is just for the <Logo> component on the homepage
       if (this.props.offCenter) {
         style.transform = "translateX(-50%)";
       }

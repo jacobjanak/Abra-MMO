@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MoveList from './MoveList';
+import MoveList from '../MoveList';
 import './Scoreboard.css';
 
 class Scoreboard extends Component {
@@ -9,12 +9,12 @@ class Scoreboard extends Component {
         return (
             <div id="scoreboard">
                 <p className="lead">
-                    {player1.username}
                     <span className="timer">3:43</span>
+                    <span className="username">{player1.username}</span>
                 </p>
                 <p className="lead">
-                    {player2.username}
                     <span className="timer">5:07</span>
+                    <span className="username">{player2.username}</span>
                 </p>
                 <div id="move-controls">
                     <span className="move-control">

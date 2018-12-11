@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import API from '../../API';
-import Board from './components/Board';
-import Scoreboard from './components/Scoreboard/';
+import API from '../API';
+import Board from './Board';
+import Scoreboard from './Scoreboard';
 
 class Game extends Component {
   state = {

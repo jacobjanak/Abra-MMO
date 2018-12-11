@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Tile from '../Game/components/Tile';
+import Tile from '../Tile';
 import './Logo.css';
 
 class Logo extends Component {

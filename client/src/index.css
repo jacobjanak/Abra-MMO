@@ -7,18 +7,23 @@ body {
 
 /* Game */
 #game-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100vh;
+  /* top: 0;
+  left: 0; */
+  /* padding-left: 50vw; */
+  /* padding-right: 50vw; */
+  height: calc(100vh - 56px); /* subtract 56 for navbar */
   width: 100%;
+  max-width: 100%;
   overflow: scroll;
   font-size: 0px;
   z-index: 10;
 }
 
 #game {
+  box-sizing: content-box;
   margin: auto;
+  padding-left: 50vw;
+  padding-right: 50vw;
 }
 
 .tile {

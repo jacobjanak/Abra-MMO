@@ -49,8 +49,14 @@ class Board extends Component {
     const { width, tileSize } = this.state;
     const container = ReactDOM.findDOMNode(this.refs.container);
 
-    container.scrollTop = width * tileSize / 2 - container.offsetHeight / 2;
-    container.scrollLeft = width * tileSize / 2 - container.offsetWidth / 2;
+    console.log(container.clientWidth)
+    console.log(container.clientWidth)
+
+    const halfWay = width * tileSize / 2;
+    container.scrollTop = halfWay - container.clientHeight / 2;
+    container.scrollLeft = halfWay + tileSize / 2 + 25;
+    // #game has padding left/right so there's no need to subtract anything
+    // not sure why adding 25 works but it makes it perfect
   };
 
   movesToTiles = () => {
@@ -73,13 +79,10 @@ class Board extends Component {
 
   moveToIndex = (move, optionalTiles) => {
     const { width, middleTile } = this.state;
-
     const xy = move.split(',');
 
-    console.log(move) // 0,-2
-
     let index = middleTile + Number(xy[0]) - (Number(xy[1]) * width);
-    console.log(index)
+
     return index;
   }
 
@@ -91,7 +94,6 @@ class Board extends Component {
     const relativeY = Math.floor(middleTile / width) - Math.floor(index / width);
   
     const move = relativeX + ',' + relativeY;
-    console.log("move: ", move)
 
     return move;
   }

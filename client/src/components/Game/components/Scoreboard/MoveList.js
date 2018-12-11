@@ -17,15 +17,17 @@ class MoveList extends Component {
                 formatted += xy[i];
             }
             if (i === 0) formatted += ',';
+            else formatted += ')';
         }
-
-        formatted += ')';
 
         return formatted;
     }
 
     render() {
-        const { moves, ...props } = this.props;
+        const { moves } = this.props;
+
+        console.log('hey')
+        console.log(this.props.moves)
 
         const moveListContent = [];
         for (let i = 0; i < moves.length; i += 2) {
@@ -46,7 +48,7 @@ class MoveList extends Component {
         }
 
         return (
-            <div id="move-list-container" { ...props }>
+            <div id="move-list-container" { ...this.props }>
                 <div id="move-list">
                     { moveListContent.map((Move, i) => (
                         <Move key={i} />
@@ -57,4 +59,4 @@ class MoveList extends Component {
     }
 }
  
-export default autoscroll(MoveList);
+export default autoscroll(MoveList, { isScrolledDownThreshold: 5 });

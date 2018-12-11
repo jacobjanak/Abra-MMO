@@ -31,7 +31,11 @@ class Scoreboard extends Component {
                     </span>
                 </div>
 
-                <MoveList moves={moves} />
+                <MoveList
+                    moves={moves}
+                    onScrolled={e => {/* just need this function to exist */}}
+                    onScrolledTop={e => {/* just need this function to exist */}}
+                />
 
                 {/* <p style={{ color: 'red' }}>
                     Player 1: {player1.username}&nbsp;

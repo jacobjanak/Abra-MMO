@@ -18,7 +18,6 @@ class Game extends Component {
     API.getGame()
     .then(res => {
       const game = res.data;
-      console.log(game)
       if (game) {
         API.joinGame(game._id, this.socketCallback)
       } else {
@@ -51,12 +50,10 @@ class Game extends Component {
   socketCallback = (game, newMove, winner) => {
     if (game) this.setState({ ...game });
     else if (newMove) {
-      this.setState(state => {
-        state.moves.push(newMove)
-        //NOTE: why did I write this code:
-        // state.newMove = newMove;
-        return state;
-      })
+      this.setState(state => ({
+        moves: [...state.moves, newMove.move],
+        time: newMove.time
+      }))
     }
     else if (winner) {
       this.setState({ winner })
@@ -64,13 +61,19 @@ class Game extends Component {
   };
 
   render() {
-    const { player1, player2, moves, winner, queued, playerCount } = this.state;
+    const { player1, player2, moves, winner, time, queued, playerCount } = this.state;
 
     if (player1 && player2) {
       // game in progress
       return (
         <div>
-          <Scoreboard player1={player1} player2={player2} moves={moves} winner={winner} />
+          <Scoreboard 
+            player1={player1} 
+            player2={player2} 
+            moves={moves} 
+            time={time}
+            winner={winner}
+          />
   
           { moves && (
             <Board moves={moves} winner={winner} makeMove={this.makeMove} />
@@ -100,7 +103,7 @@ class Game extends Component {
             style={buttonStyle}
             onClick={this.queue}
           >
-            { queued ? "Leave Queue" : "Enter Queue"}
+            {queued ? "Leave Queue" : "Enter Queue"}
           </button>
         </div>
       );

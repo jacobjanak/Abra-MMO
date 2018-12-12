@@ -26,12 +26,8 @@ class MoveList extends Component {
     render() {
         const { moves } = this.props;
 
-        console.log('hey')
-        console.log(this.props.moves)
-
         const moveListContent = [];
         for (let i = 0; i < moves.length; i += 2) {
-            console.log(i)
             moveListContent.push(() => (
                 <div className="move-row">
                     <span className="move-number">{Math.floor(i / 2) + 1}.</span>

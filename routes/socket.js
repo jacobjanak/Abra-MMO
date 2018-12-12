@@ -40,6 +40,10 @@ function socket(http) {
           db.Game.create({
             player1: random ? userId : queue.pop(),
             player2: random ? queue.pop() : userId,
+            time: {
+              player1: 5 * 60 * 1000,
+              player2: 5 * 60 * 1000
+            }
           })
           .then(game => {
             //NOTE: this seems excessive
@@ -88,24 +92,41 @@ function socket(http) {
     client.on('move', move => {
       // NOTE: validate client.rooms length here
 
+      // find game
       const gameId = Object.keys(client.rooms)[1];
-
       db.Game.findById(gameId)
       .then(game => {
         if (!game.winner) {
 
+          // which player is sending move (double equals is important)
+          const activePlayer = client.userId == game.player1 ? 'player1' : 'player2';
+
           // validate that the correct user is sending the move
-          if ((game.moves.length % 2 === 0 && game.player1 == client.userId)
-          || (game.moves.length % 2 === 1 && game.player2 == client.userId)) {
+          if ((game.moves.length % 2 === 0 && activePlayer === 'player1')
+          || (game.moves.length % 2 === 1 && activePlayer === 'player2')) {
 
             // check that the move is legal
             if (abraLogic.checkLegality(move, game.moves)) {
 
               // add the move to the game
               game.moves.push(move)
+              
+              // update times
+              const unix = new Date().getTime();
+              game.time[activePlayer] -= unix - game.time.lastMove;
+              game.time.lastMove = unix;
 
-              // check if someone has won the game
-              const winner = abraLogic.findWinner(game.moves);
+              // see if anyone ran out of time
+              let winner;
+              if (game.time[activePlayer] <= 0) {
+                winner = activePlayer === 'player1' ? 'player2' : 'player1';
+              } else {
+                winner = abraLogic.findWinner(game.moves);
+              }
+
+              // const winner = abraLogic.findWinner(game.moves);
+
+              // check if someone has won the game              
               if (winner) {
                 game.winner = winner;
                 io.to(gameId).emit('winner', winner)
@@ -135,7 +156,10 @@ function socket(http) {
       })
       .then(game => {
         if (game) {
-          io.to(gameId).emit('newMove', move)
+          io.to(gameId).emit('newMove', {
+            move: move,
+            time: game.time
+          })
         }
       })
     })

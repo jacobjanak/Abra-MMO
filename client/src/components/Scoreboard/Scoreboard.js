@@ -1,21 +1,26 @@
 import React, { Component } from 'react';
 import MoveList from '../MoveList';
+import Timer from '../Timer';
 import './Scoreboard.css';
 
 class Scoreboard extends Component {
     render() {
-        const { player1, player2, moves, winner }= this.props;
+        const { player1, player2, moves, time, winner } = this.props;
+
+        let activePlayer = moves.length % 2 ? 'player2' : 'player1';
+        if (winner) activePlayer = false;
 
         return (
             <div id="scoreboard">
                 <p className="lead">
-                    <span className="timer">3:43</span>
+                    <Timer unix={time.player1} active={activePlayer === 'player1'} />
                     <span className="username">{player1.username}</span>
                 </p>
                 <p className="lead">
-                    <span className="timer">5:07</span>
+                    <Timer unix={time.player2} active={activePlayer === 'player2'} />
                     <span className="username">{player2.username}</span>
                 </p>
+                
                 <div id="move-controls">
                     <span className="move-control">
                         <i className="fas fa-fast-backward"></i>
@@ -31,30 +36,7 @@ class Scoreboard extends Component {
                     </span>
                 </div>
 
-                <MoveList
-                    moves={moves}
-                    onScrolled={e => {/* just need this function to exist */}}
-                    onScrolledTop={e => {/* just need this function to exist */}}
-                />
-
-                {/* <p style={{ color: 'red' }}>
-                    Player 1: {player1.username}&nbsp;
-                    {moves.length % 2 === 0 && !winner && (
-                        <span>(active)</span>
-                    )}
-                    {winner === 'player1' && (
-                        <span>(winner)</span>
-                    )}
-                </p>
-                <p style={{ color: 'blue' }}>
-                    Player 2: {player2.username}&nbsp;
-                    {moves.length % 2 !== 0 && !winner && (
-                        <span>(active)</span>
-                    )}
-                    {winner === 'player2' && (
-                        <span>(winner)</span>
-                    )}
-                </p> */}
+                <MoveList moves={moves} />
             </div>
         );
     }

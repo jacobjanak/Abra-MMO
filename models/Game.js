@@ -12,6 +12,18 @@ const GameSchema = new Schema({
     ref: 'User',
     required: true,
   },
+  time: {
+    lastMove: {
+      type: Number,
+      default: () => new Date().getTime()
+    },
+    player1: {
+      type: Number,
+    },
+    player2: {
+      type: Number,
+    }
+  },
   moves: {
     type: [String],
     default: ['0,0', '0,1']

@@ -27,30 +27,52 @@ class Board extends Component {
     })
   }
 
-  componentDidUpdate() {
-    // this runs when the socket recieves a new move
-    // NOTE: should this function handle multiple moves??
-    const { moveCount } = this.state;
-    const { moves } = this.props;
-    if (moves.length !== moveCount) {
+  componentWillReceiveProps(prevProps) {
+    // check if a winner was just announced, usually due to time out
+    console.log(prevProps)
+    if (prevProps.winner) {
+      this.setState({
+        tiles: this.checkAvailability(this.state.tiles)
+      })
+    }
+
+    // NOTE: this function is only setup to handle one move which may cause issues
+    // check if new move was sent
+    const moves = prevProps.moves;
+    if (moves) {
       const index = this.moveToIndex(moves[moves.length - 1]);
       const player = moves.length % 2 === 1 ? 'player1' : 'player2'
       this.setState(state => {
         state.tiles[index].owner = player;
         state.tiles = this.checkAvailability(state.tiles);
-        state.moveCount = moves.length;
         return state;
       })
     }
   }
 
+  // componentDidUpdate() {
+  //   // NOTE: couldn't this be componentWillReceiveProps instead?
+  //   // NOTE: this function is only setup to handle one move which may cause issues
+  //   const { moveCount } = this.state;
+  //   const { moves, winner } = this.props;
+
+  //   // check if new move was sent
+  //   if (moves.length !== moveCount) {
+  //     const index = this.moveToIndex(moves[moves.length - 1]);
+  //     const player = moves.length % 2 === 1 ? 'player1' : 'player2'
+  //     this.setState(state => {
+  //       state.tiles[index].owner = player;
+  //       state.tiles = this.checkAvailability(state.tiles);
+  //       state.moveCount = moves.length;
+  //       return state;
+  //     })
+  //   }
+  // }
+
   centerView = () => {
     //NOTE: this function is not working perfectly. The game looks slightly off-center
     const { width, tileSize } = this.state;
     const container = ReactDOM.findDOMNode(this.refs.container);
-
-    console.log(container.clientWidth)
-    console.log(container.clientWidth)
 
     const halfWay = width * tileSize / 2;
     container.scrollTop = halfWay - container.clientHeight / 2;
@@ -135,6 +157,7 @@ class Board extends Component {
 
   render() {
     const { width, tiles, tileSize } = this.state;
+    const { winner } = this.props;
 
     const gameStyles = {
       width: width * tileSize,
@@ -145,7 +168,13 @@ class Board extends Component {
       <div id="game-container" ref="container">
         <div id="game" style={gameStyles}>
           { tiles.map((tile, i) => (
-            <Tile {...tile} makeMove={this.handleClick} index={i} key={i} />
+            <Tile
+              {...tile}
+              winner={winner}
+              index={i}
+              key={i}
+              makeMove={this.handleClick}
+            />
           ))}
         </div>
       </div>

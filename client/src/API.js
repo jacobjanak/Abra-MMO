@@ -7,7 +7,8 @@ const Auth = new AuthService();
 
 const API = {
   getUser: (username = '') => axios.get('/user/' + username),
-  getGame: () => axios.get('/user/game'),
+  getGame: (id = '') => axios.get('/game/' + id),
+  getActiveGame: () => axios.get('/user/game'),
   signUpUser: user => axios.post('/api/signup', user),
   queue: cb => {
     const userId = Auth.user().id;

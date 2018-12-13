@@ -41,8 +41,8 @@ function socket(http) {
             player1: random ? userId : queue.pop(),
             player2: random ? queue.pop() : userId,
             time: {
-              player1: 5 * 60 * 1000,
-              player2: 5 * 60 * 1000
+              player1: 0.25 * 60 * 1000,
+              player2: 0.25 * 60 * 1000
             }
           })
           .then(game => {
@@ -98,61 +98,67 @@ function socket(http) {
       .then(game => {
         if (!game.winner) {
 
-          // which player is sending move (double equals is important)
-          const activePlayer = client.userId == game.player1 ? 'player1' : 'player2';
+          // make sure the client is actually a part of this game (redundant?)
+          if (client.userId == game.player1 || client.userId == game.player2) {
 
-          // validate that the correct user is sending the move
-          if ((game.moves.length % 2 === 0 && activePlayer === 'player1')
-          || (game.moves.length % 2 === 1 && activePlayer === 'player2')) {
+            // validate that the correct user is sending the move (double equals is important)
+            const activePlayer = client.userId == game.player1 ? 'player1' : 'player2';
+            if ((game.moves.length % 2 === 0 && activePlayer === 'player1')
+            || (game.moves.length % 2 === 1 && activePlayer === 'player2')) {
 
-            // check that the move is legal
-            if (abraLogic.checkLegality(move, game.moves)) {
+              // check that the move is legal
+              if (abraLogic.checkLegality(move, game.moves)) {
 
-              // add the move to the game
-              game.moves.push(move)
-              
-              // update times
-              const unix = new Date().getTime();
-              game.time[activePlayer] -= unix - game.time.lastMove;
-              game.time.lastMove = unix;
+                // add the move to the game
+                game.moves.push(move)
+                
+                // update times
+                const unix = new Date().getTime();
+                game.time[activePlayer] -= unix - game.time.lastMove;
+                game.time.lastMove = unix;
 
-              // see if anyone ran out of time
-              let winner;
-              if (game.time[activePlayer] <= 0) {
-                winner = activePlayer === 'player1' ? 'player2' : 'player1';
-              } else {
-                winner = abraLogic.findWinner(game.moves);
-              }
+                // see if anyone ran out of time
+                let winner;
+                if (game.time[activePlayer] <= 0) {
+                  game.time[activePlayer] = 0;
+                  winner = activePlayer === 'player1' ? 'player2' : 'player1';
+                } else {
+                  winner = abraLogic.findWinner(game.moves);
+                }
 
-              // const winner = abraLogic.findWinner(game.moves);
+                // const winner = abraLogic.findWinner(game.moves);
 
-              // check if someone has won the game              
-              if (winner) {
-                game.winner = winner;
-                io.to(gameId).emit('winner', winner)
+                // check if someone has won the game              
+                if (winner) {
+                  game.winner = winner;
+                  io.to(gameId).emit('winner', winner)
 
-                // add wins and losses to user objects
-                db.User.findById(game[winner])
-                .then(user => {
-                  user.wins++
-                  user.save()
-                })
-                db.User.findById(game[winner === 'player1' ? 'player2' : 'player1'])
-                .then(user => {
-                  user.losses++
-                  user.save()
-                })
-              }
+                  // add wins and losses to user objects
+                  db.User.findById(game[winner])
+                  .then(user => {
+                    user.wins++
+                    user.save()
+                  })
+                  db.User.findById(game[winner === 'player1' ? 'player2' : 'player1'])
+                  .then(user => {
+                    user.losses++
+                    user.save()
+                  })
+                }
 
-              return game.save()
+                return game.save()
 
-            // move was not legal
+              // move was not legal (hacker)
+              } else return false;
+            
+            // wrong user sent the move (hacker)
             } else return false;
-          
-          // wrong user sent the move
+
+          // user isn't a part of this game (hacker)
           } else return false;
 
-        }
+        // game has already been finished (hacker)
+        } else return false;
       })
       .then(game => {
         if (game) {

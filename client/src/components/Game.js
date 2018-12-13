@@ -14,8 +14,7 @@ class Game extends Component {
   };
 
   componentDidMount() {
-    //NOTE; change this to getGame()
-    API.getGame()
+    API.getActiveGame()
     .then(res => {
       const game = res.data;
       if (game) {
@@ -25,6 +24,20 @@ class Game extends Component {
       }
     })
     // .catch(err => alert('No game found'))
+  }
+
+  reloadGame = () => {
+    API.getGame(this.state._id)
+    .then(res => {
+      const game = res.data;
+      if (game) {
+        this.setState({
+          moves: game.moves,
+          winner: game.winner,          
+          time: game.time
+        })
+      }
+    })
   }
 
   makeMove = move => {
@@ -64,6 +77,7 @@ class Game extends Component {
     const { player1, player2, moves, winner, time, queued, playerCount } = this.state;
 
     if (player1 && player2) {
+
       // game in progress
       return (
         <div>
@@ -73,6 +87,7 @@ class Game extends Component {
             moves={moves} 
             time={time}
             winner={winner}
+            reloadGame={this.reloadGame}
           />
   
           { moves && (

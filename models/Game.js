@@ -37,4 +37,22 @@ const GameSchema = new Schema({
   }
 });
 
+// this listener will fire on .find() and .save() before any data changes
+GameSchema.post('init', function (game) {
+  if (!game.winner) {
+
+    // check for time out
+    const unix = new Date().getTime();
+    const difference = unix - game.time.lastMove;
+    
+    // check if current player has timed out
+    const activePlayer = game.moves.length % 2 ? 'player2' : 'player1';
+    if (game.time[activePlayer] - difference <= 0) {
+      game.time[activePlayer] = 0;
+      game.winner = activePlayer === 'player1' ? 'player2' : 'player1';
+      game.save()
+    }
+  }
+})
+
 module.exports = mongoose.model('Game', GameSchema);

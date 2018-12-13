@@ -40,7 +40,9 @@ class Timer extends Component {
     }
 
     unixToTime = unix => {
-        if (unix <= 0) return '0:00';
+        if (unix <= 0) {
+            return '0:00';
+        }
 
         let minutes = Math.floor(unix / (1000 * 60)).toString();
         let seconds = Math.floor(unix / 1000 % 60).toString();
@@ -54,6 +56,11 @@ class Timer extends Component {
 
     render() { 
         const { unix } = this.state;
+
+        if (unix < 0) {
+            this.stopCountdown()
+            this.props.reloadGame()
+        }
 
         return (
             <span>{this.unixToTime(unix)}</span>

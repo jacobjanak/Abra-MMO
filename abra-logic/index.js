@@ -6,7 +6,7 @@ const abraLogic = {
         return Math.ceil(abraLogic.width ** 2 / 2);
     },
 
-    indexToMove = index => {
+    indexToMove: index => {
         // get distances from the middle square
         const relativeX = (index % abraLogic.width) - (abraLogic.middle % abraLogic.width);
         const relativeY = Math.floor(abraLogic.middle / abraLogic.width) - Math.floor(index / abraLogic.width);
@@ -14,7 +14,7 @@ const abraLogic = {
         const move = relativeX + ',' + relativeY;
     
         return move;
-    }
+    },
 
     findWinner: moves => {
         let winner = false;
@@ -68,7 +68,7 @@ const abraLogic = {
             tiles[tileIndex].owner = i % 2 === 0 ? 'player1' : 'player2';
         })
 
-        return tiles;
+        return abraLogic.checkAvailability(tiles);
     },
 
     moveToIndex: move => {

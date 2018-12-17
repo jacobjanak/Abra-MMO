@@ -41,8 +41,8 @@ function socket(http) {
             player1: random ? userId : queue.pop(),
             player2: random ? queue.pop() : userId,
             time: {
-              player1: 15 * 60 * 1000,
-              player2: 15 * 60 * 1000
+              player1: 0.25 * 60 * 1000,
+              player2: 0.25 * 60 * 1000
             }
           })
           .then(game => {
@@ -96,6 +96,7 @@ function socket(http) {
       const gameId = Object.keys(client.rooms)[1];
       db.Game.findById(gameId)
       .then(game => {
+        if (!game) return false;
         if (!game.winner) {
 
           // make sure the client is actually a part of this game (redundant?)

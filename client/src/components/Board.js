@@ -21,10 +21,9 @@ class Board extends Component {
 
   componentDidMount() {
     let tiles = abraLogic.movesToTiles(this.props.moves);
-    tiles = abraLogic.checkAvailability(tiles);
-    this.setState({
-      tiles
-    }, this.centerView)
+    tiles = abraLogic.checkAvailability(tiles); //NOTE: this will be redundant one abra-logic updates
+
+    this.setState({ tiles }, this.centerView)
   }
 
   componentWillReceiveProps(prevProps) {

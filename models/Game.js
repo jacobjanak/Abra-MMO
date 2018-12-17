@@ -44,10 +44,16 @@ GameSchema.post('init', function (game) {
     // check for time out
     const unix = new Date().getTime();
     const difference = unix - game.time.lastMove;
-    
-    // check if current player has timed out
+
+    // update players time (no need to save)
     const activePlayer = game.moves.length % 2 ? 'player2' : 'player1';
-    if (game.time[activePlayer] - difference <= 0) {
+    game.time[activePlayer] -= difference;
+
+    // update lastMove (no need to save)
+    game.time.lastMove = unix;
+
+    // check if current player has timed out
+    if (game.time[activePlayer] <= 0) {
       game.time[activePlayer] = 0;
       game.winner = activePlayer === 'player1' ? 'player2' : 'player1';
       game.save()

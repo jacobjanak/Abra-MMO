@@ -23,15 +23,15 @@ function socket(http) {
   io.on('connection', client => {
 
     client.on('queue', userId => {
-      //NOTE: move the user id stuff here
       if (!queue.includes(userId)) {
 
         // storing the client so that we can send the game once they're queued
         clients[userId] = client;
 
-        // storing the userId in the client to create a link between clients and user objects
+        // store userId in the client to link between client and user
         client.userId = userId;
 
+        // update the amount of players currently playing
         updatePlayerCount()
 
         if (queue.length > 0) {
@@ -41,8 +41,8 @@ function socket(http) {
             player1: random ? userId : queue.pop(),
             player2: random ? queue.pop() : userId,
             time: {
-              player1: 0.25 * 60 * 1000,
-              player2: 0.25 * 60 * 1000
+              player1: 15 * 60 * 1000,
+              player2: 15 * 60 * 1000
             }
           })
           .then(game => {

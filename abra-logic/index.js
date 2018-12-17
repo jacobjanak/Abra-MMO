@@ -6,6 +6,16 @@ const abraLogic = {
         return Math.ceil(abraLogic.width ** 2 / 2);
     },
 
+    indexToMove = index => {
+        // get distances from the middle square
+        const relativeX = (index % abraLogic.width) - (abraLogic.middle % abraLogic.width);
+        const relativeY = Math.floor(abraLogic.middle / abraLogic.width) - Math.floor(index / abraLogic.width);
+      
+        const move = relativeX + ',' + relativeY;
+    
+        return move;
+    }
+
     findWinner: moves => {
         let winner = false;
         const tiles = abraLogic.movesToTiles(moves);

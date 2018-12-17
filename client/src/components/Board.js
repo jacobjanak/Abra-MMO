@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import abraLogic from 'abra-logic';
 import Tile from './Tile';
 
 class Board extends Component {
@@ -19,20 +20,18 @@ class Board extends Component {
   }
 
   componentDidMount() {
-    this.movesToTiles()
-    this.centerView()
-    this.setState(state => {
-      state.tiles = this.checkAvailability(state.tiles);
-      return state;
-    })
+    let tiles = abraLogic.movesToTiles(this.props.moves);
+    tiles = abraLogic.checkAvailability(tiles);
+    this.setState({
+      tiles
+    }, this.centerView)
   }
 
   componentWillReceiveProps(prevProps) {
-    // check if a winner was just announced, usually due to time out
-    console.log(prevProps)
+    // check if a winner was just announced due to time out
     if (prevProps.winner) {
       this.setState({
-        tiles: this.checkAvailability(this.state.tiles)
+        tiles: abraLogic.checkAvailability(this.state.tiles)
       })
     }
 
@@ -40,37 +39,17 @@ class Board extends Component {
     // check if new move was sent
     const moves = prevProps.moves;
     if (moves) {
-      const index = this.moveToIndex(moves[moves.length - 1]);
+      const index = abraLogic.moveToIndex(moves[moves.length - 1]);
       const player = moves.length % 2 === 1 ? 'player1' : 'player2'
       this.setState(state => {
         state.tiles[index].owner = player;
-        state.tiles = this.checkAvailability(state.tiles);
+        state.tiles = abraLogic.checkAvailability(state.tiles);
         return state;
       })
     }
   }
 
-  // componentDidUpdate() {
-  //   // NOTE: couldn't this be componentWillReceiveProps instead?
-  //   // NOTE: this function is only setup to handle one move which may cause issues
-  //   const { moveCount } = this.state;
-  //   const { moves, winner } = this.props;
-
-  //   // check if new move was sent
-  //   if (moves.length !== moveCount) {
-  //     const index = this.moveToIndex(moves[moves.length - 1]);
-  //     const player = moves.length % 2 === 1 ? 'player1' : 'player2'
-  //     this.setState(state => {
-  //       state.tiles[index].owner = player;
-  //       state.tiles = this.checkAvailability(state.tiles);
-  //       state.moveCount = moves.length;
-  //       return state;
-  //     })
-  //   }
-  // }
-
   centerView = () => {
-    //NOTE: this function is not working perfectly. The game looks slightly off-center
     const { width, tileSize } = this.state;
     const container = ReactDOM.findDOMNode(this.refs.container);
 
@@ -81,33 +60,7 @@ class Board extends Component {
     // not sure why adding 25 works but it makes it perfect
   };
 
-  movesToTiles = () => {
-    const { width } = this.state;
-    const { moves } = this.props;
-    const tiles = [];
-
-    // fill array with empty tiles NOTE: does it have to be empty objects?
-    for (let i = 0; i < width ** 2; i++) {
-      tiles.push({})
-    }
-
-    moves.forEach((move, i) => {
-      const index = this.moveToIndex(move, tiles);
-      tiles[index].owner = i % 2 === 0 ? 'player1' : 'player2';
-    })
-
-    this.setState({ tiles, moveCount: moves.length })
-  };
-
-  moveToIndex = (move, optionalTiles) => {
-    const { width, middleTile } = this.state;
-    const xy = move.split(',');
-
-    let index = middleTile + Number(xy[0]) - (Number(xy[1]) * width);
-
-    return index;
-  }
-
+  //NOTE: need to replace this with abraLogic
   indexToMove = index => {
     const { width, middleTile } = this.state;
 
@@ -124,36 +77,6 @@ class Board extends Component {
     const move = this.indexToMove(index);
     this.props.makeMove(move)
   }
-
-  checkAvailability = tiles => {
-    const { width } = this.state;
-    const { winner } = this.props;
-
-    tiles.forEach((tile, i) => {
-      if (tile.owner || winner) {
-        return tile.available = false
-      }
-
-      // check all 4 neighbouring tiles
-      if (i >= width && tiles[i - width].owner) {
-        tile.available = true; // up
-      }
-      else if (i < width * (width - 1) && tiles[i + width].owner) {
-        tile.available = true; // down
-      }
-      else if (i % width !== 0 && tiles[i - 1].owner) {
-        tile.available = true; // left
-      }
-      else if (i % width !== width - 1 && tiles[i + 1].owner) {
-        tile.available = true; // right
-      }
-      else if (tile.available) {
-        tile.available = false;
-      }
-    })
-
-    return tiles;
-  };
 
   render() {
     const { width, tiles, tileSize } = this.state;

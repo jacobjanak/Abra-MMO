@@ -59,21 +59,7 @@ class Board extends Component {
     // not sure why adding 25 works but it makes it perfect
   };
 
-  //NOTE: need to replace this with abraLogic
-  // indexToMove = index => {
-  //   const { width, middleTile } = this.state;
-
-  //   // get distances from the middle square
-  //   const relativeX = (index % width) - (middleTile % width);
-  //   const relativeY = Math.floor(middleTile / width) - Math.floor(index / width);
-  
-  //   const move = relativeX + ',' + relativeY;
-
-  //   return move;
-  // }
-
   handleClick = index => {
-    console.log(abraLogic)
     const move = abraLogic.indexToMove(index);
     this.props.makeMove(move)
   }

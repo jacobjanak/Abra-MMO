@@ -60,9 +60,9 @@ router.get('/user/game', isAuthenticated, (req, res) => {
       { player2: req.user.id }
     ] 
   })
-  .then(game => {
+  .then(games => {
     //NOTE: if time is up declare winner
-    if (game) res.json(game[game.length - 1]);
+    if (games) res.json(games[games.length - 1]);
     else res.status(404).send('No game found');
   })
   .catch(err => console.log(err))

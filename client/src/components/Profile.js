@@ -13,7 +13,6 @@ class Profile extends Component {
   componentDidMount() {
     API.getUser(this.props.match.params.username)
     .then(res => {
-      console.log(res)
       const user = res.data;
       this.setState({ ...user })
     })

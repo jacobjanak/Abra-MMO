@@ -4,23 +4,22 @@ import axios from 'axios';
 class AuthService {
   user = () => {
     const token = localStorage.getItem('id_token');
-    return token ? decode(token) : false;
+    
+    // no user is logged in
+    if (!token) return false;
+    
+    // check if token is valid or expired
+    if (!this.isTokenExpired(token)) {
+      return decode(token);
+    } else {
+      this.logout()
+    }
   };
 
-  // NOTE: I will impliment expiring tokens later
-  // isTokenExpired = token => {
-  //   try {
-  //     const decoded = decode(token);
-  //     if (decoded.exp < Date.now() / 1000) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   }
-  //   catch (err) {
-  //     return false;
-  //   }
-  // };
+  isTokenExpired = token => {
+    const decoded = decode(token);
+    return decoded.exp < Date.now() / 1000;
+  };
 
   signUp = (email, password, firstName, lastName, role) => {
     return new Promise((resolve, reject) => {
@@ -58,6 +57,7 @@ class AuthService {
     // clear user token and profile data from localStorage
     axios.defaults.headers.common['Authorization'] = null;
     localStorage.removeItem('id_token');
+    window.location.reload()
   };
 }
 

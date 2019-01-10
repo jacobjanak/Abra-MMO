@@ -20,7 +20,12 @@ class Game extends Component {
       if (game) {
         API.joinGame(game._id, this.socketCallback)
       } else {
-        API.getPlayerCount(playerCount => this.setState({ playerCount }))
+        API.getPlayerCount(playerCount => {
+          // prevent unnecessary re-renders if a game is in progress
+          if (!this.state._id) {
+            this.setState({ playerCount })
+          }
+        })
       }
     })
     // .catch(err => alert('No game found'))

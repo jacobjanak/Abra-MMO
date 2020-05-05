@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import AuthService from '../AuthService';
+import './Login.css';
 
 class Login extends Component {
   constructor() {
@@ -29,30 +30,36 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="container">
-        <h1>Login</h1>
+      <div id="login-container" className="container">
+        <h1 className="mb-3">Login</h1>
         <form onSubmit={this.handleFormSubmit}>
           <div className="form-group">
-            <label htmlFor="email">Email address:</label>
+            <label className="mb-0" htmlFor="email">
+              Email address:
+            </label>
             <input className="form-control"
-                   placeholder="Email goes here..."
+                   placeholder="Email address"
                    name="email"
                    type="email"
                    id="email"
                    onChange={this.handleChange}/>
           </div>
           <div className="form-group">
-            <label htmlFor="pwd">Password:</label>
+            <label className="mb-0" htmlFor="password">
+              Password:
+            </label>
             <input className="form-control"
-                   placeholder="Password goes here..."
+                   placeholder="Password"
                    name="password"
                    type="password"
-                   id="pwd"
+                   id="password"
                    onChange={this.handleChange}/>
           </div>
-          <button type="submit" className="btn btn-primary">Submit</button>
+          <div className="mt-4">
+            <button type="submit" className="btn btn-primary">Login</button>
+            <Link className="ml-2" to="/signup">Don't have an account?</Link>
+          </div>
         </form>
-        <p><Link to="/signup">Go to Signup</Link></p>
       </div>
 
     );

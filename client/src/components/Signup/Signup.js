@@ -57,8 +57,7 @@ class Signup extends Component {
   render() {
     return (
       <div id="signup-container" className="container">
-
-        <h1 id="signup-heading">Signup</h1>
+        <h1 className="mb-3">Signup</h1>
         <form onSubmit={this.handleFormSubmit}>
           <div className="form-group">
             <label className="mb-0" htmlFor="email">
@@ -109,15 +108,14 @@ class Signup extends Component {
                    value={this.state.confirm}
                    onChange={this.handleChange}/>
             { this.state.confirmError &&
-
-            <small id="emailHelp" class="form-text text-danger">
-              Passwords must match
-            </small>
+              <small id="emailHelp" class="form-text text-danger">
+                Passwords must match
+              </small>
             }
           </div>
           <div className="mt-4">
             <button type="submit" className="btn btn-primary">Create account</button>
-            <Link id="login-link" to="/login">Already have an account?</Link>
+            <Link className="ml-2" to="/login">Already have an account?</Link>
           </div>
         </form>
       </div>

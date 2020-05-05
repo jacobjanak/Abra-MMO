@@ -1,9 +1,8 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
-import AuthService from './AuthService';
-import API from '../API';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import AuthService from '../AuthService';
 
-class Signup extends Component {
+class Login extends Component {
   constructor() {
     super();
     this.Auth = new AuthService();
@@ -17,27 +16,21 @@ class Signup extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    API.signUpUser({
-      username: this.state.username,
-      email: this.state.email,
-      password: this.state.password
-    })
-    .then(res => this.props.history.replace('/login'))
-    .catch(err => alert(err));
+
+    this.Auth.login(this.state.email, this.state.password)
+    .then(user => window.location.reload())
+    .catch(err => alert(err.response.data.message))
   };
 
   handleChange = event => {
-    const {name, value} = event.target;
-    this.setState({
-      [name]: value
-    });
+    const { name, value } = event.target;
+    this.setState({ [name]: value })
   };
 
   render() {
     return (
       <div className="container">
-
-        <h1>Signup</h1>
+        <h1>Login</h1>
         <form onSubmit={this.handleFormSubmit}>
           <div className="form-group">
             <label htmlFor="email">Email address:</label>
@@ -46,15 +39,6 @@ class Signup extends Component {
                    name="email"
                    type="email"
                    id="email"
-                   onChange={this.handleChange}/>
-          </div>
-          <div className="form-group">
-            <label htmlFor="username">Username:</label>
-            <input className="form-control"
-                   placeholder="Username goes here..."
-                   name="username"
-                   type="text"
-                   id="username"
                    onChange={this.handleChange}/>
           </div>
           <div className="form-group">
@@ -68,10 +52,11 @@ class Signup extends Component {
           </div>
           <button type="submit" className="btn btn-primary">Submit</button>
         </form>
-        <p><Link to="/login">Go to Login</Link></p>
+        <p><Link to="/signup">Go to Signup</Link></p>
       </div>
+
     );
   }
 }
 
-export default Signup;
+export default Login;

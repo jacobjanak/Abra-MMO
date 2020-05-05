@@ -49,8 +49,8 @@ class Game extends Component {
     const { user } = this.props;
     const { player1, player2, moves } = this.state;
 
-    if ((user.id == player1._id && moves.length % 2 === 0) ||
-        (user.id == player2._id && moves.length % 2 !== 0)) {
+    if ((user.id === player1._id && moves.length % 2 === 0) ||
+        (user.id === player2._id && moves.length % 2 !== 0)) {
       API.move(move)
     }
   };

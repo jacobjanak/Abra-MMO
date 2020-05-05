@@ -36,7 +36,9 @@ class MoveList extends Component {
                         {
                           moves[i + 1]
                           ? this.formatMove(moves[i + 1])
-                          : <span style={{ color: 'transparent' }}>{ this.formatMove('0,0') }</span>
+                          : (<span style={{ color: 'transparent' }}>
+                              { this.formatMove('0,0') }
+                            </span>)
                         }
                     </span>
                 </div>

@@ -1,0 +1,12 @@
+#signup-container {
+    max-width: 420px;
+    margin: 16px auto 32px;
+}
+
+#signup-heading {
+    margin-bottom: 16px;
+}
+
+#login-link {
+    margin-left: 12px;
+}

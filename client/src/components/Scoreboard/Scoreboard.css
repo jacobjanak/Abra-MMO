@@ -1,22 +1,62 @@
 #scoreboard {
     z-index: 100;
     position: absolute;
-    top: 60px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 56px;
+    /* 320 is for scoreboard items, 12 for scrollbar */
+    left: calc(50% - 322px - 12px);
 }
 
-#scoreboard .lead {
-    margin-bottom: 0;
+.username {
+    color: black;
+}
+
+.username:hover {
+    text-decoration: none;
+    color: black;
+}
+
+.timer {
+    width: 200px
 }
 
 #active-timer {
     background: rgba(0, 255, 0, 0.6);
 }
 
-/* .username {
-    float: right;
-} */
+#scoreboard > h2 > span {
+    position: absolute;
+    top: 0;
+}
+
+.scoreboard-item-1 {
+    width: 200px;
+    left: 0;
+    text-align: right;
+}
+
+.scoreboard-item-2 {
+    width: 84px;
+    left: 212px;
+    text-align: center;
+}
+
+.scoreboard-item-3 {
+    width: 56px;
+    left: 296px;
+    text-align: center;
+}
+
+.scoreboard-item-4 {
+    width: 84px;
+    left: 352px;
+    text-align: center;
+}
+
+.scoreboard-item-5 {
+    width: 200px;
+    left: 448px;
+    text-align: left;
+}
 
 /* Move Controls */
 /* #move-controls {

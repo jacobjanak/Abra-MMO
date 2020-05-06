@@ -7,10 +7,6 @@ body {
 
 /* Game */
 #game-container {
-  /* top: 0;
-  left: 0; */
-  /* padding-left: 50vw; */
-  /* padding-right: 50vw; */
   height: calc(100vh - 56px); /* subtract 56 for navbar */
   width: 100%;
   max-width: 100%;
@@ -30,6 +26,7 @@ body {
   display: inline-block;
   height: 50px;
   width: 50px;
+  margin: -1px 0 0 -1px;
 }
 
 .tile.owned {

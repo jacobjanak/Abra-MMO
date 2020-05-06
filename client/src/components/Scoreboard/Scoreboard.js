@@ -13,9 +13,14 @@ class Scoreboard extends Component {
         return (
             <div id="scoreboard">   
                 <h2>
+                    <span className="scoreboard-item-1 py-1">
+                        <a className="username" href={"/profile/" + player1.username}>
+                            {player1.username}
+                        </a>
+                    </span>
                     <span
-                        className="px-2 py-1 mr-2"
                         id={activePlayer === 'player1' ? 'active-timer' : ''}
+                        className="scoreboard-item-2 py-1 timer"
                     >
                         <Timer 
                             unix={time.player1} 
@@ -23,18 +28,23 @@ class Scoreboard extends Component {
                             reloadGame={reloadGame}
                         />
                     </span>
-                    <span className="px-2 py-1 mr-2">{player1.username}</span>
-                    <span className="py-1 ml-1 mr-1">vs</span>
-                    <span className="px-2 py-1 ml-2">{player2.username}</span>
+                    <span className="scoreboard-item-3 py-1">
+                        vs
+                    </span>
                     <span
                         id={activePlayer === 'player2' ? 'active-timer' : ''}
-                        className="px-2 py-1 ml-2"
+                        className="scoreboard-item-4 py-1 timer"
                     >
                         <Timer 
                             unix={time.player2} 
                             active={activePlayer === 'player2'} 
                             reloadGame={reloadGame}
                         />
+                    </span>
+                    <span className="scoreboard-item-5 py-1">
+                        <a className="username" href={"/profile/" + player2.username}>
+                            {player2.username}
+                        </a>
                     </span>
                 </h2>
 

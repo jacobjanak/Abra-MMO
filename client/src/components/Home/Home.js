@@ -21,7 +21,7 @@ class Home extends Component {
         {/* <p className="lead">Welcome to the best game you've ever played.</p> */}
 
         <a id="play-now" className="btn btn-dark btn-lg" href="/play">
-          Play Now <i className="fas fa-play" style={{ marginLeft: 4 }}></i>
+          Play now <i className="fas fa-play" style={{ marginLeft: 4 }}></i>
         </a>
       </div>
     );

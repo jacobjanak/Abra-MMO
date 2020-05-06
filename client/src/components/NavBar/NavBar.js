@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import AuthService from './AuthService';
+import AuthService from '../AuthService';
+import './NavBar.css';
 
 class NavBar extends Component {
   state = { username: '' };

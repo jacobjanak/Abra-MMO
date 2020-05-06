@@ -3,3 +3,8 @@
     padding-bottom: 0;
     font-size: 1.25em;
 }
+
+.navbar-collapse > .navbar-nav {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}

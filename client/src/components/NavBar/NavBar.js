@@ -41,7 +41,7 @@ class NavBar extends Component {
                 <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">
                   {username}
                 </a>
-                <div className="dropdown-menu dropdown-menu-right mt-0">
+                <div className="dropdown-menu dropdown-menu-right mt-3">
                   <a className="dropdown-item" href={"/profile/" + username}>Profile</a>
                   <div className="dropdown-divider"></div>
                   <a className="dropdown-item" href="#" onClick={this.handleLogout}>Logout</a>

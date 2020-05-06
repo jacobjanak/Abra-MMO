@@ -94,12 +94,22 @@ class Game extends Component {
             winner={winner}
             reloadGame={this.reloadGame}
           />
-  
+
           { moves && (
             <Board moves={moves} winner={winner} makeMove={this.makeMove} />
           )}
         </div>
       );  
+        // <div>
+        //   <Scoreboard 
+        //     player1={player1} 
+        //     player2={player2} 
+        //     moves={moves} 
+        //     time={time}
+        //     winner={winner}
+        //     reloadGame={this.reloadGame}
+        //   />
+        // </div>
     } else {
       // no game, user should queue up
       const style = {

@@ -1,25 +1,29 @@
 #scoreboard {
     z-index: 100;
     position: absolute;
-    right: 41px; /* adding 17px to account for scrollbar */
-    bottom: 24px;
-    width: 200px;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 #scoreboard .lead {
     margin-bottom: 0;
 }
 
-.username {
-    float: right;
+#active-timer {
+    background: rgba(0, 255, 0, 0.6);
 }
 
+/* .username {
+    float: right;
+} */
+
 /* Move Controls */
-#move-controls {
+/* #move-controls {
     display: flex;
     height: 28px;
     border: 1px solid black;
-    border-bottom: 0; /* prevent doubled up border */
+    border-bottom: 0;
 }
 
 .move-control {
@@ -38,7 +42,7 @@
     cursor: pointer;
 }
 
-/* Move List */
+Move List
 #move-list-container {
     padding-left: 8px;
     padding-right: 8px;
@@ -59,4 +63,4 @@
 .move {
     flex-grow: 1;
     text-align: center;
-}
+} */

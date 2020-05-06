@@ -12,7 +12,7 @@ function withAuth(AuthComponent, props) {
       if (user) {
         this.setState({ user })
       } else {
-        this.props.history.replace('/signup');
+        this.props.history.replace('/login');
       }
     }
 

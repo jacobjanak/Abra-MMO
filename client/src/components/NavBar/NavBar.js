@@ -51,7 +51,7 @@ class NavBar extends Component {
           ) : (
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <a className="btn btn-outline-light mr-2" href="/signup" role="button">Sign Up</a>
+                <a className="btn btn-outline-light mr-2" href="/signup" role="button">Sign up</a>
               </li>
               <li className="nav-item">
                 <a className="btn btn-dark" href="/login" role="button">Login</a>

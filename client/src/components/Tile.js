@@ -12,12 +12,17 @@ class Tile extends Component {
   };
 
   render() {
-    const { owner, available, winner } = this.props;
+    const { owner, available, winner, userIsPlayer1 } = this.props;
 
     if (owner) {
-      const style = {
-        backgroundColor: owner === 'player1' ? 'red' : 'blue'
-      };
+      
+      // user always has blue
+      const style = {};
+      if (userIsPlayer1) {
+        style.backgroundColor = owner === 'player1' ? 'blue' : 'red';
+      } else {
+        style.backgroundColor = owner === 'player1' ? 'red' : 'blue';
+      }
 
       // offCenter is just for the <Logo> component on the homepage
       if (this.props.offCenter) {

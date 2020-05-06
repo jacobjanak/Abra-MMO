@@ -44,7 +44,7 @@ body {
 }
 
 .tile.available:hover {
-  background-color: darkgrey;
+  background-color: blue;
 }
 
 .tile.locked {

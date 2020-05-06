@@ -81,9 +81,11 @@ class Game extends Component {
   render() {
     const { player1, player2, moves, winner, time, queued, playerCount } = this.state;
 
+    // game in progress
     if (player1 && player2) {
 
-      // game in progress
+      const userIsPlayer1 = player1._id === this.props.user.id;
+
       return (
         <div>
           <Scoreboard 
@@ -96,7 +98,12 @@ class Game extends Component {
           />
 
           { moves && (
-            <Board moves={moves} winner={winner} makeMove={this.makeMove} />
+            <Board 
+              moves={moves}
+              winner={winner}
+              userIsPlayer1={userIsPlayer1}
+              makeMove={this.makeMove}
+            />
           )}
         </div>
       );  
@@ -133,7 +140,7 @@ class Game extends Component {
             style={buttonStyle}
             onClick={this.queue}
           >
-            {queued ? "Leave Queue" : "Enter Queue"}
+            {queued ? "Leave queue" : "Enter queue"}
           </button>
         </div>
       );

@@ -4,6 +4,7 @@
 */
 
 const abraLogic = require('../abra-logic/');
+abraLogic.width = 39;
 
 const clients = {};
 const queue = [];

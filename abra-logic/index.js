@@ -1,5 +1,5 @@
 const abraLogic = {
-    width: 19,
+    width: 39,
 
     // index of the middle tile. using get allows this to update as width changes.
     get middle() {

@@ -7,7 +7,7 @@ class Board extends Component {
   constructor() {
     super()
 
-    const width = 19; // must be an odd number
+    const width = 39; // must be an odd number
     const middleTile = Math.ceil(width ** 2 / 2);
 
     this.state = {
@@ -20,6 +20,7 @@ class Board extends Component {
   }
 
   componentDidMount() {
+    abraLogic.width = this.state.width;
     let tiles = abraLogic.movesToTiles(this.props.moves);
     tiles = abraLogic.checkAvailability(tiles); //NOTE: this will be redundant one abra-logic updates
 
@@ -39,9 +40,28 @@ class Board extends Component {
     const moves = prevProps.moves;
     if (moves) {
       const index = abraLogic.moveToIndex(moves[moves.length - 1]);
+
       const player = moves.length % 2 === 1 ? 'player1' : 'player2'
       this.setState(state => {
         state.tiles[index].owner = player;
+
+        // check if the board size needs to be increased
+        // if (index % this.state.width <= 0
+        //   || index % this.state.width >= this.state.width - 1
+        //   || index < this.state.width
+        //   || index >= this.state.width ** 2 - this.state.width) {
+
+        //   // this guarantees the width will be odd
+        //   state.width = abraLogic.width = abraLogic.width * 2 - 1;
+        //   state.middleTile = Math.ceil(state.width ** 2 / 2);
+
+        //   // remake tiles with new larger width
+        //   state.tiles = abraLogic.movesToTiles(moves);
+
+        //   // need to increase the width on initial startup
+        //   // need to tell server to increase the width
+        // }
+
         state.tiles = abraLogic.checkAvailability(state.tiles);
         return state;
       })

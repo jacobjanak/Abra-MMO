@@ -4,7 +4,9 @@
     font-size: 1.25em;
 }
 
-.navbar-collapse > .navbar-nav {
-    margin-top: 12px;
-    margin-bottom: 12px;
+@media screen and (max-width: 991px) {
+    .navbar-collapse > .navbar-nav {
+        margin-top: 12px;
+        margin-bottom: 12px;
+    }
 }

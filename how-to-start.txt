@@ -1,0 +1,4 @@
+install mongodb and start mongod
+install node and run 'npm run install-deps'
+...you may need to run 'npm install --global yarn' first
+run 'npm run dev' to start the development server

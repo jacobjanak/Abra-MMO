@@ -46,13 +46,9 @@ class Game extends Component {
   }
 
   makeMove = move => {
-    const { user } = this.props;
-    const { player1, player2, moves } = this.state;
-
-    if ((user.id === player1._id && moves.length % 2 === 0) ||
-        (user.id === player2._id && moves.length % 2 !== 0)) {
-      API.move(move)
-    }
+    // this function could be used to make front-end checks
+    // to make sure the move is legal before sending it
+    API.move(move)
   };
 
   queue = () => {
@@ -79,12 +75,29 @@ class Game extends Component {
   };
 
   render() {
-    const { player1, player2, moves, winner, time, queued, playerCount } = this.state;
+    const {
+      player1,
+      player2,
+      moves,
+      winner,
+      time,
+      queued,
+      playerCount
+    } = this.state;
 
     // game in progress
     if (player1 && player2) {
 
+      // check if the user is player1 or player2
       const userIsPlayer1 = player1._id === this.props.user.id;
+
+      // check whose turn it is
+      const { user } = this.props;
+      let userIsActive = false;
+      if ((user.id === player1._id && moves.length % 2 === 0) ||
+          (user.id === player2._id && moves.length % 2 !== 0)) {
+        userIsActive = true;
+      }
 
       return (
         <div>
@@ -101,6 +114,7 @@ class Game extends Component {
             <Board 
               moves={moves}
               winner={winner}
+              userIsActive={userIsActive}
               userIsPlayer1={userIsPlayer1}
               makeMove={this.makeMove}
             />
@@ -129,7 +143,7 @@ class Game extends Component {
 
       return (
         <div className="container pt-4" style={style}>
-          <h1 className="display-4">Play Now</h1>
+          <h1 className="display-4">Play now</h1>
           {(playerCount || playerCount === 0) && (
             <p className="lead">
               {playerCount} players currently playing

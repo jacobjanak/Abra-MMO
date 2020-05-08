@@ -86,12 +86,12 @@ class Board extends Component {
 
   render() {
     const { width, tiles, tileSize } = this.state;
-    const { winner, userIsPlayer1 } = this.props;
+    const { winner, userIsActive, userIsPlayer1 } = this.props;
 
     const gameStyles = {
       width: width * tileSize,
       height: width * tileSize,
-    };
+    }; 
 
     return (
       <div id="game-container" ref="container">
@@ -100,6 +100,7 @@ class Board extends Component {
             <Tile
               {...tile}
               winner={winner}
+              userIsActive={userIsActive}
               userIsPlayer1={userIsPlayer1}
               index={i}
               key={i}

@@ -12,7 +12,7 @@ class Tile extends Component {
   };
 
   render() {
-    const { owner, available, winner, userIsPlayer1 } = this.props;
+    const { owner, available, winner, userIsActive, userIsPlayer1 } = this.props;
 
     if (owner) {
       
@@ -34,9 +34,16 @@ class Tile extends Component {
       );
     }
     else if (available && !winner) {
-      return (
-        <div className="tile available" onClick={this.handleClick}></div>
-      );
+      // user cannot click if it's not their turn
+      if (userIsActive) {
+        return (
+          <div className="tile available player-active" onClick={this.handleClick}></div>
+        );
+      } else {
+        return (
+          <div className="tile available player-inactive"></div>
+        );
+      }
     }
     else {
       return (

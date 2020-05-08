@@ -47,7 +47,11 @@ body {
   background-color: white;
 }
 
-.tile.available:hover {
+.tile.available.player-inactive:hover {
+  cursor: not-allowed;
+}
+
+.tile.available.player-active:hover {
   background-color: blue;
 }
 

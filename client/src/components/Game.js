@@ -8,10 +8,13 @@ class Game extends Component {
     queued: false,
     player1: false,
     player2: false,
+    userIsPlayer1: false,
     moves: false,
     winner: false,
     playerCount: false
   };
+
+  audio = new Audio('./newmove.mp3');
 
   componentDidMount() {
     API.getActiveGame()
@@ -62,8 +65,23 @@ class Game extends Component {
   };
 
   socketCallback = (game, newMove, winner) => {
-    if (game) this.setState({ ...game });
+    if (game) {
+      const userIsPlayer1 = game.player1._id === this.props.user.id;
+      this.setState({
+        userIsPlayer1,
+        ...game 
+      })
+    }
     else if (newMove) {
+
+      // if newMove is from the enemy player we play a sound
+      if (this.state.moves.length % 2 === 0 && !this.state.userIsPlayer1
+        || this.state.moves.length % 2 === 1 && this.state.userIsPlayer1) {
+        this.audio.play()
+        // need to catch err or else site will crash on safari
+        .catch(err => {});
+      }
+
       this.setState(state => ({
         moves: [...state.moves, newMove.move],
         time: newMove.time
@@ -78,6 +96,7 @@ class Game extends Component {
     const {
       player1,
       player2,
+      userIsPlayer1,
       moves,
       winner,
       time,
@@ -87,9 +106,6 @@ class Game extends Component {
 
     // game in progress
     if (player1 && player2) {
-
-      // check if the user is player1 or player2
-      const userIsPlayer1 = player1._id === this.props.user.id;
 
       // check whose turn it is
       const { user } = this.props;

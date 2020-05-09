@@ -12,7 +12,7 @@ class Tile extends Component {
   };
 
   render() {
-    const { owner, available, winner, userIsActive, userIsPlayer1 } = this.props;
+    const { owner, available, winner, userIsActive, userIsPlayer1, isLastMove } = this.props;
 
     if (owner) {
       
@@ -30,7 +30,7 @@ class Tile extends Component {
       }
       
       return (
-        <div className="tile owned" style={style}></div>
+        <div className={"tile owned" + (isLastMove ? " last-move" : "")} style={style}></div>
       );
     }
     else if (available && !winner) {

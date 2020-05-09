@@ -20,11 +20,15 @@ class Board extends Component {
   }
 
   componentDidMount() {
+    const { moves } = this.props;
     abraLogic.width = this.state.width;
-    let tiles = abraLogic.movesToTiles(this.props.moves);
+    let tiles = abraLogic.movesToTiles(moves);
     tiles = abraLogic.checkAvailability(tiles); //NOTE: this will be redundant one abra-logic updates
 
-    this.setState({ tiles }, this.centerView)
+    // find the most resent move so that we can display it differently
+    const lastMove = abraLogic.moveToIndex(moves[moves.length - 1]);
+
+    this.setState({ tiles, lastMove }, this.centerView)
   }
 
   componentWillReceiveProps(prevProps) {
@@ -39,11 +43,13 @@ class Board extends Component {
     // check if new move was sent
     const moves = prevProps.moves;
     if (moves) {
-      const index = abraLogic.moveToIndex(moves[moves.length - 1]);
 
+      const index = abraLogic.moveToIndex(moves[moves.length - 1]);
       const player = moves.length % 2 === 1 ? 'player1' : 'player2'
+
       this.setState(state => {
         state.tiles[index].owner = player;
+        state.lastMove = index;
 
         // check if the board size needs to be increased
         // if (index % this.state.width <= 0
@@ -85,7 +91,7 @@ class Board extends Component {
   }
 
   render() {
-    const { width, tiles, tileSize } = this.state;
+    const { width, tiles, tileSize, lastMove } = this.state;
     const { winner, userIsActive, userIsPlayer1 } = this.props;
 
     const gameStyles = {
@@ -102,6 +108,7 @@ class Board extends Component {
               winner={winner}
               userIsActive={userIsActive}
               userIsPlayer1={userIsPlayer1}
+              isLastMove={lastMove === i}
               index={i}
               key={i}
               makeMove={this.handleClick}

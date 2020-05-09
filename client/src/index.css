@@ -43,20 +43,48 @@ body {
   -webkit-box-shadow: inset 0 0 1px 1px #000;
   -moz-box-shadow: inset 0 0 1px 1px #000;
   box-shadow: inset 0 0 1px 1px #000;
-  cursor: pointer;
   background-color: white;
 }
 
 .tile.available.player-inactive:hover {
-  cursor: not-allowed;
+  background-color: rgb(220, 220, 220);
 }
 
 .tile.available.player-active:hover {
   background-color: blue;
+  cursor: pointer;
 }
 
 .tile.locked {
   background-color: transparent;
+}
+
+.tile.last-move {
+  /* -webkit-box-shadow: inset 0 0 4px 4px gold;
+  -moz-box-shadow: inset 0 0 4px 4px gold;
+  box-shadow: inset 0 0 4px 4px gold; */
+  position: relative;
+}
+
+.tile.last-move:before, .tile.last-move:after {
+  position: absolute;
+  content: '';
+  background: gold;
+  display: block;
+  width: 100%;
+  height: 2px;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.tile.last-move:after {
+  -webkit-transform: rotate(45deg);  
+  transform: rotate(45deg);
 }
 
 /* NavBar */

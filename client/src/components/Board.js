@@ -13,6 +13,7 @@ class Board extends Component {
     this.state = {
       width,
       middleTile,
+      lastMove: -1,
       tileSize: 50,
       tiles: [],
       moveCount: 0,
@@ -28,7 +29,10 @@ class Board extends Component {
     // find the most resent move so that we can display it differently
     const lastMove = abraLogic.moveToIndex(moves[moves.length - 1]);
 
-    this.setState({ tiles, lastMove }, this.centerView)
+    this.setState({
+      tiles,
+      lastMove: moves.length > 2 ? lastMove : -1
+    }, this.centerView)
   }
 
   componentWillReceiveProps(prevProps) {

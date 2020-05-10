@@ -24,9 +24,7 @@ class NavBar extends Component {
 
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark" style={{ zIndex: 500 }}>
-        <Link to="/">
-          <a className="navbar-brand" href="/">Abra</a>
-        </Link>
+        <Link className="navbar-brand" to="/">Abra</Link>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
           <span className="navbar-toggler-icon" />
         </button>
@@ -34,9 +32,7 @@ class NavBar extends Component {
           <ul className="navbar-nav">
             { username && (
               <li className="nav-item">
-                <Link to={"/play"}>
-                  <a className="nav-item nav-link" href="/play">Play</a>
-                </Link>
+                <Link className="nav-item nav-link" to={"/play"}>Play</Link>
               </li>
             )}
           </ul>
@@ -47,9 +43,7 @@ class NavBar extends Component {
                   {username}
                 </a>
                 <div className="dropdown-menu dropdown-menu-right mt-3">
-                  <Link className="dropdown-item" to={"/profile/" + username}>
-                    Profile
-                  </Link>
+                  <Link className="dropdown-item" to={"/profile/" + username}>Profile</Link>
                   <div className="dropdown-divider"></div>
                   <a className="dropdown-item" href="#" onClick={this.handleLogout}>Logout</a>
                 </div>
@@ -58,14 +52,10 @@ class NavBar extends Component {
           ) : (
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link to={"/signup"}>
-                  <a className="btn btn-outline-light mr-2" href="/signup" role="button">Sign up</a>
-                </Link>
+                <Link className="btn btn-outline-light mr-2" to={"/signup"}>Sign up</Link>
               </li>
               <li className="nav-item">
-                <Link to={"/login"}>
-                  <a className="btn btn-dark" href="/login" role="button">Login</a>
-                </Link>
+                <Link className="btn btn-dark" to={"/login"}>Login</Link>
               </li>
             </ul>
           )}

@@ -68,6 +68,7 @@ class Signup extends Component {
                    name="email"
                    type="email"
                    id="email"
+                   maxLength="50"
                    required
                    onChange={this.handleChange}/>
           </div>
@@ -80,6 +81,7 @@ class Signup extends Component {
                    name="username"
                    type="text"
                    id="username"
+                   maxLength="12"
                    required
                    onChange={this.handleChange}/>
           </div>

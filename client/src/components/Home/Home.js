@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import AuthService from '../AuthService';
 import Logo from '../Logo';
 import './Home.css';
@@ -20,9 +21,11 @@ class Home extends Component {
 
         {/* <p className="lead">Welcome to the best game you've ever played.</p> */}
 
-        <a id="play-now" className="btn btn-dark btn-lg" href="/play">
-          Play now <i className="fas fa-play" style={{ marginLeft: 4 }}></i>
-        </a>
+        <Link to={"/play"}>
+          <a id="play-now" className="btn btn-dark btn-lg" href="/play">
+            Play now <i className="fas fa-play" style={{ marginLeft: 4 }}></i>
+          </a>
+        </Link>
       </div>
     );
   }

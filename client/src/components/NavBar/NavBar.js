@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import AuthService from '../AuthService';
 import './NavBar.css';
 
@@ -23,7 +24,9 @@ class NavBar extends Component {
 
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark" style={{ zIndex: 500 }}>
-        <a className="navbar-brand" href="/">Abra</a>
+        <Link to="/">
+          <a className="navbar-brand" href="/">Abra</a>
+        </Link>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
           <span className="navbar-toggler-icon" />
         </button>
@@ -31,7 +34,9 @@ class NavBar extends Component {
           <ul className="navbar-nav">
             { username && (
               <li className="nav-item">
-                <a className="nav-item nav-link" href="/play">Play</a>
+                <Link to={"/play"}>
+                  <a className="nav-item nav-link" href="/play">Play</a>
+                </Link>
               </li>
             )}
           </ul>
@@ -42,7 +47,9 @@ class NavBar extends Component {
                   {username}
                 </a>
                 <div className="dropdown-menu dropdown-menu-right mt-3">
-                  <a className="dropdown-item" href={"/profile/" + username}>Profile</a>
+                  <Link className="dropdown-item" to={"/profile/" + username}>
+                    Profile
+                  </Link>
                   <div className="dropdown-divider"></div>
                   <a className="dropdown-item" href="#" onClick={this.handleLogout}>Logout</a>
                 </div>
@@ -51,10 +58,14 @@ class NavBar extends Component {
           ) : (
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <a className="btn btn-outline-light mr-2" href="/signup" role="button">Sign up</a>
+                <Link to={"/signup"}>
+                  <a className="btn btn-outline-light mr-2" href="/signup" role="button">Sign up</a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="btn btn-dark" href="/login" role="button">Login</a>
+                <Link to={"/login"}>
+                  <a className="btn btn-dark" href="/login" role="button">Login</a>
+                </Link>
               </li>
             </ul>
           )}

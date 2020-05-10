@@ -28,9 +28,29 @@ router.post('/api/login', (req, res) => {
 })
 
 router.post('/api/signup', (req, res) => {
-  db.User.create(req.body)
-  .then(data => res.json(data))
-  .catch(err => res.status(400).json(err))
+  if (req.body.username.length > 12) {
+    //NOTE: the message never actually gets sent
+    res.status(400).send({ message: "Email cannot be more than 50 characters long" })
+  }
+  else if (req.body.email.length > 50) {
+    res.status(400).send({ message: "Email cannot be more than 50 characters long" })
+  }
+  else if (req.body.username.length < 1) {
+    res.status(400).send({ message: "Email cannot be more than 50 characters long" })
+  }
+  else if (req.body.email.length < 3) {
+    res.status(400).send({ message: "Email cannot be more than 50 characters long" })
+  }
+  else if (req.body.password.length < 1) {
+    res.status(400).send({ message: "Email cannot be more than 50 characters long" })
+  } 
+  else if (req.body.password.length > 50) {
+    res.status(400).send({ message: "Email cannot be more than 50 characters long" })
+  } else {
+    db.User.create(req.body)
+    .then(data => res.json(data))
+    .catch(err => res.status(400).json(err))
+  }
 })
 
 router.get('/api/user/:id', isAuthenticated, (req, res) => {

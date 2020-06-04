@@ -173,16 +173,10 @@ class Game extends Component {
           </button>
           {queued && (
             <div>
-              <p className="lead mb-0 mt-4" style={{ fontSize: "1em"}}>
+              {/* <p className="lead mb-0 mt-4" style={{ fontSize: "1em"}}>
                 Finding opponent
-              </p>
-              <div style={{ width: 60, height: 60, margin: 'auto', overflow: 'hidden' }}>
-                <img
-                  style={{ width: 72, height: 72, marginLeft: -6, marginTop: -6 }}
-                  src="https://media.giphy.com/media/l3q2IYN87QjIg51kc/giphy.gif"
-                  alt="Loading"
-                />
-              </div>
+              </p> */}
+              <img src="spinner.gif" alt="Loading" height="140" />
             </div>
           )}
         </div>

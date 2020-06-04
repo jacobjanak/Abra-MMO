@@ -9,6 +9,7 @@ import Login from './Login/';
 import Profile from './Profile';
 import Signup from './Signup/';
 import Game from './Game';
+import Music from './Music';
 
 class App extends Component {
   render() {
@@ -21,6 +22,7 @@ class App extends Component {
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/profile/:username" component={Profile} />
           <Route exact path="/play" component={withAuth(Game)} />
+          <Music />
         </div>
       </Router>
     );

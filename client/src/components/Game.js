@@ -22,6 +22,8 @@ class Game extends Component {
       const game = res.data;
       if (game) {
         API.joinGame(game._id, this.socketCallback)
+        //NOTE: this is inefficient but it's for safety
+        setInterval(this.reloadGame, 1000 * 5)
       } else {
         API.getPlayerCount(playerCount => {
           // prevent unnecessary re-renders if a game is in progress

@@ -27,10 +27,12 @@ class Timer extends Component {
     }
 
     startCountdown = () => {
+        const { unix, lastMove } = this.props;
         const millisecondsLeft = 1000 - (new Date().getDate() % 1000);
         this.countdown = setTimeout(() => {
+            const currentTime = new Date().getTime();
             this.setState({
-                unix: this.state.unix - 1000
+                unix: unix - currentTime + lastMove
             }, this.startCountdown)
         }, millisecondsLeft)
     }

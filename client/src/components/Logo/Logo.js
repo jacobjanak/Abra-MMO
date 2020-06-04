@@ -6,15 +6,41 @@ class Logo extends Component {
     render() {
         return (
             <div className="logo-container">
+                <Tile />
+                <Tile owner="player1" offCenter />
+                <Tile owner="player1" offCenter />
+                <Tile owner="player2" />
+                <Tile owner="player2" />
+                <Tile />
+                <Tile owner="player1" />
+                <Tile owner="player1" />
+                <Tile />
+                <Tile />
+                <Tile owner="player2" offCenter />
+                <Tile owner="player2" offCenter />
+                <br />
+                <Tile owner="player1" />
+                <Tile />
+                <Tile owner="player1" />
+                <Tile owner="player2" />
+                <Tile />
+                <Tile owner="player2" offCenterY />
+                <Tile owner="player1" />
+                <Tile />
+                <Tile owner="player1" offCenterY />
+                <Tile owner="player2" />
+                <Tile />
+                <Tile owner="player2" />
+                <br />
                 <Tile owner="player1" />
                 <Tile owner="player1" />
                 <Tile owner="player1" />
                 <Tile owner="player2" />
                 <Tile owner="player2" />
-                <Tile owner="player2" />
+                <Tile owner="player2" offCenterY />
                 <Tile owner="player1" />
                 <Tile owner="player1" />
-                <Tile owner="player1" />
+                <Tile owner="player1" offCenterY />
                 <Tile owner="player2" />
                 <Tile owner="player2" />
                 <Tile owner="player2" />
@@ -24,33 +50,7 @@ class Logo extends Component {
                 <Tile owner="player1" />
                 <Tile owner="player2" />
                 <Tile />
-                <Tile owner="player2" />
-                <Tile owner="player1" />
-                <Tile />
-                <Tile owner="player1" />
-                <Tile owner="player2" />
-                <Tile />
-                <Tile owner="player2" />
-                <br />
-                <Tile owner="player1" />
-                <Tile owner="player1" />
-                <Tile owner="player1" />
-                <Tile owner="player2" />
-                <Tile owner="player2" />
-                <Tile owner="player2" />
-                <Tile owner="player1" />
-                <Tile owner="player1" />
-                <Tile owner="player1" />
-                <Tile owner="player2" />
-                <Tile owner="player2" />
-                <Tile owner="player2" />
-                <br />
-                <Tile owner="player1" />
-                <Tile />
-                <Tile owner="player1" />
-                <Tile owner="player2" />
-                <Tile />
-                <Tile owner="player2" />
+                <Tile owner="player2" offCenterY />
                 <Tile owner="player1" />
                 <Tile />
                 <Tile owner="player1" offCenter />
@@ -63,7 +63,7 @@ class Logo extends Component {
                 <Tile owner="player1" />
                 <Tile owner="player2" />
                 <Tile owner="player2" />
-                <Tile owner="player2" />
+                <Tile owner="player2" offCenterY />
                 <Tile owner="player1" />
                 <Tile />
                 <Tile owner="player1" />

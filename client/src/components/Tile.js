@@ -28,6 +28,9 @@ class Tile extends Component {
       if (this.props.offCenter) {
         style.transform = "translateX(-50%)";
       }
+      if (this.props.offCenterY) {
+        style.transform = "translateY(-50%)";
+      }
       
       return (
         <div className={"tile owned" + (isLastMove ? " last-move" : "")} style={style}></div>

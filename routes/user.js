@@ -17,7 +17,7 @@ router.post('/api/login', (req, res) => {
           id: user._id,
           email: user.email,
           username: user.username
-        }, secret, { expiresIn: 129600 })
+        }, secret, { expiresIn: 60 * 60 * 24 * 365 })
         res.json({ success: true, message: 'Token issued', token: token, user: user })
       } else {
         res.status(401).json({ success: false, message: 'Authentication failed. Wrong password.' })

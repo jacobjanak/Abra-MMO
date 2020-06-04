@@ -153,25 +153,38 @@ class Game extends Component {
         textAlign: 'center',
       };
 
-      const buttonStyle = {
-        marginTop: 48,
-      };
+      // const buttonStyle = {
+      //   marginTop: 24,
+      // };
 
       return (
         <div className="container pt-4" style={style}>
           <h1 className="display-4">Play now</h1>
           {(playerCount || playerCount === 0) && (
-            <p className="lead">
+            <p className="lead mb-0">
               {playerCount} players currently playing
             </p>
           )}
           <button
-            className={"btn btn-lg btn-" + (queued ? 'secondary' : 'primary')}
-            style={buttonStyle}
+            className={"mt-5 btn btn-lg btn-" + (queued ? 'secondary' : 'primary')}
             onClick={this.queue}
           >
             {queued ? "Leave queue" : "Enter queue"}
           </button>
+          {queued && (
+            <div>
+              <p className="lead mb-0 mt-4" style={{ fontSize: "1em"}}>
+                Finding opponent
+              </p>
+              <div style={{ width: 60, height: 60, margin: 'auto', overflow: 'hidden' }}>
+                <img
+                  style={{ width: 72, height: 72, marginLeft: -6, marginTop: -6 }}
+                  src="https://media.giphy.com/media/l3q2IYN87QjIg51kc/giphy.gif"
+                  alt="Loading"
+                />
+              </div>
+            </div>
+          )}
         </div>
       );
     }

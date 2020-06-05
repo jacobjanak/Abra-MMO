@@ -25,11 +25,15 @@ class Game extends Component {
         //NOTE: this is inefficient but it's for safety
         setInterval(this.reloadGame, 1000 * 5)
       } else {
-        API.getPlayerCount(playerCount => {
-          // prevent unnecessary re-renders if a game is in progress
-          if (!this.state._id) {
-            this.setState({ playerCount })
-          }
+        API.checkIfQueued(queued => {
+          this.setState({ queued }, () => {
+            API.getPlayerCount(playerCount => {
+              // prevent unnecessary re-renders if a game is in progress
+              if (!this.state._id) {
+                this.setState({ playerCount })
+              }
+            })
+          })
         })
       }
     })
@@ -77,8 +81,8 @@ class Game extends Component {
     else if (newMove) {
 
       // if newMove is from the enemy player we play a sound
-      if (this.state.moves.length % 2 === 0 && !this.state.userIsPlayer1
-        || this.state.moves.length % 2 === 1 && this.state.userIsPlayer1) {
+      if ((this.state.moves.length % 2 === 0 && !this.state.userIsPlayer1)
+        || (this.state.moves.length % 2 === 1 && this.state.userIsPlayer1)) {
         this.audio.play()
         // need to catch err or else site will crash on safari
         .catch(err => {});

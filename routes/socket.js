@@ -74,6 +74,14 @@ function socket(http) {
       }
     })
 
+    client.on('checkIfQueued', userId => {
+      if (queue.includes(userId)) {
+        client.emit('isQueued', true)
+      } else {
+        client.emit('isQueued', false)
+      }
+    })
+
     client.on('joinGame', data => {
       client.userId = data.userId;
       const gameId = data.gameId;

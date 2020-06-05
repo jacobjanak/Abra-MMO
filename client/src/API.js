@@ -15,6 +15,11 @@ const API = {
     socket.emit('queue', userId)
     API.openSocket(cb)
   },
+  checkIfQueued: cb => {
+    const userId = Auth.user().id;
+    socket.emit('checkIfQueued', userId)
+    socket.on('isQueued', cb)
+  },
   joinGame: (gameId, cb) => {
     const userId = Auth.user().id;
     socket.emit('joinGame', { gameId, userId })

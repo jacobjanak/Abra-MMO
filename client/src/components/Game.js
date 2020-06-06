@@ -26,14 +26,14 @@ class Game extends Component {
         setInterval(this.reloadGame, 1000 * 5)
       } else {
         API.checkIfQueued(queued => {
-          this.setState({ queued }, () => {
-            API.getPlayerCount(playerCount => {
-              // prevent unnecessary re-renders if a game is in progress
-              if (!this.state._id) {
-                this.setState({ playerCount })
-              }
-            })
-          })
+          if (queued) API.openSocket(this.socketCallback);
+          this.setState({ queued })
+        })
+        API.getPlayerCount(playerCount => {
+          // prevent unnecessary re-renders if a game is in progress
+          if (!this.state._id) {
+            this.setState({ playerCount })
+          }
         })
       }
     })

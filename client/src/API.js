@@ -21,9 +21,9 @@ const API = {
     socket.on('isQueued', cb)
   },
   joinGame: (gameId, cb) => {
+    API.openSocket(cb)
     const userId = Auth.user().id;
     socket.emit('joinGame', { gameId, userId })
-    API.openSocket(cb)
   },
   openSocket: cb => {
     socket.on('gameJoined', game => cb(game, null, null))

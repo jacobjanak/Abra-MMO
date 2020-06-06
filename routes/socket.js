@@ -22,10 +22,9 @@ function socket(http) {
   const db = require('../models');
 
   io.on('connection', client => {
-
     client.on('queue', userId => {
       if (!queue.includes(userId)) {
-
+        
         // storing the client so that we can send the game once they're queued
         clients[userId] = client;
 
@@ -56,12 +55,14 @@ function socket(http) {
               if (err) console.log(err);
               if (game) {
                 // update current client
+                leaveQueue(client)
                 leaveRooms(client)
                 client.join(game._id)
                 client.emit('gameJoined', game)
 
                 // update the opponents client
                 const opponentId = game.player1._id == userId ? game.player2._id : game.player1._id;
+                leaveQueue(clients[opponentId]);
                 leaveRooms(clients[opponentId])
                 clients[opponentId].join(game._id)
                 clients[opponentId].emit('gameJoined', game)
@@ -84,12 +85,15 @@ function socket(http) {
 
     client.on('joinGame', data => {
       client.userId = data.userId;
+      clients[client.userId] = client;
+      updatePlayerCount()
       const gameId = data.gameId;
       db.Game.findById(gameId)
       .populate('player1')
       .populate('player2')
       .exec((err, game) => {
         if (game) {
+          leaveQueue(client);
           leaveRooms(client)
           client.join(gameId)
           //NOTE: seems sketchy to send all the user data to both users
@@ -186,14 +190,18 @@ function socket(http) {
     })
 
     client.on('disconnect', () => {
+      leaveQueue(client)
+      delete clients[client.userId];
+      updatePlayerCount()
+    })
+
+    function leaveQueue(client) {
       queue.forEach((id, i) => {
         if (id === client.userId) {
           queue.splice(i, 1)
         }
       })
-      delete clients[client.userId];
-      updatePlayerCount()
-    })
+    }
 
     function updatePlayerCount() {
       const playerCount = Object.keys(clients).length;

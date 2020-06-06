@@ -53,7 +53,7 @@ class Board extends Component {
 
       this.setState(state => {
         state.tiles[index].owner = player;
-        state.lastMove = index;
+        state.lastMove = moves.length > 2 ? index : -1;
 
         // check if the board size needs to be increased
         // if (index % this.state.width <= 0

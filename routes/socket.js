@@ -145,6 +145,21 @@ function socket(http) {
                 game.time[activePlayer] -= unix - game.time.lastMove;
                 game.time.lastMove = unix;
 
+                const inactivePlayer = activePlayer === 'player1' ? 'player2' : 'player1';
+                const gameId = game._id;
+
+                // setting a timeout that runs after a player is out of time
+                if (client.rooms[gameId].timer) {
+                  clearTimeout(client.rooms[gameId].timer)
+                }
+                // I'm using a self-calling function so that the variable
+                // values are preserved when the setTimeout finally runs
+                (function(gameId, inactivePlayer) {
+                  client.rooms[gameId].timer = setTimeout(function() {
+                    outOfTime(gameId, inactivePlayer)
+                  }, game.time[inactivePlayer] + 500);
+                } (gameId, inactivePlayer));
+
                 // see if anyone ran out of time
                 let winner;
                 if (game.time[activePlayer] <= 0) {
@@ -214,6 +229,27 @@ function socket(http) {
     function updatePlayerCount() {
       const playerCount = Object.keys(clients).length;
       io.emit('playerCount', playerCount)
+    }
+
+    function outOfTime(gameId, loser) {
+      db.Game.findById(gameId)
+      .then(game => {
+        if (game) {
+          game.winner = loser === 'player1' ? 'player2' : 'player1';
+          io.to(gameId).emit('winner', winner)
+          // add wins and losses to user objects
+          db.User.findById(game[game.winner])
+          .then(user => {
+            user.wins++
+            user.save()
+          })
+          db.User.findById(game[loser])
+          .then(user => {
+            user.losses++
+            user.save()
+          })
+        }
+      })
     }
   })
 }

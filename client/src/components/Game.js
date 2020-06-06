@@ -15,6 +15,7 @@ class Game extends Component {
   };
 
   audio = new Audio('./newmove.mp3');
+  interval;
 
   componentDidMount() {
     API.getActiveGame()
@@ -23,7 +24,7 @@ class Game extends Component {
       if (game) {
         API.joinGame(game._id, this.socketCallback)
         //NOTE: this is inefficient but it's for safety
-        setInterval(this.reloadGame, 1000 * 5)
+        this.interval = setInterval(this.reloadGame, 1000 * 5)
       } else {
         API.checkIfQueued(queued => {
           if (queued) API.openSocket(this.socketCallback);
@@ -38,6 +39,14 @@ class Game extends Component {
       }
     })
     // .catch(err => alert('No game found'))
+  }
+
+  componentWillUnmount() {
+    /* index.js:1446 Warning: Can't perform a React state update on an unmounted component.
+    This is a no-op, but it indicates a memory leak in your application.
+    To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.
+    in Game (at withAuth.js:33) */
+    clearInterval(this.interval)
   }
 
   reloadGame = () => {

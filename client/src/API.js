@@ -3,6 +3,7 @@ import openSocket from 'socket.io-client';
 import AuthService from './components/AuthService';
 
 const socket = openSocket(window.location.origin);
+console.log("opening a socket")
 const Auth = new AuthService();
 
 const API = {

@@ -15,6 +15,10 @@ class Timer extends Component {
         }
     }
 
+    componentWillUnmount() {
+        this.stopCountdown()
+    }
+
     componentWillReceiveProps(prevProps) {
         this.stopCountdown()
         this.setState({

@@ -21,9 +21,9 @@ class Home extends Component {
 
         {/* <p className="lead">Welcome to the best game you've ever played.</p> */}
 
-        <Link to={"/play"} id="play-now" className="btn btn-dark btn-lg">
+        <a href="/play" id="play-now" className="btn btn-dark btn-lg">
           Play now <i className="fas fa-play" style={{ marginLeft: 4 }}></i>
-        </Link>
+        </a>
       </div>
     );
   }

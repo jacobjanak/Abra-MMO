@@ -32,7 +32,7 @@ class NavBar extends Component {
           <ul className="navbar-nav">
             { username && (
               <li className="nav-item">
-                <Link className="nav-item nav-link" to={"/play"}>Play</Link>
+                <a className="nav-item nav-link" href="/play">Play</a>
               </li>
             )}
           </ul>

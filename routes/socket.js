@@ -24,63 +24,77 @@ function socket(http) {
   io.on('connection', client => {
     client.on('queue', userId => {
       if (!queue.includes(userId)) {
-        
-        // storing the client so that we can send the game once they're queued
-        clients[userId] = client;
+        if (!(userId in clients)) {
+          
+          // storing the client so that we can send the game once they're queued
+          clients[userId] = client;
 
-        // store userId in the client to link between client and user
-        client.userId = userId;
+          // store userId in the client to link between client and user
+          client.userId = userId;
 
-        // update the amount of players currently playing
-        updatePlayerCount()
+          // update the amount of players currently playing
+          updatePlayerCount()
 
-        if (queue.length > 0) {
-          // NOTE: matchmaking logic here
-          const random = Math.random() >= 0.5;
-          db.Game.create({
-            player1: random ? userId : queue.pop(),
-            player2: random ? queue.pop() : userId,
-            time: {
-              player1: 5 * 60 * 1000,
-              player2: 5 * 60 * 1000
-            }
-          })
-          .then(game => {
-            //NOTE: this seems excessive
-            //NOTE: also very repetitive except for the last lines
-            db.Game.findById(game._id)
-            .populate('player1')
-            .populate('player2')
-            .exec((err, game) => {
-              if (err) console.log(err);
-              if (game) {
-                // update current client
-                leaveQueue(client)
-                leaveRooms(client)
-                client.join(game._id)
-                client.emit('gameJoined', game)
-
-                // update the opponents client
-                const opponentId = game.player1._id == userId ? game.player2._id : game.player1._id;
-                leaveQueue(clients[opponentId]);
-                leaveRooms(clients[opponentId])
-                clients[opponentId].join(game._id)
-                clients[opponentId].emit('gameJoined', game)
+          if (queue.length > 0) {
+            // NOTE: matchmaking logic here
+            const random = Math.random() >= 0.5;
+            db.Game.create({
+              player1: random ? userId : queue.pop(),
+              player2: random ? queue.pop() : userId,
+              time: {
+                player1: 5 * 60 * 1000,
+                player2: 5 * 60 * 1000
               }
             })
-          })
-        } else {
-          queue.push(userId)
+            .then(game => {
+              //NOTE: this seems excessive
+              //NOTE: also very repetitive except for the last lines
+              db.Game.findById(game._id)
+              .populate('player1')
+              .populate('player2')
+              .exec((err, game) => {
+                if (err) console.log(err);
+                if (game) {
+                  // update current client
+                  leaveQueue(client)
+                  leaveRooms(client)
+                  client.join(game._id)
+                  client.emit('gameJoined', game)
+
+                  // update the opponents client
+                  const opponentId = game.player1._id == userId ? game.player2._id : game.player1._id;
+                  leaveQueue(clients[opponentId]);
+                  leaveRooms(clients[opponentId])
+                  clients[opponentId].join(game._id)
+                  clients[opponentId].emit('gameJoined', game)
+                }
+              })
+            })
+          } else {
+            queue.push(userId)
+          }
         }
       }
     })
 
-    client.on('checkIfQueued', userId => {
-      if (queue.includes(userId)) {
-        client.emit('isQueued', true)
-      } else {
-        client.emit('isQueued', false)
-      }
+    // client.on('checkIfQueued', userId => {
+    //   if (queue.includes(userId)) {
+    //     client.emit('isQueued', true)
+    //   } else {
+    //     client.emit('isQueued', false)
+    //   }
+    // })
+
+    client.on('dequeue', () => {
+      leaveQueue(client)
+      delete clients[client.userId];
+      updatePlayerCount()
+    })
+
+    client.on('disconnect', () => {
+      leaveQueue(client)
+      delete clients[client.userId];
+      updatePlayerCount()
     })
 
     client.on('joinGame', data => {
@@ -187,12 +201,6 @@ function socket(http) {
     client.on('getPlayerCount', () => {
       const playerCount = Object.keys(clients).length;
       client.emit('playerCount', playerCount)
-    })
-
-    client.on('disconnect', () => {
-      leaveQueue(client)
-      delete clients[client.userId];
-      updatePlayerCount()
     })
 
     function leaveQueue(client) {

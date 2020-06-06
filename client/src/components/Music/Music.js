@@ -8,6 +8,8 @@ class Music extends Component {
   render() {
 
     // this.audio.play();
+    // need to catch err or else site will crash on safari
+    //.catch(err => {});
 
     return (
       <div>

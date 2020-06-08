@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import abraLogic from 'abra-logic';
+import abraLogic from '../../../abra-logic/';
 import Tile from './Tile';
 
 class Board extends Component {
   constructor() {
     super()
-
     const width = 39; // must be an odd number
     const middleTile = Math.ceil(width ** 2 / 2);
-
     this.state = {
       width,
       middleTile,
@@ -81,17 +79,53 @@ class Board extends Component {
   centerView = () => {
     const { width, tileSize } = this.state;
     const container = ReactDOM.findDOMNode(this.refs.container);
-
     const halfWay = width * tileSize / 2;
-    container.scrollTop = halfWay - container.clientHeight / 2;
-    container.scrollLeft = halfWay + tileSize / 2 + 25;
-    // #game has padding left/right so there's no need to subtract anything
-    // not sure why adding 25 works but it makes it perfect
+    container.scrollTop = halfWay - container.clientHeight / 2 - 20;
+    container.scrollLeft = halfWay + tileSize / 2 + 14;
   };
 
   handleClick = index => {
     const move = abraLogic.indexToMove(index);
-    this.props.makeMove(move)
+    if (!this.props.computer) {
+      this.props.makeMove(move)
+      // the following code could be used to do front-end checks
+      // if (abraLogic.checkLegality(move, this.state.tiles)) {
+        //   this.props.makeMove(move)
+        // }
+    } else {
+      //NOTE: change the turn to the computer turn
+      // probably no need to check legality but its for safety
+      const { tiles } = this.state;
+      if (abraLogic.checkLegality(move, tiles)) {
+        if (this.props.userIsActive) {
+          this.props.makeMove(move)
+          setTimeout(() => {
+            const move = abraLogic.computerMove(tiles);
+          }, 2000)
+        }
+      }
+      //   if (userIsActive) {
+      //     this.setState({
+      //       moves: [...moves, move],
+      //       userIsActive: false
+      //     }, () => {
+      //       // check for winner
+      //       const winner = abraLogic.findWinner(this.state.moves);
+      //       if (winner) this.setState({ winner })
+      //       else {
+      //         // make computer move here
+      //         abraLogic.computerMove(tiles)
+      //       }
+      //     })
+          
+          //1 make sure the client is actually a part of this game (redundant?)
+          //2 validate that the correct user is sending the move (double equals is important)
+          //3 check that the move is legal
+          //4 add the move to the game
+          //5 check if someone has won the game              
+        // }
+      // }
+    }
   }
 
   render() {

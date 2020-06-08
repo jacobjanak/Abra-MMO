@@ -22,12 +22,14 @@ class Scoreboard extends Component {
                         id={activePlayer === 'player1' ? 'active-timer' : ''}
                         className="scoreboard-item-2 py-1 timer"
                     >
-                        <Timer 
-                            unix={time.player1} 
-                            active={activePlayer === 'player1'} 
-                            lastMove={time.lastMove}
-                            reloadGame={reloadGame}
-                        />
+                        {time && (
+                            <Timer 
+                                unix={time.player1} 
+                                active={activePlayer === 'player1'} 
+                                lastMove={time.lastMove}
+                                reloadGame={reloadGame}
+                            />
+                        )}
                     </span>
                     <span className="scoreboard-item-3 py-1">
                         vs
@@ -36,12 +38,14 @@ class Scoreboard extends Component {
                         id={activePlayer === 'player2' ? 'active-timer' : ''}
                         className="scoreboard-item-4 py-1 timer"
                     >
-                        <Timer 
-                            unix={time.player2} 
-                            active={activePlayer === 'player2'} 
-                            lastMove={time.lastMove}
-                            reloadGame={reloadGame}
-                        />
+                        {time && (
+                            <Timer 
+                                unix={time.player2} 
+                                active={activePlayer === 'player2'} 
+                                lastMove={time.lastMove}
+                                reloadGame={reloadGame}
+                            />
+                        )}
                     </span>
                     <span className="scoreboard-item-5 py-1">
                         <a className="username" href={"/profile/" + player2.username}>

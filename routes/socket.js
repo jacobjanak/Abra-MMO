@@ -42,8 +42,8 @@ function socket(http) {
               player1: random ? userId : queue.pop(),
               player2: random ? queue.pop() : userId,
               time: {
-                player1: 5 * 60 * 1000,
-                player2: 5 * 60 * 1000
+                player1: 20 * 1000,
+                player2: 20 * 1000
               }
             })
             .then(game => {
@@ -144,22 +144,7 @@ function socket(http) {
                 const unix = new Date().getTime();
                 game.time[activePlayer] -= unix - game.time.lastMove;
                 game.time.lastMove = unix;
-
-                const inactivePlayer = activePlayer === 'player1' ? 'player2' : 'player1';
-                const gameId = game._id;
-
-                // setting a timeout that runs after a player is out of time
-                if (client.rooms[gameId].timer) {
-                  clearTimeout(client.rooms[gameId].timer)
-                }
-                // I'm using a self-calling function so that the variable
-                // values are preserved when the setTimeout finally runs
-                (function(gameId, inactivePlayer) {
-                  client.rooms[gameId].timer = setTimeout(function() {
-                    outOfTime(gameId, inactivePlayer)
-                  }, game.time[inactivePlayer] + 500);
-                } (gameId, inactivePlayer));
-
+                
                 // see if anyone ran out of time
                 let winner;
                 if (game.time[activePlayer] <= 0) {
@@ -168,6 +153,21 @@ function socket(http) {
                 } else {
                   winner = abraLogic.findWinner(game.moves);
                 }
+                
+                // setting a timeout that runs after a player is out of time
+                const gameId = game._id;
+                if (client.rooms[gameId].timer) {
+                  clearTimeout(client.rooms[gameId].timer)
+                }
+                // I'm using a self-calling function so that the variable
+                // values are preserved when the setTimeout finally runs
+                const inactivePlayer = activePlayer === 'player1' ? 'player2' : 'player1';
+                (function(gameId, inactivePlayer) {
+                  client.rooms[gameId].timer = setTimeout(function() {
+                    outOfTime(gameId, inactivePlayer)
+                  }, game.time[inactivePlayer] + 500);
+                } (gameId, inactivePlayer));
+
 
                 // const winner = abraLogic.findWinner(game.moves);
 
@@ -235,8 +235,9 @@ function socket(http) {
       db.Game.findById(gameId)
       .then(game => {
         if (game) {
+          console.log("hey buddy")
           game.winner = loser === 'player1' ? 'player2' : 'player1';
-          io.to(gameId).emit('winner', winner)
+          io.to(gameId).emit('winner', game.winner)
           // add wins and losses to user objects
           db.User.findById(game[game.winner])
           .then(user => {

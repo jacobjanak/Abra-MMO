@@ -42,6 +42,7 @@ class Login extends Component {
                    name="email"
                    type="email"
                    id="email"
+                   required
                    onChange={this.handleChange}/>
           </div>
           <div className="form-group">
@@ -53,6 +54,7 @@ class Login extends Component {
                    name="password"
                    type="password"
                    id="password"
+                   required
                    onChange={this.handleChange}/>
           </div>
           <div className="mt-4">

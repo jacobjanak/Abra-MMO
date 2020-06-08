@@ -60,8 +60,7 @@ class Game extends Component {
   }
 
   makeMove = move => {
-    // this function could be used to make front-end checks
-    // to make sure the move is legal before sending it
+    // server checks if the move is legal
     API.move(move)
   };
 

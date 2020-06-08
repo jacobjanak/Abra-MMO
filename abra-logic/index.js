@@ -126,6 +126,40 @@ const abraLogic = {
         })
 
         return tiles;
+    },
+
+    computerMove: tiles => {
+        // if movesOrTiles is moves then convert it to tiles
+        // if (typeof movesOrTiles[0] === "string") {
+        //     tiles = abraLogic.movesToTiles(movesOrTiles);
+        // } else {
+        //     tiles = movesOrTiles;
+        // }
+
+        let bestIndex = 0;
+        let bestScore = 0;
+        tiles.forEach((tile, i) => {
+            if (tile.available) {
+
+                // horizontal
+                for (let j = 0; j < 5; j++) {
+
+                    let score = 0;
+                    for (let k = 0; k < 5; k++) {
+                        if (tiles[i - j + k].owner === 'player1') {
+                            score++;
+                        }
+                    }
+                }
+
+                if (tile.owner === tiles[i + 2].owner
+                    && tile.owner === tiles[i + 1].owner
+                    && tile.owner === tiles[i - 1].owner
+                    && tile.owner === tiles[i - 2].owner) {
+                    winner = tile.owner;
+                }
+            }
+        })
     }
 
 };

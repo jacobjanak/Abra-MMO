@@ -41,6 +41,14 @@ class Board extends Component {
       })
     }
 
+    // check for winner in player vs computer
+    if (prevProps.computer && !prevProps.winner) {
+      const winner = abraLogic.findWinner(prevProps.moves);
+      if (winner) {
+        prevProps.declareWinner(winner)
+      }
+    }
+
     // NOTE: this function is only setup to handle one move which may cause issues
     // check if new move was sent
     const moves = prevProps.moves;
@@ -100,8 +108,11 @@ class Board extends Component {
         if (this.props.userIsActive) {
           this.props.makeMove(move)
           setTimeout(() => {
-            const move = abraLogic.computerMove(tiles);
-          }, 2000)
+            if (!this.props.winner) {
+              const move = abraLogic.computerMove(tiles);
+              this.props.makeMove(move)
+            }
+          }, 500 + Math.random() * 1500)
         }
       }
       //   if (userIsActive) {

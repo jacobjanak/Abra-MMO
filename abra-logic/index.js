@@ -136,30 +136,70 @@ const abraLogic = {
         //     tiles = movesOrTiles;
         // }
 
-        let bestIndex = 0;
+        let bestIndex = [];
         let bestScore = 0;
         tiles.forEach((tile, i) => {
             if (tile.available) {
+                for (let direction = 0; direction < 4; direction++) {
+                    for (let j = 0; j < 5; j++) {
 
-                // horizontal
-                for (let j = 0; j < 5; j++) {
+                        let score1 = 0;
+                        for (let k = 0; k < 5; k++) {
+                            let index;
+                            if (direction === 0) index = i - j + k;
+                            else if (direction === 1) index = i - j * abraLogic.width + k * abraLogic.width;
+                            else if (direction === 2) index = i - j * abraLogic.width - j + k * abraLogic.width + k;
+                            else if (direction === 3) index = i - j * abraLogic.width + j + k * abraLogic.width - k;
+                            if (index != i) {
+                                if (tiles[index].owner === 'player1') {
+                                    score1++;
+                                }
+                                else if (tiles[index].owner === 'player2') {
+                                    if (index < i) score1 = 0;
+                                    else break;
+                                }
+                            }
+                        }
 
-                    let score = 0;
-                    for (let k = 0; k < 5; k++) {
-                        if (tiles[i - j + k].owner === 'player1') {
-                            score++;
+                        let score2 = 0;
+                        for (let k = 0; k < 5; k++) {             
+                            let index;
+                            if (direction === 0) index = i - j + k;
+                            else if (direction === 1) index = i - j * abraLogic.width + k * abraLogic.width;
+                            else if (direction === 2) index = i - j * abraLogic.width - j + k * abraLogic.width + k;
+                            else if (direction === 3) index = i - j * abraLogic.width + j + k * abraLogic.width - k;
+                            if (index != i) {
+                                if (tiles[index].owner === 'player2') {
+                                    score2++;
+                                }
+                                else if (tiles[index].owner === 'player1') {
+                                    if (index < i) score2 = 0;
+                                    else break;
+                                }
+                            }
+                        }
+
+                        if (score1 === bestScore) {
+                            bestIndex.push(i)
+                        }
+                        if (score2 === bestScore) {
+                            bestIndex.push(i)
+                        }
+                        if (score1 > bestScore) {
+                            bestScore = score1;
+                            bestIndex = [i];
+                        }
+                        if (score2 > bestScore) {
+                            bestScore = score2;
+                            bestIndex = [i];
                         }
                     }
                 }
-
-                if (tile.owner === tiles[i + 2].owner
-                    && tile.owner === tiles[i + 1].owner
-                    && tile.owner === tiles[i - 1].owner
-                    && tile.owner === tiles[i - 2].owner) {
-                    winner = tile.owner;
-                }
             }
         })
+
+        const result = bestIndex[Math.floor(Math.random() * bestIndex.length)];
+        return abraLogic.indexToMove(result);
     }
 
 };

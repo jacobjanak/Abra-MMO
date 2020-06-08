@@ -15,6 +15,10 @@ class Game extends Component {
     };
   }
 
+  declareWinner = winner => {
+    this.setState({ winner })
+  };
+
   makeMove = move => {
     const { userIsPlayer1, userIsActive, moves } = this.state;
     // user move
@@ -52,6 +56,7 @@ class Game extends Component {
             winner={winner}
             userIsActive={userIsActive}
             userIsPlayer1={userIsPlayer1}
+            declareWinner={this.declareWinner}
             makeMove={this.makeMove}
           />
         )}

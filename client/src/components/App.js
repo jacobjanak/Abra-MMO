@@ -22,8 +22,8 @@ class App extends Component {
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/profile/:username" component={Profile} />
-          <Route exact path="/play" component={withAuth(Game)} />
-          <Route exact path="/offline" component={GameVsComputer} />
+          <Route exact path="/play" component={GameVsComputer} />
+          <Route exact path="/online" component={withAuth(Game)} />
           <Music />
         </div>
       </Router>

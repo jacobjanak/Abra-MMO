@@ -35,6 +35,9 @@ class Game extends Component {
       this.setState({
         userIsActive: true,
         moves: [...this.state.moves, move]
+      }, () => {
+        this.audio.play()
+        .catch(err => {})
       })
     }
   };

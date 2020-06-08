@@ -30,9 +30,12 @@ class NavBar extends Component {
         </button>
         <div className="collapse navbar-collapse" id="navbar">
           <ul className="navbar-nav">
+            <li className="nav-item">
+              <a className="nav-item nav-link" href="/play">Play</a>
+            </li>
             { username && (
               <li className="nav-item">
-                <a className="nav-item nav-link" href="/play">Play</a>
+                <a className="nav-item nav-link" href="/online">Online</a>
               </li>
             )}
           </ul>

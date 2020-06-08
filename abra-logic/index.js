@@ -136,7 +136,7 @@ const abraLogic = {
         //     tiles = movesOrTiles;
         // }
 
-        let bestIndex = [];
+        let bestIndexes = [];
         let bestScore = 0;
         tiles.forEach((tile, i) => {
             if (tile.available) {
@@ -180,25 +180,25 @@ const abraLogic = {
                         }
 
                         if (score1 === bestScore) {
-                            bestIndex.push(i)
+                            bestIndexes.push(i)
                         }
                         if (score2 === bestScore) {
-                            bestIndex.push(i)
+                            bestIndexes.push(i)
                         }
                         if (score1 > bestScore) {
                             bestScore = score1;
-                            bestIndex = [i];
+                            bestIndexes = [i];
                         }
                         if (score2 > bestScore) {
                             bestScore = score2;
-                            bestIndex = [i];
+                            bestIndexes = [i];
                         }
                     }
                 }
             }
         })
 
-        const result = bestIndex[Math.floor(Math.random() * bestIndex.length)];
+        const result = bestIndexes[Math.floor(Math.random() * bestIndexes.length)];
         return abraLogic.indexToMove(result);
     }
 

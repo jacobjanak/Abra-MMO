@@ -21,21 +21,30 @@ class NavBar extends Component {
 
   render() {
     const { username } = this.state;
+    const path = window.location.pathname;
 
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark" style={{ zIndex: 500 }}>
-        <Link className="navbar-brand" to="/">Abra</Link>
+        <Link className="navbar-brand mr-4 ml-2" to="/">Abra</Link>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
           <span className="navbar-toggler-icon" />
         </button>
         <div className="collapse navbar-collapse" id="navbar">
           <ul className="navbar-nav">
-            <li className="nav-item">
-              <a className="nav-item nav-link" href="/play">Play</a>
+            <li className="nav-item mr-3">
+              <Link
+                className={"nav-item nav-link" + (path === "/play" ? " active" : "")}
+                to={"/play"}>
+                  Play
+              </Link>
             </li>
             { username && (
-              <li className="nav-item">
-                <a className="nav-item nav-link" href="/online">Online</a>
+              <li className="nav-item mr-3">
+                <a 
+                  className={"nav-item nav-link" + (path === "/online" ? " active" : "")}
+                  href="/online">
+                    Online
+                </a>
               </li>
             )}
           </ul>

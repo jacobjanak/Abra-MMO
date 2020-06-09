@@ -4,7 +4,7 @@
   "private": true,
   "proxy": "http://localhost:3001/",
   "dependencies": {
-    "abra-logic": "^1.0.5",
+    "abra-logic": "^1.0.6",
     "autoscroll-react": "^3.2.0",
     "axios": "^0.18.0",
     "jwt-decode": "^2.2.0",

@@ -957,9 +957,10 @@ abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
 
-abra-logic@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/abra-logic/-/abra-logic-1.0.5.tgz#b6ef7c9836f28c04835ad61e7b10185bd6c45948"
+abra-logic@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/abra-logic/-/abra-logic-1.0.6.tgz#9e2fa0818ea5c4d96136cf6d055a46935b0e73c3"
+  integrity sha512-rie/SCV69k6OAiqcCIMkN3YWkKw4jkKBY23NNGEHZu0Asvl4Q5KTFAnKf/hA1Q8BnEOhB76rOARzxeyGoZ+teg==
 
 accepts@~1.3.4, accepts@~1.3.5:
   version "1.3.5"

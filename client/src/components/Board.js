@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import abraLogic from '../../../abra-logic/';
+import abraLogic from 'abra-logic';
 import Tile from './Tile';
 
 class Board extends Component {
@@ -96,12 +96,7 @@ class Board extends Component {
     const move = abraLogic.indexToMove(index);
     if (!this.props.computer) {
       this.props.makeMove(move)
-      // the following code could be used to do front-end checks
-      // if (abraLogic.checkLegality(move, this.state.tiles)) {
-        //   this.props.makeMove(move)
-        // }
     } else {
-      //NOTE: change the turn to the computer turn
       // probably no need to check legality but its for safety
       const { tiles } = this.state;
       if (abraLogic.checkLegality(move, tiles)) {
@@ -127,15 +122,8 @@ class Board extends Component {
       //         // make computer move here
       //         abraLogic.computerMove(tiles)
       //       }
-      //     })
-          
-          //1 make sure the client is actually a part of this game (redundant?)
-          //2 validate that the correct user is sending the move (double equals is important)
-          //3 check that the move is legal
-          //4 add the move to the game
-          //5 check if someone has won the game              
-        // }
-      // }
+      //     })         
+      //    }
     }
   }
 

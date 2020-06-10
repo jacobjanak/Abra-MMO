@@ -8,8 +8,8 @@ import Home from './Home/';
 import Login from './Login/';
 import Profile from './Profile';
 import Signup from './Signup/';
-import Game from './Game';
-import GameVsComputer from './GameVsComputer';
+import GameOnline from './GameOnline';
+import GameComputer from './GameComputer';
 import Music from './Music';
 
 class App extends Component {
@@ -22,8 +22,8 @@ class App extends Component {
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/profile/:username" component={Profile} />
-          <Route exact path="/play" component={GameVsComputer} />
-          <Route exact path="/online" component={withAuth(Game)} />
+          <Route exact path="/play" component={GameComputer} />
+          <Route exact path="/online" component={withAuth(GameOnline)} />
           <Music />
         </div>
       </Router>

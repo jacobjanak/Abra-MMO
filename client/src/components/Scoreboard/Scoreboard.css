@@ -30,8 +30,7 @@
 
 @media screen and (min-width: 768px) {
     #scoreboard {
-        /* 320 is for scoreboard items, 12 for scrollbar */
-        left: calc(50% - 322px - 12px);
+        left: calc(50% - 324px);
     }
 
     .scoreboard-item-1 {

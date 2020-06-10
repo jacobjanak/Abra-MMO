@@ -89,7 +89,7 @@ class Board extends Component {
     const container = ReactDOM.findDOMNode(this.refs.container);
     const halfWay = width * tileSize / 2;
     container.scrollTop = halfWay - container.clientHeight / 2 - 20;
-    container.scrollLeft = halfWay + tileSize / 2 + 14;
+    container.scrollLeft = halfWay + tileSize / 2 + 4;
   };
 
   handleClick = index => {
@@ -112,20 +112,6 @@ class Board extends Component {
           }, 500 + Math.random() * 1500)
         }
       }
-      //   if (userIsActive) {
-      //     this.setState({
-      //       moves: [...moves, move],
-      //       userIsActive: false
-      //     }, () => {
-      //       // check for winner
-      //       const winner = abraLogic.findWinner(this.state.moves);
-      //       if (winner) this.setState({ winner })
-      //       else {
-      //         // make computer move here
-      //         abraLogic.computerMove(tiles)
-      //       }
-      //     })         
-      //    }
     }
   }
 

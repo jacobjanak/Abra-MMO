@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Board from './Board';
+import Turn from './Turn/';
 
 class Game extends Component {
   constructor(props) {
@@ -13,6 +14,15 @@ class Game extends Component {
       winner: false,
       moves: ['0,0', '0,1']
     };
+  }
+
+  componentWillUnmount() {
+    this.setState({
+      userIsPlayer1: true,
+      userIsActive: true,
+      winner: false,
+      moves: ['0,0', '0,1']
+    })
   }
 
   declareWinner = winner => {
@@ -52,17 +62,20 @@ class Game extends Component {
 
     return (
       <div>
-        { moves && (
-          <Board 
-            computer={true}
-            moves={moves}
-            winner={winner}
-            userIsActive={userIsActive}
-            userIsPlayer1={userIsPlayer1}
-            declareWinner={this.declareWinner}
-            makeMove={this.makeMove}
-          />
-        )}
+        <Turn 
+          movesLength={moves.length}
+          userIsActive={userIsActive}
+          winner={winner}
+        />
+        <Board 
+          computer={true}
+          moves={moves}
+          winner={winner}
+          userIsActive={userIsActive}
+          userIsPlayer1={userIsPlayer1}
+          declareWinner={this.declareWinner}
+          makeMove={this.makeMove}
+        />
       </div>
     );  
   }

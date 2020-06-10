@@ -42,8 +42,8 @@ function socket(http) {
               player1: random ? userId : queue.pop(),
               player2: random ? queue.pop() : userId,
               time: {
-                player1: 20 * 1000,
-                player2: 20 * 1000
+                player1: 5 * 60 * 1000,
+                player2: 5 * 60 * 1000
               }
             })
             .then(game => {

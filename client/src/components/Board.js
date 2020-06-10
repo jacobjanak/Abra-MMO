@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import abraLogic from 'abra-logic';
+import abraLogic from '../../../abra-logic/';
 import Tile from './Tile';
 
 class Board extends Component {
@@ -93,19 +93,21 @@ class Board extends Component {
   };
 
   handleClick = index => {
+    const { computer, moves, userIsActive, userIsPlayer1, winner, makeMove } = this.props
     const move = abraLogic.indexToMove(index);
-    if (!this.props.computer) {
-      this.props.makeMove(move)
+
+    if (!computer) {
+      makeMove(move)
     } else {
       // probably no need to check legality but its for safety
       const { tiles } = this.state;
       if (abraLogic.checkLegality(move, tiles)) {
-        if (this.props.userIsActive) {
-          this.props.makeMove(move)
+        if (userIsActive) {
+          makeMove(move)
           setTimeout(() => {
             if (!this.props.winner) {
-              const move = abraLogic.computerMove(tiles);
-              this.props.makeMove(move)
+              const cpuMove = abraLogic.computerMove(this.props.moves, !userIsPlayer1);
+              makeMove(cpuMove)
             }
           }, 500 + Math.random() * 1500)
         }

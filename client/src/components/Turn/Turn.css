@@ -1,8 +1,8 @@
 #turn {
-  font-family: 'Designer Block';
-  font-size: 24px;
+  /* font-family: 'Designer Block';
   letter-spacing: 2px;
-  text-transform: uppercase;
+  text-transform: uppercase; */
+  font-size: 24px;
   z-index: 100;
   position: absolute;
   top: 56px;

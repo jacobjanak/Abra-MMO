@@ -35,18 +35,16 @@ class NavBar extends Component {
               <Link
                 className={"nav-item nav-link" + (path === "/play" ? " active" : "")}
                 to={"/play"}>
-                  Play
+                  Play Offline
               </Link>
             </li>
-            { username && (
-              <li className="nav-item mr-3">
-                <a 
-                  className={"nav-item nav-link" + (path === "/online" ? " active" : "")}
-                  href="/online">
-                    Online
-                </a>
-              </li>
-            )}
+            <li className="nav-item mr-3">
+              <a 
+                className={"nav-item nav-link" + (path === "/online" ? " active" : "")}
+                href="/online">
+                  Online
+              </a>
+            </li>
           </ul>
           { username ? (
             <ul className="navbar-nav ml-auto">

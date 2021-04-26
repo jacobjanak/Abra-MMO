@@ -87,9 +87,9 @@ class Game extends Component {
       // if newMove is from the enemy player we play a sound
       if ((this.state.moves.length % 2 === 0 && !this.state.userIsPlayer1)
         || (this.state.moves.length % 2 === 1 && this.state.userIsPlayer1)) {
-        this.audio.play()
+        // this.audio.play()
         // need to catch err or else site will crash on safari
-        .catch(err => {});
+        // .catch(err => {});
       }
 
       this.setState(state => ({

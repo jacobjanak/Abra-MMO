@@ -1,12 +1,15 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const morgan = require('morgan');
 
-// database
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/abra';
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
+// // database
+// const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/abra';
+// mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
+
+const db = require('./models/');
+db.db.collection("test").doc("test").set({ "foo": "bar2" })
 
 // server
 const PORT = process.env.PORT || 3001;

@@ -3,6 +3,9 @@ notes.txt
 abra-logic/package.json
 package-lock.json
 
+# Dev
+firebase-adminsdk.json
+
 # Logs
 logs
 *.log

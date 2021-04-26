@@ -11,7 +11,7 @@ const isAuthenticated = exjwt({ secret: secret });
 router.post('/api/login', (req, res) => {
   db.User.findOne({ email: req.body.email })
   .then(user => {
-    user.verifyPassword(req.body.password, (err, isMatch) => {
+    db.User.verifyPassword(user, req.body.password, (err, isMatch) => {
       if (isMatch && !err) {
         const token = jwt.sign({
           id: user._id,
@@ -22,7 +22,7 @@ router.post('/api/login', (req, res) => {
       } else {
         res.status(401).json({ success: false, message: 'Authentication failed. Wrong password.' })
       }
-    });
+    })
   })
   .catch(err => res.status(404).json({ success: false, message: 'User not found', error: err }))
 })

@@ -56,11 +56,33 @@ module.exports = db => {
       });
     },
 
-    verifyPassword: (password, cb) => {
-      bcrypt.compare(password, this.password, (err, isMatch) => {
+    verifyPassword: (user, password, cb) => {
+      bcrypt.compare(password, user.password, (err, isMatch) => {
         if (err) return cb(err);
         cb(null, isMatch);
       })
     },
+
+    findOne: (user) => {
+      return new Promise((resolve, reject) => {
+        db.collection("users").get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            const existingUser = doc.data();
+            let match = true;
+            for (const key in user) {
+              if (user[key] != existingUser[key]) {
+                match = false;
+              }
+            }
+            if (match === true) {
+              resolve(existingUser);
+            }
+          })
+          reject("No user found")
+        })
+      });
+    },
+
   };
 };

@@ -9,7 +9,6 @@ const morgan = require('morgan');
 // mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
 
 const db = require('./models/');
-db.db.collection("test").doc("test").set({ "foo": "bar2" })
 
 // server
 const PORT = process.env.PORT || 3001;

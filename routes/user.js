@@ -47,9 +47,10 @@ router.post('/api/signup', (req, res) => {
   else if (req.body.password.length > 50) {
     res.status(400).send({ message: "Password cannot be more than 50 characters long" })
   } else {
+
     db.User.create(req.body)
-    .then(data => res.json(data))
-    .catch(err => res.status(400).json(err))
+    .then(user => res.json(user))
+    .catch(err => res.status(500).send(err))
   }
 })
 

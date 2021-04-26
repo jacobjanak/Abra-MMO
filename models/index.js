@@ -29,7 +29,5 @@ const db = admin.firestore();
 
 // export
 module.exports = {
-  User: require('./User'),
-  Game: require('./Game'),
-  db: db,
+  User: require('./User')(db),
 };

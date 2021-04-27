@@ -81,9 +81,7 @@ router.get('/user/game', isAuthenticated, (req, res) => {
       { player2: req.user.id }
     ]
   })
-  .then(game => {
-    res.json(game);
-  })
+  .then(game => res.json(game))
   .catch(err => res.json(null))
 })
 

@@ -63,7 +63,7 @@ module.exports = db => {
       })
     },
 
-    findOne: (user) => {
+    findOne: user => {
       return new Promise((resolve, reject) => {
         db.collection("users").get()
         .then(snapshot => {
@@ -82,6 +82,17 @@ module.exports = db => {
           reject("No user found")
         })
       });
+    },
+
+    findById: function(id) {
+      return this.findOne({ _id: id });
+    },
+
+    save: user => {
+      return new Promise((resolve, reject) => {
+        db.collection("users").doc(user._id).set(user)
+        resolve(user)
+      })
     },
 
   };

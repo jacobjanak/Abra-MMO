@@ -1,64 +1,80 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const generateId = require('./generateId');
 
-const GameSchema = new Schema({
-  player1: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  player2: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  time: {
-    lastMove: {
-      type: Number,
-      default: () => new Date().getTime()
+
+module.exports = db => {
+  return {
+
+    create: obj => {
+      return new Promise((resolve, reject) => {
+        const game = {};
+
+        // store values
+        game.player1 = obj.player1;
+        game.player2 = obj.player2;
+        game.time = obj.time;
+
+        // default values
+        const currentTime = Date.now();
+        game.time.lastMove = currentTime;
+        game.createdAt = currentTime;
+        game._id = generateId();
+        game.moves = ['0,0', '0,1'];
+        game.winner = '';
+
+        // save to db
+        db.collection("games").doc(game._id).set(game)
+        resolve(game)
+      })
     },
-    player1: {
-      type: Number,
+
+    findOne: game => {
+      return new Promise((resolve, reject) => {
+        db.collection("games").get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            const existingGame = doc.data();
+            let match = true;
+            for (const key in game) {
+
+              // this replicates mongoDBs $or feature
+              if (key === '$or') {
+                const fields = game[key];
+                for (let i = 0; i < fields.length; i++) {
+                  for (const orKey in fields[i]) {
+                    if (game[orKey] === fields[i][orKey]) {
+                      resolve(existingGame)
+                    }
+                  }
+                }
+
+              } else {
+                if (game[key] != existingGame[key]) {
+                  match = false;
+                }
+              }
+            }
+            if (match === true) {
+              resolve(existingGame);
+            }
+          })
+
+          // no game found
+          resolve(undefined)
+        })
+      })
+      .catch(err => resolve());
     },
-    player2: {
-      type: Number,
-    }
-  },
-  moves: {
-    type: [String],
-    default: ['0,0', '0,1']
-  },
-  winner: {
-    type: String,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
-});
 
-// this listener will fire on .find() and .save() before any data changes
-GameSchema.post('init', function (game) {
-  if (!game.winner) {
+    findById: function(id) {
+      return this.findOne({ _id: id });
+    },
 
-    // check for time out
-    const unix = new Date().getTime();
-    const difference = unix - game.time.lastMove;
+    save: game => {
+      return new Promise((resolve, reject) => {
+        db.collection("games").doc(game._id).set(game)
+        resolve(game)
+      })
+    },
 
-    // update players time (no need to save)
-    const activePlayer = game.moves.length % 2 ? 'player2' : 'player1';
-    game.time[activePlayer] -= difference;
-
-    // update lastMove (no need to save)
-    game.time.lastMove = unix;
-
-    // check if current player has timed out
-    if (game.time[activePlayer] <= 0) {
-      game.time[activePlayer] = 0;
-      game.winner = activePlayer === 'player1' ? 'player2' : 'player1';
-      game.save()
-    }
-  }
-})
-
-module.exports = mongoose.model('Game', GameSchema);
+  };
+};

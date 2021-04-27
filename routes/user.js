@@ -74,19 +74,17 @@ router.get('/user/', isAuthenticated, (req, res) => {
 })
 
 router.get('/user/game', isAuthenticated, (req, res) => {
-  db.Game.find({
-    winner: { $exists: false },
+  db.Game.findOne({
+    winner: '',
     $or: [
       { player1: req.user.id }, 
       { player2: req.user.id }
-    ] 
+    ]
   })
-  .then(games => {
-    //NOTE: if time is up declare winner
-    if (games) res.json(games[games.length - 1]);
-    else res.status(404).send('No game found');
+  .then(game => {
+    res.json(game);
   })
-  .catch(err => console.log(err))
+  .catch(err => res.json(null))
 })
 
 router.get('/user/:username', (req, res) => {

@@ -50,25 +50,31 @@ function socket(http) {
               //NOTE: this seems excessive
               //NOTE: also very repetitive except for the last lines
               db.Game.findById(game._id)
-              .populate('player1')
-              .populate('player2')
-              .exec((err, game) => {
-                if (err) console.log(err);
-                if (game) {
-                  // update current client
-                  leaveQueue(client)
-                  leaveRooms(client)
-                  client.join(game._id)
-                  client.emit('gameJoined', game)
-
-                  // update the opponents client
-                  const opponentId = game.player1._id == userId ? game.player2._id : game.player1._id;
-                  leaveQueue(clients[opponentId]);
-                  leaveRooms(clients[opponentId])
-                  clients[opponentId].join(game._id)
-                  clients[opponentId].emit('gameJoined', game)
-                }
+              .then(data => {
+                game = data;
+                if (game) return db.User.findById(game.player1);
               })
+              .then(data => {
+                game.player1 = data;
+                return db.User.findById(game.player2)
+              })
+              .then(data => {
+                game.player2 = data;
+                
+                // update current client
+                leaveQueue(client)
+                leaveRooms(client)
+                client.join(game._id)
+                client.emit('gameJoined', game)
+
+                // update the opponents client
+                const opponentId = game.player1._id == userId ? game.player2._id : game.player1._id;
+                leaveQueue(clients[opponentId]);
+                leaveRooms(clients[opponentId])
+                clients[opponentId].join(game._id)
+                clients[opponentId].emit('gameJoined', game)
+              })
+              .catch(err => console.log(err))
             })
           } else {
             queue.push(userId)
@@ -102,18 +108,25 @@ function socket(http) {
       clients[client.userId] = client;
       updatePlayerCount()
       const gameId = data.gameId;
+      let game;
       db.Game.findById(gameId)
-      .populate('player1')
-      .populate('player2')
-      .exec((err, game) => {
-        if (game) {
-          leaveQueue(client);
-          leaveRooms(client)
-          client.join(gameId)
-          //NOTE: seems sketchy to send all the user data to both users
-          client.emit('gameJoined', game) 
-        }
+      .then(data => {
+        game = data;
+        if (game) return db.User.findById(game.player1);
       })
+      .then(data => {
+        game.player1 = data;
+        return db.User.findById(game.player2)
+      })
+      .then(data => {
+        game.player2 = data;
+        leaveQueue(client);
+        leaveRooms(client)
+        client.join(gameId)
+        //NOTE: seems sketchy to send all the user data to both users
+        client.emit('gameJoined', game) 
+      })
+      .catch(err => res.status(400).send(err))
     })
 
     client.on('move', move => {
@@ -180,16 +193,16 @@ function socket(http) {
                   db.User.findById(game[winner])
                   .then(user => {
                     user.wins++
-                    user.save()
+                    db.User.save(user)
                   })
                   db.User.findById(game[winner === 'player1' ? 'player2' : 'player1'])
                   .then(user => {
                     user.losses++
-                    user.save()
+                    db.User.save(user)
                   })
                 }
 
-                return game.save()
+                return db.Game.save(game)
 
               // move was not legal (hacker)
               } else return false;
@@ -242,12 +255,12 @@ function socket(http) {
           db.User.findById(game[game.winner])
           .then(user => {
             user.wins++
-            user.save()
+            db.User.save(user)
           })
           db.User.findById(game[loser])
           .then(user => {
             user.losses++
-            user.save()
+            db.User.save(user)
           })
         }
       })

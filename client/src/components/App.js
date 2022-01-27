@@ -24,7 +24,7 @@ class App extends Component {
           <Route exact path="/profile/:username" component={Profile} />
           <Route exact path="/play" component={GameComputer} />
           <Route exact path="/online" component={withAuth(GameOnline)} />
-          <Music />
+          {/* <Music /> */}
         </div>
       </Router>
     );

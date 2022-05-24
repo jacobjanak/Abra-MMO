@@ -5,3 +5,5 @@ This is an online multiplayer game. It is a board game, except there is no limit
 If you do not wish to play online, you can also play offline against a somewhat-challenging computer.
 
 This project is built using a React.js front-end with Node.js and MongoDB on the backend. In other words, this project is built using the MERN stack. User authentication is secured with JSON web tokens and the app uses socket.js to allow gameplay between players in real-time.
+
+UPDATE: MongoDB is no longer avilable for free on Heroku. So, I switched the database to use Firebase instead of MongoDB.

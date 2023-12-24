@@ -1,11 +1,10 @@
 const router = require('express').Router();
-const jwt = require('jsonwebtoken');
-const exjwt = require('express-jwt');
+const { expressjwt: exjwt } = require('express-jwt');
 const db = require('../models');
 
 // create req.user and redirect logged out users
 const secret = 'my secret';
-const isAuthenticated = exjwt({ secret: secret });
+const isAuthenticated = exjwt({ secret: secret, algorithms: ['RS256'] });
 
 // TEMPLATE CODE
 router.post('/api/login', (req, res) => {
@@ -13,7 +12,7 @@ router.post('/api/login', (req, res) => {
   .then(user => {
     db.User.verifyPassword(user, req.body.password, (err, isMatch) => {
       if (isMatch && !err) {
-        const token = jwt.sign({
+        const token = exjwt.sign({
           id: user._id,
           email: user.email,
           username: user.username
@@ -43,7 +42,7 @@ router.post('/api/signup', (req, res) => {
   }
   else if (req.body.password.length < 1) {
     res.status(400).send({ message: "Password cannot be less than 1 characters long" })
-  } 
+  }
   else if (req.body.password.length > 50) {
     res.status(400).send({ message: "Password cannot be more than 50 characters long" })
   } else {
@@ -77,7 +76,7 @@ router.get('/user/game', isAuthenticated, (req, res) => {
   db.Game.findOne({
     winner: '',
     $or: [
-      { player1: req.user.id }, 
+      { player1: req.user.id },
       { player2: req.user.id }
     ]
   })

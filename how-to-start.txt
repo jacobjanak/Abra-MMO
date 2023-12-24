@@ -1,4 +1,4 @@
-install mongodb and start mongod
+Create the firebase-adminsdk.json file. This is your firebase config. I can't share mine for security reasons. https://firebase.google.com/docs/admin/setup/#initialize_the_sdk_in_non-google_environments
 install node and run 'npm run install-deps'
 ...you may need to run 'npm install --global yarn' first
 run 'npm run dev' to start the development server

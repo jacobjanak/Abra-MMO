@@ -10,9 +10,9 @@ const abraLogic = {
     // get distances from the middle square
     const relativeX = (index % abraLogic.width) - (abraLogic.middle % abraLogic.width);
     const relativeY = Math.floor(abraLogic.middle / abraLogic.width) - Math.floor(index / abraLogic.width);
-   
+
     const move = relativeX + ',' + relativeY;
-  
+
     return move;
   },
 
@@ -106,7 +106,7 @@ const abraLogic = {
       if (tile.owner) {
         return tile.available = false
       }
-   
+
       // check all 4 neighbouring tiles
       if (i >= abraLogic.width && tiles[i - abraLogic.width].owner) {
         tile.available = true; // up
@@ -159,7 +159,7 @@ const abraLogic = {
 
             let score2 = 0;
             if (!returnEnemyScoreInstead || (returnEnemyScoreInstead && compIsPlayer1)) {
-              for (let k = 0; k < 5; k++) {       
+              for (let k = 0; k < 5; k++) {
                 let index;
                 if (direction === 0) index = i - j + k;
                 else if (direction === 1) index = i - j * abraLogic.width + k * abraLogic.width;
@@ -176,7 +176,7 @@ const abraLogic = {
                 }
               }
             }
-             
+
             // look for instant wins
             if (compIsPlayer1 && score1 === 4) {
               bestScore = 5;
@@ -186,7 +186,7 @@ const abraLogic = {
               bestScore = 5;
               bestIndexes = [i];
             }
-            
+
             // else
             else {
               if (score1 === bestScore) bestIndexes.push(i);
@@ -207,7 +207,7 @@ const abraLogic = {
     if (returnEnemyScoreInstead) return bestScore;
     else {
       // recursively call this function once to check for losing blunders
-      let randomIndex, result;  
+      let randomIndex, result;
     //   if (!avoidScore) {
     //     while (bestIndexes.length > 0) {
     //       // find the best move for the next player to check for blunders
@@ -221,12 +221,12 @@ const abraLogic = {
     //         compIsPlayer1,
     //         true
     //       );
-          
+
     //       // user will win if their score is 4 so let's try to find a better move
     //       if (opponentScore === 4) bestIndexes.splice(randomIndex, 1)
     //       else break;
     //     }
-        
+
     //     // this means a blunder is about to happen
     //     if (bestIndexes.length === 0) {
     //       result = abraLogic.computerMove(moves, compIsPlayer1, false, bestScore);

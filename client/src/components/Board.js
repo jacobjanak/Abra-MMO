@@ -53,34 +53,46 @@ class Board extends Component {
     // check if new move was sent
     const moves = prevProps.moves;
     if (moves) {
-
       const index = abraLogic.moveToIndex(moves[moves.length - 1]);
       const player = moves.length % 2 === 1 ? 'player1' : 'player2'
 
-      this.setState(state => {
-        state.tiles[index].owner = player;
-        state.lastMove = moves.length > 2 ? index : -1;
+      let tiles = this.state.tiles;
+      tiles[index].owner = player;
 
-        // check if the board size needs to be increased
-        // if (index % this.state.width <= 0
-        //   || index % this.state.width >= this.state.width - 1
-        //   || index < this.state.width
-        //   || index >= this.state.width ** 2 - this.state.width) {
+      // TODO: check if the board size needs to be increased
 
-        //   // this guarantees the width will be odd
-        //   state.width = abraLogic.width = abraLogic.width * 2 - 1;
-        //   state.middleTile = Math.ceil(state.width ** 2 / 2);
+      tiles = abraLogic.checkAvailability(tiles);
 
-        //   // remake tiles with new larger width
-        //   state.tiles = abraLogic.movesToTiles(moves);
+      this.setState({
+        tiles,
+        lastMove: moves.length > 2 ? index : -1,
+      });
 
-        //   // need to increase the width on initial startup
-        //   // need to tell server to increase the width
-        // }
-
-        state.tiles = abraLogic.checkAvailability(state.tiles);
-        return state;
-      })
+      // this.setState(function(state) {
+      //   console.log(JSON.stringify(state.tiles), console.log(index), state.tiles[index])
+      //   state.tiles[index].owner = player;
+      //   state.lastMove = moves.length > 2 ? index : -1;
+      //
+      //   // check if the board size needs to be increased
+      //   // if (index % this.state.width <= 0
+      //   //   || index % this.state.width >= this.state.width - 1
+      //   //   || index < this.state.width
+      //   //   || index >= this.state.width ** 2 - this.state.width) {
+      //
+      //   //   // this guarantees the width will be odd
+      //   //   state.width = abraLogic.width = abraLogic.width * 2 - 1;
+      //   //   state.middleTile = Math.ceil(state.width ** 2 / 2);
+      //
+      //   //   // remake tiles with new larger width
+      //   //   state.tiles = abraLogic.movesToTiles(moves);
+      //
+      //   //   // need to increase the width on initial startup
+      //   //   // need to tell server to increase the width
+      //   // }
+      //
+      //   state.tiles = abraLogic.checkAvailability(state.tiles);
+      //   return state;
+      // })
     }
   }
 

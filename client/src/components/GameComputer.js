@@ -62,12 +62,12 @@ class Game extends Component {
 
     return (
       <div>
-        <Turn 
+        <Turn
           movesLength={moves.length}
           userIsActive={userIsActive}
           winner={winner}
         />
-        <Board 
+        <Board
           computer={true}
           moves={moves}
           winner={winner}
@@ -77,7 +77,7 @@ class Game extends Component {
           makeMove={this.makeMove}
         />
       </div>
-    );  
+    );
   }
 }
 

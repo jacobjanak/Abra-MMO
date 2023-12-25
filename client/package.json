@@ -4,8 +4,10 @@
   "private": true,
   "proxy": "http://localhost:3001",
   "secure": false,
-
   "changeOrigin": true,
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+  },
   "dependencies": {
     "abra-logic": "^1.0.6",
     "autoscroll-react": "^3.2.0",

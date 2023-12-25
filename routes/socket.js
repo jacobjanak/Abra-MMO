@@ -25,7 +25,7 @@ function socket(http) {
     client.on('queue', userId => {
       if (!queue.includes(userId)) {
         if (!(userId in clients)) {
-          
+
           // storing the client so that we can send the game once they're queued
           clients[userId] = client;
 
@@ -60,7 +60,7 @@ function socket(http) {
               })
               .then(data => {
                 game.player2 = data;
-                
+
                 // update current client
                 leaveQueue(client)
                 leaveRooms(client)
@@ -124,7 +124,7 @@ function socket(http) {
         leaveRooms(client)
         client.join(gameId)
         //NOTE: seems sketchy to send all the user data to both users
-        client.emit('gameJoined', game) 
+        client.emit('gameJoined', game)
       })
       .catch(err => res.status(400).send(err))
     })
@@ -152,12 +152,12 @@ function socket(http) {
 
                 // add the move to the game
                 game.moves.push(move)
-                
+
                 // update times
                 const unix = new Date().getTime();
                 game.time[activePlayer] -= unix - game.time.lastMove;
                 game.time.lastMove = unix;
-                
+
                 // see if anyone ran out of time
                 let winner;
                 if (game.time[activePlayer] <= 0) {
@@ -166,7 +166,7 @@ function socket(http) {
                 } else {
                   winner = abraLogic.findWinner(game.moves);
                 }
-                
+
                 // setting a timeout that runs after a player is out of time
                 const gameId = game._id;
                 if (client.rooms[gameId].timer) {
@@ -184,7 +184,7 @@ function socket(http) {
 
                 // const winner = abraLogic.findWinner(game.moves);
 
-                // check if someone has won the game              
+                // check if someone has won the game
                 if (winner) {
                   game.winner = winner;
                   io.to(gameId).emit('winner', winner)
@@ -206,7 +206,7 @@ function socket(http) {
 
               // move was not legal (hacker)
               } else return false;
-            
+
             // wrong user sent the move (hacker)
             } else return false;
 

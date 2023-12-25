@@ -1,4 +1,4 @@
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const generateId = require('./generateId');
 
 
@@ -10,10 +10,9 @@ module.exports = db => {
         let fail = false;
         const user = {};
 
-        // store values
-        user.username = obj.username.trim();
         user.email = obj.email.toLowerCase().trim(); // TO DO: ensure email is unique
-        user.password = obj.password.trim();
+        user.username = obj.username.trim();
+        user.password = obj.password;
 
         // default values
         user._id = generateId();
@@ -22,6 +21,7 @@ module.exports = db => {
         user.createdAt = Date.now();
 
         // make sure email and username are unique
+        // TODO: is there a better way to do this?
         db.collection("users").get()
         .then(snapshot => {
           snapshot.forEach(doc => {
@@ -35,21 +35,32 @@ module.exports = db => {
 
           // hash password
           if (!fail) {
-            bcrypt.genSalt(5, (err, salt) => {
-              if (err) reject(err);
-              else {
-                bcrypt.hash(user.password, salt, null, (err, hash) => {
-                  if (err) reject(err);
-                  else {
-                    user.password = hash;
-
-                    // save to db
-                    db.collection("users").doc(user._id).set(user)
-                    resolve(user)
-                  }
-                });
-              }
-            });
+            bcrypt.hash(user.password, 10)
+            .then(hash => {
+              user.password = hash;
+              db.collection("users").doc(user._id).set(user);
+              resolve(user);
+            })
+            .catch(err => reject(err));
+            // bcrypt.genSalt(5, (err, salt) => {
+            //   if (err) reject(err);
+            //   else {
+            //     bcrypt.hash(user.password, salt, null, (err, hash) => {
+            //       if (err) {
+            //         console.log(err);
+            //         throw err;
+            //         reject(err);
+            //       }
+            //       else {
+            //         user.password = hash ? hash : 'temp';
+            //
+            //         // save to db
+            //         db.collection("users").doc(user._id).set(user)
+            //         resolve(user)
+            //       }
+            //     });
+            //   }
+            // });
           }
         })
         .catch(err => reject(err))

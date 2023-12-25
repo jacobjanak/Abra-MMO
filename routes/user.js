@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const jwt = require('jsonwebtoken');
 const { expressjwt: exjwt } = require('express-jwt');
 const db = require('../models');
 
@@ -12,7 +13,7 @@ router.post('/api/login', (req, res) => {
   .then(user => {
     db.User.verifyPassword(user, req.body.password, (err, isMatch) => {
       if (isMatch && !err) {
-        const token = exjwt.sign({
+        const token = jwt.sign({
           id: user._id,
           email: user.email,
           username: user.username

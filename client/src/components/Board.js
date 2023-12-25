@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import abraLogic from '../../../abra-logic/';
+import abraLogic from 'abra-logic';
 import Tile from './Tile';
 
 class Board extends Component {
@@ -122,7 +122,7 @@ class Board extends Component {
     const gameStyles = {
       width: width * tileSize,
       height: width * tileSize,
-    }; 
+    };
 
     return (
       <div id="game-container" ref="container">

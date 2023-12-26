@@ -4,6 +4,7 @@
 */
 
 const abraLogic = require('../abra-logic/');
+const db = require("../models");
 abraLogic.width = 39;
 
 const clients = {};
@@ -49,17 +50,17 @@ function socket(http) {
             .then(game => {
               //NOTE: this seems excessive
               //NOTE: also very repetitive except for the last lines
-              db.Game.findById(game._id)
-              .then(data => {
-                game = data;
-                if (game) return db.User.findById(game.player1);
-              })
-              .then(data => {
-                game.player1 = data;
-                return db.User.findById(game.player2)
-              })
-              .then(data => {
-                game.player2 = data;
+              // db.Game.findById(game._id) // Do I need this?
+              // .then(data => {
+              //   game = data;
+              //   if (game) return db.User.findById(game.player1);
+              // })
+              // .then(data => {
+              //   game.player1 = data;
+              //   return db.User.findById(game.player2)
+              // })
+              // .then(data => {
+              //   game = data;
 
                 // update current client
                 leaveQueue(client)
@@ -68,14 +69,14 @@ function socket(http) {
                 client.emit('gameJoined', game)
 
                 // update the opponents client
-                const opponentId = game.player1._id == userId ? game.player2._id : game.player1._id;
+                const opponentId = game.player1 == userId ? game.player2 : game.player1;
                 leaveQueue(clients[opponentId]);
                 leaveRooms(clients[opponentId])
                 clients[opponentId].join(game._id)
                 clients[opponentId].emit('gameJoined', game)
               })
               .catch(err => console.log(err))
-            })
+            // })
           } else {
             queue.push(userId)
           }

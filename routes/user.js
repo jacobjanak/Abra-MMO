@@ -3,9 +3,12 @@ const jwt = require('jsonwebtoken');
 const { expressjwt: exjwt } = require('express-jwt');
 const db = require('../models');
 
-// create req.user and redirect logged out users
+// create req.auth and redirect logged out users
 const secret = 'my secret';
-const isAuthenticated = exjwt({ secret: secret, algorithms: ['RS256'] });
+const isAuthenticated = exjwt({
+  secret: secret,
+  algorithms: ['HS256'],
+});
 
 // TEMPLATE CODE
 router.post('/api/login', (req, res) => {
@@ -68,7 +71,7 @@ router.get('/api/user/:id', isAuthenticated, (req, res) => {
 // END TEMPLATE CODE
 
 router.get('/user/', isAuthenticated, (req, res) => {
-  db.User.findById(req.user.id)
+  db.User.findById(req.auth.id)
   .then(data => res.json(data))
   .catch(err => res.status(404).send('No user found'))
 })
@@ -77,8 +80,8 @@ router.get('/user/game', isAuthenticated, (req, res) => {
   db.Game.findOne({
     winner: '',
     $or: [
-      { player1: req.user.id },
-      { player2: req.user.id }
+      { player1: req.auth.id },
+      { player2: req.auth.id }
     ]
   })
   .then(game => res.json(game))

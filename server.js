@@ -29,10 +29,7 @@ app.get('*', (req, res) => {
 })
 
 // socket
-require('./routes/socket')(http, {
-  pingTimeout: 3 * 60 * 1000, // default: 5 * 1000 ms
-  pingInterval: 30 * 1000 // default : 25 * 1000 ms
-})
+require('./routes/socket')(http)
 
 // start server
 http.listen(PORT, () => console.log(`http://localhost:${PORT}`))

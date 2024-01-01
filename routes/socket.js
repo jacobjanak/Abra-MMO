@@ -26,6 +26,8 @@ function socket(http) {
                 return;
             }
 
+            let game;
+
             const random = Math.random() >= 0.5;
             db.Game.create({
                 player1: random ? userId : queue.pop(),
@@ -35,7 +37,18 @@ function socket(http) {
                     player2: 5 * 60 * 1000
                 }
             })
-            .then(game => {
+            .then(localGame => {
+                game = localGame;
+                // TODO: do both user lookups at the same time
+                return db.User.findById(localGame.player1);
+            })
+            .then(user => {
+                game.player1 = user;
+                return db.User.findById(game.player2)
+            })
+            .then(user => {
+                game.player2 = user;
+
                 // Update current client
                 leaveQueue(client)
                 leaveRooms(client)
@@ -43,7 +56,7 @@ function socket(http) {
                 client.emit('gameJoined', game)
 
                 // Update the opponents client
-                const opponentId = game.player1 === userId ? game.player2 : game.player1;
+                const opponentId = game.player1._id === userId ? game.player2._id : game.player1._id;
                 leaveQueue(clients[opponentId]);
                 leaveRooms(clients[opponentId])
                 clients[opponentId].join(game._id)

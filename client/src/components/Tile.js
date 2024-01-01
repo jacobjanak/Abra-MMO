@@ -15,7 +15,6 @@ class Tile extends Component {
     const { owner, available, winner, userIsActive, userIsPlayer1, isLastMove } = this.props;
 
     if (owner) {
-      
       // user always has blue
       const style = {};
       if (userIsPlayer1) {
@@ -31,7 +30,7 @@ class Tile extends Component {
       if (this.props.offCenterY) {
         style.transform = "translateY(-50%)";
       }
-      
+
       return (
         <div className={"tile owned" + (isLastMove ? " last-move" : "")} style={style}></div>
       );

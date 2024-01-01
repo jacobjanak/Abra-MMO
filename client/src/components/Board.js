@@ -111,7 +111,7 @@ class Board extends Component {
     if (!computer) {
       makeMove(move)
     } else {
-      // probably no need to check legality but its for safety
+      // probably no need to check legality, but it's for safety
       const { tiles } = this.state;
       if (abraLogic.checkLegality(move, tiles)) {
         if (userIsActive) {

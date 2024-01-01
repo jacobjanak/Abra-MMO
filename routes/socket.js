@@ -93,16 +93,17 @@ function socket(http) {
 
             let game;
             db.Game.findById(data.gameId)
-            .then(data => {
-                game = data;
+            .then(localGame => {
+                game = localGame;
+                // TODO: do both user lookups at the same time
                 return db.User.findById(game.player1);
             })
-            .then(data => {
-                game.player1 = data;
+            .then(user => {
+                game.player1 = user;
                 return db.User.findById(game.player2)
             })
-            .then(data => {
-                game.player2 = data;
+            .then(user => {
+                game.player2 = user;
 
                 leaveQueue(client);
                 leaveRooms(client)
@@ -113,6 +114,8 @@ function socket(http) {
         })
 
         client.on('move', move => {
+            console.log('move')
+
             const gameId = Object.keys(client.rooms)[1];
             db.Game.findById(gameId)
             .then(game => {
@@ -120,10 +123,10 @@ function socket(http) {
                     return;
 
                 const clientPlayer = client.userId === game.player1 ? 'player1' : 'player2';
-                const activePlayer = game.moves.length % 2 ? 'player1' : 'player2';
+                const activePlayer = game.moves.length % 2 ? 'player2' : 'player1';
                 const inactivePlayer = activePlayer === 'player1' ? 'player2' : 'player1';
 
-                if (clientPlayer !== activePlayer || !abraLogic.checkLegality(move, game.moves))
+                if (clientPlayer !== activePlayer)
                     return;
 
                 // Move is legal
@@ -158,16 +161,12 @@ function socket(http) {
                     }(io, game, activePlayer, inactivePlayer));
                 }
 
-                return db.Game.save(game)
-            })
-            .then(game => {
-                if (game) {
-                    // TODO: I don't think I have to wait for the game to finish
-                    io.to(gameId).emit('newMove', {
-                        move: move,
-                        time: game.time,
-                    })
-                }
+                io.to(gameId).emit('newMove', {
+                    move: move,
+                    time: game.time,
+                })
+
+                db.Game.save(game)
             })
             .catch(err => console.error(err))
         })
@@ -182,10 +181,10 @@ function leaveQueue(client) {
     })
 }
 
-function leaveRooms(socket) {
-    for (const room in socket.rooms) {
-        if (socket.id !== room) {
-            socket.leave(room)
+function leaveRooms(client) {
+    for (const room in client.rooms) {
+        if (client.id !== room) {
+            client.leave(room)
         }
     }
 }

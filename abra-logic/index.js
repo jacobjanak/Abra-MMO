@@ -23,7 +23,7 @@ const abraLogic = {
       return game.winner;
 
     // Check if a player is out of time
-    const activePlayer = game.moves.length % 2 ? 'player1' : 'player2';
+    const activePlayer = game.moves.length % 2 ? 'player2' : 'player1';
     const unix = new Date().getTime();
     game.time[activePlayer] -= unix - game.time.lastMove;
 

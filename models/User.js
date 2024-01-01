@@ -96,7 +96,16 @@ module.exports = db => {
     },
 
     findById: function(id) {
-      return this.findOne({ _id: id });
+      return new Promise((resolve, reject) => {
+        db.collection('users').doc('' + id).get()
+        .then((doc) => {
+          if (doc.exists) {
+            resolve(doc.data());
+          } else {
+            reject(null)
+          }
+        })
+      })
     },
 
     save: user => {

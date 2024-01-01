@@ -66,14 +66,14 @@ router.get('/api/user/:id', isAuthenticated, (req, res) => {
       res.status(404).send({ success: false, message: 'No user found' })
     }
   })
-  .catch(err => res.status(400).send(err))
+  .catch(() => res.status(404).send('No user found'))
 })
 // END TEMPLATE CODE
 
 router.get('/user/', isAuthenticated, (req, res) => {
   db.User.findById(req.auth.id)
   .then(data => res.json(data))
-  .catch(err => res.status(404).send('No user found'))
+  .catch(() => res.status(404).send('No user found'))
 })
 
 router.get('/user/game', isAuthenticated, (req, res) => {

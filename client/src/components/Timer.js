@@ -60,12 +60,12 @@ class Timer extends Component {
         return minutes + ':' + seconds;
     }
 
-    render() { 
+    render() {
         const { unix } = this.state;
 
         if (unix < 0) {
             this.stopCountdown()
-            this.props.reloadGame()
+            // this.props.reloadGame() Commenting out due to infinite recursion
         }
 
         return (
@@ -73,5 +73,5 @@ class Timer extends Component {
         );
     }
 }
- 
+
 export default Timer;

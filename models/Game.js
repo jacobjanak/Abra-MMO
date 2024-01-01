@@ -1,5 +1,5 @@
 const generateId = require('./generateId');
-
+const abraLogic = require('../abra-logic/');
 
 module.exports = db => {
   return {
@@ -66,7 +66,20 @@ module.exports = db => {
     },
 
     findById: function(id) {
-      return this.findOne({ _id: id });
+      return new Promise((resolve, reject) => {
+        db.collection('games').doc('' + id).get()
+        .then((doc) => {
+          if (doc.exists) {
+            const game = doc.data();
+
+            abraLogic.findWinner(game.moves);
+
+            resolve(game);
+          } else {
+            reject(null)
+          }
+        })
+      })
     },
 
     save: game => {

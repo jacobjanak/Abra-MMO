@@ -23,8 +23,8 @@ class Game extends Component {
       const game = res.data;
       if (game) {
         API.joinGame(game._id, this.socketCallback)
-        //NOTE: this is inefficient but it's for safety
-        this.interval = setInterval(this.reloadGame, 5 * 1000)
+        // TODO: this is inefficient but it's for safety
+        // this.interval = setInterval(this.reloadGame, 5 * 1000)
       } else {
         // API.checkIfQueued(queued => {
         //   if (queued) API.openSocket(this.socketCallback);
@@ -52,7 +52,7 @@ class Game extends Component {
       if (game) {
         this.setState({
           moves: game.moves,
-          winner: game.winner,          
+          winner: game.winner,
           time: game.time
         })
       }
@@ -79,7 +79,7 @@ class Game extends Component {
       const userIsPlayer1 = game.player1._id === this.props.user.id;
       this.setState({
         userIsPlayer1,
-        ...game 
+        ...game
       })
     }
     else if (newMove) {
@@ -127,17 +127,17 @@ class Game extends Component {
 
       return (
         <div>
-          <Scoreboard 
-            player1={player1} 
-            player2={player2} 
-            moves={moves} 
+          <Scoreboard
+            player1={player1}
+            player2={player2}
+            moves={moves}
             time={time}
             winner={winner}
             reloadGame={this.reloadGame}
           />
 
           { moves && (
-            <Board 
+            <Board
               moves={moves}
               winner={winner}
               userIsActive={userIsActive}
@@ -146,12 +146,12 @@ class Game extends Component {
             />
           )}
         </div>
-      );  
+      );
         // <div>
-        //   <Scoreboard 
-        //     player1={player1} 
-        //     player2={player2} 
-        //     moves={moves} 
+        //   <Scoreboard
+        //     player1={player1}
+        //     player2={player2}
+        //     moves={moves}
         //     time={time}
         //     winner={winner}
         //     reloadGame={this.reloadGame}

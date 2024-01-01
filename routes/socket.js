@@ -128,27 +128,17 @@ function socket(http) {
 
                 // Move is legal
                 game.moves.push(move)
-
-                // Update times
-                const unix = new Date().getTime();
-                game.time[activePlayer] -= unix - game.time.lastMove;
-                game.time.lastMove = unix;
+                game.time.lastMove = new Date().getTime();
 
                 // Clear the timeout that runs when a player is out of time
                 if (client.rooms[game._id].timer) {
                     clearTimeout(client.rooms[game._id].timer)
                 }
 
-                let winner;
-                if (game.time[activePlayer] <= 0) {
-                    game.time[activePlayer] = 0;
-                    winner = inactivePlayer;
-                } else {
-                    winner = abraLogic.findWinner(game.moves);
-                }
+                // Check for a winner
+                const winner = abraLogic.findWinner(game);
 
                 if (winner) {
-                    game.winner = winner;
                     finishGame(io, game, winner)
                 } else {
                     // TODO: this can be improved

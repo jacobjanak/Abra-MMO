@@ -43,7 +43,7 @@ class Board extends Component {
 
     // check for winner in player vs computer
     if (prevProps.computer && !prevProps.winner) {
-      const winner = abraLogic.findWinner(prevProps.moves);
+      const winner = abraLogic.findWinner(prevProps.moves); // TODO: this will break when I pull the latest npm version
       if (winner) {
         prevProps.declareWinner(winner)
       }

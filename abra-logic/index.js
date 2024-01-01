@@ -16,9 +16,33 @@ const abraLogic = {
     return move;
   },
 
-  findWinner: moves => {
-    let winner = false;
-    const tiles = abraLogic.movesToTiles(moves);
+  // Checks time and moves for a winner
+  // Note: this function may update the game param
+  findWinner: game => {
+    if (game.winner)
+      return game.winner;
+
+    // Check if a player is out of time
+    const activePlayer = game.moves.length % 2 ? 'player1' : 'player2';
+    const unix = new Date().getTime();
+    game.time[activePlayer] -= unix - game.time.lastMove;
+
+    if (game.time['player1'] <= 0) {
+      game.time['player1'] = 0;
+      game.winner = 'player2';
+    }
+
+    if (game.time['player2'] <= 0) {
+      game.time['player2'] = 0;
+      game.winner = 'player1';
+    }
+
+    if (game.winner)
+      return game.winner;
+
+    // Check if a player has 5 in a row
+    let winner = null;
+    const tiles = abraLogic.movesToTiles(game.moves);
 
     tiles.forEach((tile, i) => {
       if (tile.owner) {
@@ -52,6 +76,9 @@ const abraLogic = {
         }
       }
     })
+
+    if (winner)
+      game.winner = winner;
 
     return winner;
   },

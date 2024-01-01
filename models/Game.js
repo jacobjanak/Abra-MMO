@@ -72,7 +72,9 @@ module.exports = db => {
           if (doc.exists) {
             const game = doc.data();
 
-            abraLogic.findWinner(game.moves);
+            if (!game.winner && abraLogic.findWinner(game)) {
+              this.save(game);
+            }
 
             resolve(game);
           } else {

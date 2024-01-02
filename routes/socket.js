@@ -39,14 +39,19 @@ function socket(http) {
             })
             .then(localGame => {
                 game = localGame;
-                // TODO: do both user lookups at the same time
                 return db.User.findById(localGame.player1);
             })
             .then(user => {
+                user.lastGame = game._id;
+                db.User.save(user);
+
                 game.player1 = user;
-                return db.User.findById(game.player2)
+                return db.User.findById(game.player2);
             })
             .then(user => {
+                user.lastGame = game._id;
+                db.User.save(user);
+
                 game.player2 = user;
 
                 // Update current client
@@ -108,7 +113,6 @@ function socket(http) {
             db.Game.findById(data.gameId)
             .then(localGame => {
                 game = localGame;
-                // TODO: do both user lookups at the same time
                 return db.User.findById(game.player1);
             })
             .then(user => {

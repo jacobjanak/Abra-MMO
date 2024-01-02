@@ -3,31 +3,39 @@ const jwt = require('jsonwebtoken');
 const { expressjwt: exjwt } = require('express-jwt');
 const db = require('../models');
 
-// create req.auth and redirect logged out users
+// create req.auth and redirect logged-out users
 const secret = 'my secret';
 const isAuthenticated = exjwt({
   secret: secret,
   algorithms: ['HS256'],
 });
 
-// TEMPLATE CODE
 router.post('/api/login', (req, res) => {
-  db.User.findOne({ email: req.body.email })
+  db.User.findOne('email', req.body.email)
   .then(user => {
     db.User.verifyPassword(user, req.body.password, (err, isMatch) => {
-      if (isMatch && !err) {
-        const token = jwt.sign({
-          id: user._id,
-          email: user.email,
-          username: user.username
-        }, secret, { expiresIn: 60 * 60 * 24 * 365 })
-        res.json({ success: true, message: 'Token issued', token: token, user: user })
-      } else {
+      if (err || !isMatch) {
         res.status(401).json({ success: false, message: 'Authentication failed. Wrong password.' })
+        return;
       }
+
+      const token = jwt.sign({
+        id: user._id,
+        email: user.email,
+        username: user.username
+      }, secret, {
+        expiresIn: 60 * 60 * 24 * 365
+      });
+
+      res.json({
+        success: true,
+        message: 'Token issued',
+        token: token,
+        user: user
+      })
     })
   })
-  .catch(err => res.status(404).json({ success: false, message: 'User not found', error: err }))
+  .catch(() => res.status(404).json({ success: false, message: 'User not found.' }))
 })
 
 router.post('/api/signup', (req, res) => {
@@ -53,7 +61,7 @@ router.post('/api/signup', (req, res) => {
 
     db.User.create(req.body)
     .then(user => res.json(user))
-    .catch(err => res.status(500).send(err))
+    .catch(err => res.status(400).send({ message: err }))
   }
 })
 
@@ -77,15 +85,17 @@ router.get('/user/', isAuthenticated, (req, res) => {
 })
 
 router.get('/user/game', isAuthenticated, (req, res) => {
-  db.Game.findOne({
-    winner: '',
-    $or: [
-      { player1: req.auth.id },
-      { player2: req.auth.id }
-    ]
+  db.User.findById(req.auth.id)
+  .then(user => {
+    if (!user.lastGame)
+      return Promise.reject();
+
+    return db.Game.findById(user.lastGame)
   })
-  .then(game => res.json(game))
-  .catch(err => res.json(null))
+  .then(game => {
+    res.json(game.winner ? null : game);
+  })
+  .catch(() => res.json(null))
 })
 
 router.get('/user/:username', (req, res) => {

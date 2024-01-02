@@ -3,117 +3,76 @@ const generateId = require('./generateId');
 
 
 module.exports = db => {
-  return {
+    return {
+        create: data => {
+            return new Promise((resolve, reject) => {
+                const user = {
+                    _id: generateId(),
+                    email: data.email.toLowerCase().trim(),
+                    username: data.username.trim(),
+                    password: data.password,
+                    wins: 0,
+                    losses: 0,
+                    lastGame: null,
+                    createdAt: Date.now(),
+                };
 
-    create: obj => {
-      return new Promise((resolve, reject) => {
-        let fail = false;
-        const user = {};
+                db.collection('users').where('email', '==', user.email).get()
+                    .then(snapshot => {
+                        if (!snapshot.empty)
+                            return Promise.reject('A user already exists with that email.');
 
-        user.email = obj.email.toLowerCase().trim(); // TO DO: ensure email is unique
-        user.username = obj.username.trim();
-        user.password = obj.password;
+                        return db.collection('users').where('username', '==', user.username).get();
+                    })
+                    .then(snapshot => {
+                        if (!snapshot.empty)
+                            return Promise.reject('A user already exists with that username.');
 
-        // default values
-        user._id = generateId();
-        user.wins = 0;
-        user.losses = 0;
-        user.createdAt = Date.now();
+                        return bcrypt.hash(user.password, 10);
+                    })
+                    .then(hash => {
+                        user.password = hash;
+                        db.collection('users').doc(user._id).set(user);
+                        resolve(user);
+                    })
+                    .catch(err => reject(err));
+            });
+        },
 
-        // make sure email and username are unique
-        // TODO: is there a better way to do this?
-        db.collection("users").get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            const existingUser = doc.data();
-            if (user.email === existingUser.email
-             || user.username === existingUser.username) {
-              fail = true;
-              reject()
-            }
-          })
+        verifyPassword: (user, password, cb) => {
+            bcrypt.compare(password, user.password, cb)
+        },
 
-          // hash password
-          if (!fail) {
-            bcrypt.hash(user.password, 10)
-            .then(hash => {
-              user.password = hash;
-              db.collection("users").doc(user._id).set(user);
-              resolve(user);
+        findById: function (id) {
+            return new Promise((resolve, reject) => {
+                db.collection('users').doc(id).get()
+                    .then((doc) => {
+                        if (!doc.exists) {
+                            reject()
+                            return;
+                        }
+
+                        resolve(doc.data());
+                    })
             })
-            .catch(err => reject(err));
-            // bcrypt.genSalt(5, (err, salt) => {
-            //   if (err) reject(err);
-            //   else {
-            //     bcrypt.hash(user.password, salt, null, (err, hash) => {
-            //       if (err) {
-            //         console.log(err);
-            //         throw err;
-            //         reject(err);
-            //       }
-            //       else {
-            //         user.password = hash ? hash : 'temp';
-            //
-            //         // save to db
-            //         db.collection("users").doc(user._id).set(user)
-            //         resolve(user)
-            //       }
-            //     });
-            //   }
-            // });
-          }
-        })
-        .catch(err => reject(err))
-      });
-    },
+        },
 
-    verifyPassword: (user, password, cb) => {
-      bcrypt.compare(password, user.password, (err, isMatch) => {
-        if (err) return cb(err);
-        cb(null, isMatch);
-      })
-    },
+        findOne: (field, value) => {
+            return new Promise((resolve, reject) => {
+                db.collection('users').where(field, '==', value).get()
+                    .then(snapshot => {
+                        if (snapshot.empty) {
+                            reject()
+                            return;
+                        }
 
-    findOne: user => {
-      return new Promise((resolve, reject) => {
-        db.collection("users").get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            const existingUser = doc.data();
-            let match = true;
-            for (const key in user) {
-              if (user[key] != existingUser[key]) {
-                match = false;
-              }
-            }
-            if (match === true) {
-              resolve(existingUser);
-            }
-          })
-          reject("No user found")
-        })
-      });
-    },
+                        resolve(snapshot.docs[0].data())
+                    })
+            });
+        },
 
-    findById: function(id) {
-      return new Promise((resolve, reject) => {
-        db.collection('users').doc('' + id).get()
-        .then((doc) => {
-          if (doc.exists) {
-            resolve(doc.data());
-          } else {
-            reject(null)
-          }
-        })
-      })
-    },
-
-    save: user => {
-      return new Promise((resolve, reject) => {
-        db.collection("users").doc(user._id).set(user)
-        resolve(user)
-      })
-    },
-
-  };
+        save: user => {
+            db.collection('users').doc(user._id).set(user)
+        },
+    };
 };

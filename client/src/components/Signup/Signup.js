@@ -15,7 +15,7 @@ class Signup extends Component {
     this.Auth = new AuthService();
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (this.Auth.user()) {
       this.props.history.replace('/');
     }

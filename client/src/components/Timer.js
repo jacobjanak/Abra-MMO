@@ -19,7 +19,7 @@ class Timer extends Component {
         this.stopCountdown()
     }
 
-    componentWillReceiveProps(prevProps) {
+    UNSAFE_componentWillReceiveProps(prevProps) {
         this.stopCountdown()
         this.setState({
             unix: prevProps.unix

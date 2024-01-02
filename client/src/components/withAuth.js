@@ -7,7 +7,7 @@ function withAuth(AuthComponent, props) {
   return class AuthWrapped extends Component {
     state = { user: false };
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
       const user = Auth.user();
       if (user) {
         this.setState({ user })

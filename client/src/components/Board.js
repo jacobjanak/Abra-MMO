@@ -33,7 +33,7 @@ class Board extends Component {
     }, this.centerView)
   }
 
-  componentWillReceiveProps(prevProps) {
+  UNSAFE_componentWillReceiveProps(prevProps) {
     // check if a winner was just announced due to time out
     if (prevProps.winner) {
       this.setState({

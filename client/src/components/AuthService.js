@@ -1,23 +1,23 @@
-import decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 
 class AuthService {
   user = () => {
     const token = localStorage.getItem('id_token');
-    
-    // no user is logged in
-    if (!token) return false;
-    
-    // check if token is valid or expired
-    if (!this.isTokenExpired(token)) {
-      return decode(token);
-    } else {
+
+    if (!token)
+      return null;
+
+    if (this.isTokenExpired(token)) {
       this.logout()
+      return null;
     }
+
+    return jwtDecode(token);
   };
 
   isTokenExpired = token => {
-    const decoded = decode(token);
+    const decoded = jwtDecode(token);
     return decoded.exp < Date.now() / 1000;
   };
 

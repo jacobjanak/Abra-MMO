@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import AuthService from './AuthService';
 import API from '../API';
 import Board from './Board';
 import Scoreboard from './Scoreboard';
+
+const Auth = new AuthService();
 
 class Game extends Component {
   state = {
@@ -16,6 +19,15 @@ class Game extends Component {
 
   audio = new Audio('./newmove.mp3');
   interval;
+
+  UNSAFE_componentWillMount() {
+    const user = Auth.user();
+    if (user) {
+      this.setState({ user })
+    } else {
+      this.props.history.replace('/login');
+    }
+  }
 
   componentDidMount() {
     API.getActiveGame()
@@ -76,7 +88,7 @@ class Game extends Component {
 
   socketCallback = (game, newMove, winner) => {
     if (game) {
-      const userIsPlayer1 = game.player1._id === this.props.user.id;
+      const userIsPlayer1 = game.player1._id === this.state.user.id;
       this.setState({
         userIsPlayer1,
         ...game
@@ -104,6 +116,7 @@ class Game extends Component {
 
   render() {
     const {
+      user,
       player1,
       player2,
       userIsPlayer1,
@@ -118,7 +131,6 @@ class Game extends Component {
     if (player1 && player2) {
 
       // check whose turn it is
-      const { user } = this.props;
       let userIsActive = false;
       if ((user.id === player1._id && moves.length % 2 === 0) ||
           (user.id === player2._id && moves.length % 2 !== 0)) {

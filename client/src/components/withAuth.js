@@ -20,15 +20,6 @@ function withAuth(AuthComponent, props) {
       const { history, match } = this.props;
       const { user } = this.state;
 
-      //NOTE: seems like this could replace all the state stuff?
-      // const user = Auth.user();
-      // if (user) {
-      //   return <AuthComponent history={history} user={user} />;
-      // } else {
-      //   this.props.history.replace('/signup');
-      //   return null;
-      // }
-
       if (user) {
         return <AuthComponent history={history} match={match} user={user} {...props} />;
       } else {

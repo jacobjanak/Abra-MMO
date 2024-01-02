@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, BrowserRouter as Router } from 'react-router-dom';
+import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import withAuth from './withAuth';
 
 // components
@@ -18,13 +18,15 @@ class App extends Component {
       <Router>
         <div>
           <NavBar />
-          <Route exact path="/" component={Home} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/signup" component={Signup} />
-          <Route exact path="/profile/:username" component={Profile} />
-          <Route exact path="/play" component={GameComputer} />
-          <Route exact path="/online" component={withAuth(GameOnline)} />
-          {/* <Music /> */}
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route exact path="/login" element={<Login />} />
+            <Route exact path="/signup" element={<Signup />} />
+            <Route exact path="/profile/:username" element={<Profile />} />
+            <Route exact path="/play" element={<GameComputer />} />
+            <Route exact path="/online" element={<GameOnline />} />
+            {/* <Music /> */}
+          </Routes>
         </div>
       </Router>
     );

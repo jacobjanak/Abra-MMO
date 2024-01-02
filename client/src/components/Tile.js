@@ -6,6 +6,7 @@ class Tile extends Component {
   };
 
   handleClick = () => {
+    console.log('Tile clicked', this.state.available)
     if (this.state.available) {
       this.props.makeMove(this.props.index)
     }

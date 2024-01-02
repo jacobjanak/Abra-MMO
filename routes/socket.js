@@ -133,7 +133,7 @@ function socket(http) {
         client.on('move', move => {
             console.log('move')
 
-            const gameId = Object.keys(client.rooms)[1];
+            const gameId = Array.from(client.rooms)[1];
             db.Game.findById(gameId)
             .then(game => {
                 if (!game || game.winner)
@@ -151,9 +151,9 @@ function socket(http) {
                 game.time.lastMove = new Date().getTime();
 
                 // Clear the timeout that runs when a player is out of time
-                if (client.rooms[game._id].timer) {
-                    clearTimeout(client.rooms[game._id].timer)
-                }
+                // if (client.rooms[game._id].timer) {
+                //     clearTimeout(client.rooms[game._id].timer)
+                // }
 
                 // Check for a winner
                 const winner = abraLogic.findWinner(game);
@@ -164,18 +164,18 @@ function socket(http) {
                     // TODO: this can be improved
                     // Set a timeout that will run when the player runs out of time
                     // Using self-calling function for scoping so that the variables don't get overwritten
-                    (function (io, game, activePlayer, inactivePlayer) {
-                        client.rooms[gameId].timer = setTimeout(function () {
-                            db.Game.findById(gameId)
-                            .then(game => {
-                                game.winner = winner;
-                                db.Game.save(game)
-                            })
-                            .catch(err => console.error(err))
-
-                            finishGame(io, game, activePlayer)
-                        }, game.time[inactivePlayer] + 500);
-                    }(io, game, activePlayer, inactivePlayer));
+                    // (function (io, game, activePlayer, inactivePlayer) {
+                    //     client.rooms[gameId].timer = setTimeout(function () {
+                    //         db.Game.findById(gameId)
+                    //         .then(game => {
+                    //             game.winner = winner;
+                    //             db.Game.save(game)
+                    //         })
+                    //         .catch(err => console.error(err))
+                    //
+                    //         finishGame(io, game, activePlayer)
+                    //     }, game.time[inactivePlayer] + 500);
+                    // }(io, game, activePlayer, inactivePlayer));
                 }
 
                 io.to(gameId).emit('newMove', {

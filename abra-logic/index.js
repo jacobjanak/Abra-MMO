@@ -165,7 +165,7 @@ const abraLogic = {
                             else if (direction === 1) index = i - j * abraLogic.width + k * abraLogic.width;
                             else if (direction === 2) index = i - j * abraLogic.width - j + k * abraLogic.width + k;
                             else if (direction === 3) index = i - j * abraLogic.width + j + k * abraLogic.width - k;
-                            
+
                             if (index !== i) {
                                 if (tiles[index].owner === 'player1') {
                                     score1++;

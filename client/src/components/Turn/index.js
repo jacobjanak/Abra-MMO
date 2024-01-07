@@ -1,1 +1,1 @@
-export { default } from './Turn.js';
+export {default} from './Turn.js';

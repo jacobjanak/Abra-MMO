@@ -1,6 +1,6 @@
 {
-  "ignore": [
-    "client/*",
-    "abra-logic/*"
-  ]
+	"ignore": [
+		"client/*",
+		"abra-logic/*"
+	]
 }

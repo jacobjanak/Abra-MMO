@@ -1,13 +1,13 @@
 #turn {
-  /* font-family: 'Designer Block';
-  letter-spacing: 2px;
-  text-transform: uppercase; */
-  font-size: 24px;
-  z-index: 100;
-  position: absolute;
-  top: 56px;
-  left: calc(50% - 180px);
-  width: 360px;
-  text-align: center;
-  /* transform: translateX(-50%); */
+    /* font-family: 'Designer Block';
+    letter-spacing: 2px;
+    text-transform: uppercase; */
+    font-size: 24px;
+    z-index: 100;
+    position: absolute;
+    top: 56px;
+    left: calc(50% - 180px);
+    width: 360px;
+    text-align: center;
+    /* transform: translateX(-50%); */
 }

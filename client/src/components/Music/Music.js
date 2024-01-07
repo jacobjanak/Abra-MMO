@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './Music.css';
 
 class Music extends Component {
 
-  audio = new Audio('./newmove.mp3');
+    audio = new Audio('./newmove.mp3');
 
-  render() {
+    render() {
 
-    // this.audio.play();
-    // need to catch err or else site will crash on safari
-    //.catch(err => {});
+        // this.audio.play();
+        // need to catch err or else site will crash on safari
+        //.catch(err => {});
 
-    return (
-      <div>
+        return (
+            <div>
 
-      </div>
-    );
-  }
+            </div>
+        );
+    }
 }
 
 export default Music;

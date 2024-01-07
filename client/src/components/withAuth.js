@@ -13,14 +13,14 @@ function withAuth(AuthComponent, props) {
             const user = Auth.user();
 
             if (user) {
-                this.setState({ user })
+                this.setState({user})
             } else {
                 window.location.href = '/login';
             }
         }
 
         render() {
-            const { user } = this.state;
+            const {user} = this.state;
 
             if (user) {
                 return <AuthComponent user={user} {...props} />;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 class Timer extends Component {
     constructor(props) {
@@ -31,7 +31,7 @@ class Timer extends Component {
     }
 
     startCountdown = () => {
-        const { unix, lastMove } = this.props;
+        const {unix, lastMove} = this.props;
         const millisecondsLeft = 1000 - (new Date().getDate() % 1000);
         this.countdown = setTimeout(() => {
             const currentTime = new Date().getTime();
@@ -61,7 +61,7 @@ class Timer extends Component {
     }
 
     render() {
-        const { unix } = this.state;
+        const {unix} = this.state;
 
         if (unix < 0) {
             this.stopCountdown()

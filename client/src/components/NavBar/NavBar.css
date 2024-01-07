@@ -5,16 +5,18 @@
 }
 
 @media screen and (max-width: 991px) {
-	.nav-item {
-		margin-right: 0 !important;
-	}
+    .nav-item {
+        margin-right: 0 !important;
+    }
+
     .nav-link {
-    	padding: .5rem 1rem !important;
-    	border: 1px solid white;
-    	border-radius: .3rem;
+        padding: .5rem 1rem !important;
+        border: 1px solid white;
+        border-radius: .3rem;
         margin-top: 24px;
     }
+
     .dropdown {
-    	margin-bottom: 12px;
+        margin-bottom: 12px;
     }
 }

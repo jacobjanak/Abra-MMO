@@ -9,14 +9,14 @@ const http = require('http').Server(app);
 
 // middleware
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.static('client/build'))
 
 // routing
 app.use('/', require('./routes/user'))
 app.use('/game', require('./routes/game'))
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './client/build/index.html'))
+    res.sendFile(path.join(__dirname, './client/build/index.html'))
 })
 
 // socket

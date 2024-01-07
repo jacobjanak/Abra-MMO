@@ -37,37 +37,37 @@ function socket(http) {
                     player2: 5 * 60 * 1000
                 }
             })
-            .then(localGame => {
-                game = localGame;
-                return db.User.findById(localGame.player1);
-            })
-            .then(user => {
-                user.lastGame = game._id;
-                db.User.save(user);
+                .then(localGame => {
+                    game = localGame;
+                    return db.User.findById(localGame.player1);
+                })
+                .then(user => {
+                    user.lastGame = game._id;
+                    db.User.save(user);
 
-                game.player1 = user;
-                return db.User.findById(game.player2);
-            })
-            .then(user => {
-                user.lastGame = game._id;
-                db.User.save(user);
+                    game.player1 = user;
+                    return db.User.findById(game.player2);
+                })
+                .then(user => {
+                    user.lastGame = game._id;
+                    db.User.save(user);
 
-                game.player2 = user;
+                    game.player2 = user;
 
-                // Update current client
-                leaveQueue(client)
-                leaveRooms(client)
-                client.join(game._id)
-                client.emit('gameJoined', game)
+                    // Update current client
+                    leaveQueue(client)
+                    leaveRooms(client)
+                    client.join(game._id)
+                    client.emit('gameJoined', game)
 
-                // Update the opponents client
-                const opponentId = game.player1._id === userId ? game.player2._id : game.player1._id;
-                leaveQueue(clients[opponentId]);
-                leaveRooms(clients[opponentId])
-                clients[opponentId].join(game._id)
-                clients[opponentId].emit('gameJoined', game)
-            })
-            .catch(err => console.log(err))
+                    // Update the opponents client
+                    const opponentId = game.player1._id === userId ? game.player2._id : game.player1._id;
+                    leaveQueue(clients[opponentId]);
+                    leaveRooms(clients[opponentId])
+                    clients[opponentId].join(game._id)
+                    clients[opponentId].emit('gameJoined', game)
+                })
+                .catch(err => console.log(err))
         })
 
         // client.on('checkIfQueued', userId => {
@@ -111,23 +111,23 @@ function socket(http) {
 
             let game;
             db.Game.findById(data.gameId)
-            .then(localGame => {
-                game = localGame;
-                return db.User.findById(game.player1);
-            })
-            .then(user => {
-                game.player1 = user;
-                return db.User.findById(game.player2)
-            })
-            .then(user => {
-                game.player2 = user;
+                .then(localGame => {
+                    game = localGame;
+                    return db.User.findById(game.player1);
+                })
+                .then(user => {
+                    game.player1 = user;
+                    return db.User.findById(game.player2)
+                })
+                .then(user => {
+                    game.player2 = user;
 
-                leaveQueue(client);
-                leaveRooms(client)
-                client.join(data.gameId)
-                client.emit('gameJoined', game)
-            })
-            .catch(err => console.error(err))
+                    leaveQueue(client);
+                    leaveRooms(client)
+                    client.join(data.gameId)
+                    client.emit('gameJoined', game)
+                })
+                .catch(err => console.error(err))
         })
 
         client.on('move', move => {
@@ -135,57 +135,57 @@ function socket(http) {
 
             const gameId = Array.from(client.rooms)[1];
             db.Game.findById(gameId)
-            .then(game => {
-                if (!game || game.winner)
-                    return;
+                .then(game => {
+                    if (!game || game.winner)
+                        return;
 
-                const clientPlayer = client.userId === game.player1 ? 'player1' : 'player2';
-                const activePlayer = game.moves.length % 2 ? 'player2' : 'player1';
-                const inactivePlayer = activePlayer === 'player1' ? 'player2' : 'player1';
+                    const clientPlayer = client.userId === game.player1 ? 'player1' : 'player2';
+                    const activePlayer = game.moves.length % 2 ? 'player2' : 'player1';
+                    const inactivePlayer = activePlayer === 'player1' ? 'player2' : 'player1';
 
-                if (clientPlayer !== activePlayer)
-                    return;
+                    if (clientPlayer !== activePlayer)
+                        return;
 
-                // Move is legal
-                game.moves.push(move)
-                game.time.lastMove = new Date().getTime();
+                    // Move is legal
+                    game.moves.push(move)
+                    game.time.lastMove = new Date().getTime();
 
-                // Clear the timeout that runs when a player is out of time
-                // if (client.rooms[game._id].timer) {
-                //     clearTimeout(client.rooms[game._id].timer)
-                // }
+                    // Clear the timeout that runs when a player is out of time
+                    // if (client.rooms[game._id].timer) {
+                    //     clearTimeout(client.rooms[game._id].timer)
+                    // }
 
-                // Check for a winner
-                const winner = abraLogic.findWinner(game);
+                    // Check for a winner
+                    const winner = abraLogic.findWinner(game);
 
-                if (winner) {
-                    finishGame(io, game, winner)
-                } else {
-                    // TODO: this can be improved
-                    // Set a timeout that will run when the player runs out of time
-                    // Using self-calling function for scoping so that the variables don't get overwritten
-                    // (function (io, game, activePlayer, inactivePlayer) {
-                    //     client.rooms[gameId].timer = setTimeout(function () {
-                    //         db.Game.findById(gameId)
-                    //         .then(game => {
-                    //             game.winner = winner;
-                    //             db.Game.save(game)
-                    //         })
-                    //         .catch(err => console.error(err))
-                    //
-                    //         finishGame(io, game, activePlayer)
-                    //     }, game.time[inactivePlayer] + 500);
-                    // }(io, game, activePlayer, inactivePlayer));
-                }
+                    if (winner) {
+                        finishGame(io, game, winner)
+                    } else {
+                        // TODO: this can be improved
+                        // Set a timeout that will run when the player runs out of time
+                        // Using self-calling function for scoping so that the variables don't get overwritten
+                        // (function (io, game, activePlayer, inactivePlayer) {
+                        //     client.rooms[gameId].timer = setTimeout(function () {
+                        //         db.Game.findById(gameId)
+                        //         .then(game => {
+                        //             game.winner = winner;
+                        //             db.Game.save(game)
+                        //         })
+                        //         .catch(err => console.error(err))
+                        //
+                        //         finishGame(io, game, activePlayer)
+                        //     }, game.time[inactivePlayer] + 500);
+                        // }(io, game, activePlayer, inactivePlayer));
+                    }
 
-                io.to(gameId).emit('newMove', {
-                    move: move,
-                    time: game.time,
+                    io.to(gameId).emit('newMove', {
+                        move: move,
+                        time: game.time,
+                    })
+
+                    db.Game.save(game)
                 })
-
-                db.Game.save(game)
-            })
-            .catch(err => console.error(err))
+                .catch(err => console.error(err))
         })
     })
 }
@@ -217,18 +217,18 @@ function finishGame(io, game, winner) {
     io.to(game._id).emit('winner', winner)
 
     db.User.findById(game[winner])
-    .then(user => {
-        user.wins++;
-        db.User.save(user)
-    })
-    .catch(err => console.error(err))
+        .then(user => {
+            user.wins++;
+            db.User.save(user)
+        })
+        .catch(err => console.error(err))
 
     db.User.findById(game[loser])
-    .then(user => {
-        user.losses++;
-        db.User.save(user)
-    })
-    .catch(err => console.error(err))
+        .then(user => {
+            user.losses++;
+            db.User.save(user)
+        })
+        .catch(err => console.error(err))
 }
 
 module.exports = socket;

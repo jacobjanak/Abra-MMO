@@ -5,10 +5,10 @@ import App from './components/App';
 import './index.css';
 
 if (localStorage.getItem('id_token')) {
-  axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('id_token')}`;
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('id_token')}`;
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
+root.render(<App/>);
 
 registerServiceWorker();

@@ -24,19 +24,12 @@ class Game extends Component {
                 const game = res.data;
                 if (game) {
                     API.joinGame(game._id, this.socketCallback)
-                    // TODO: this is inefficient but it's for safety
-                    // this.interval = setInterval(this.reloadGame, 5 * 1000)
                 } else {
-                    // API.checkIfQueued(queued => {
-                    //   if (queued) API.openSocket(this.socketCallback);
-                    //   this.setState({ queued })
-                    // })
                     API.getPlayerCount(playerCount => {
                         this.setState({playerCount})
                     })
                 }
             })
-        // .catch(err => alert('No game found'))
     }
 
     componentWillUnmount() {

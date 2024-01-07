@@ -1,11 +1,12 @@
 const express = require('express');
-const path = require('path');
+const { createServer } = require('node:http');
+const path = require('node:path');
 const bodyParser = require('body-parser');
 
 // server
 const PORT = process.env.PORT || 3001;
 const app = express();
-const http = require('http').Server(app);
+const server = createServer(app);
 
 // middleware
 app.use(bodyParser.json())
@@ -20,7 +21,7 @@ app.get('*', (req, res) => {
 })
 
 // socket
-require('./routes/socket')(http)
+require('./routes/socket')(server)
 
 // start server
-http.listen(PORT, () => console.log(`http://localhost:${PORT}`))
+server.listen(PORT, () => console.log(`http://localhost:${PORT}`))

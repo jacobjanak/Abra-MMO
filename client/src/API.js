@@ -3,7 +3,6 @@ import openSocket from 'socket.io-client';
 import AuthService from './components/AuthService';
 
 const socket = openSocket(window.location.origin);
-console.log("opening a socket")
 const Auth = new AuthService();
 
 const API = {
@@ -19,11 +18,6 @@ const API = {
     dequeue: () => {
         socket.emit('dequeue')
     },
-    // checkIfQueued: cb => {
-    //   const userId = Auth.user().id;
-    //   socket.emit('checkIfQueued', userId)
-    //   socket.on('isQueued', cb)
-    // },
     joinGame: (gameId, cb) => {
         API.openSocket(cb)
         const userId = Auth.user().id;

@@ -6,8 +6,8 @@ abraLogic.width = 39;
 const clients = {};
 const queue = [];
 
-function socket(http) {
-    const io = new Server(http);
+function socket(server) {
+    const io = new Server(server);
 
     io.on('connection', client => {
 
@@ -70,15 +70,6 @@ function socket(http) {
                 })
                 .catch(err => console.log(err))
         })
-
-        // client.on('checkIfQueued', userId => {
-        //   console.log('checkIfQueued')
-        //   if (queue.includes(userId)) {
-        //     client.emit('isQueued', true)
-        //   } else {
-        //     client.emit('isQueued', false)
-        //   }
-        // })
 
         client.on('dequeue', () => {
             console.log('dequeue')

@@ -11,7 +11,9 @@ class Profile extends Component {
   };
 
   componentDidMount() {
-    API.getUser(this.props.match.params.username)
+    const username = window.location.pathname.split('/')[2];
+
+    API.getUser(username)
     .then(res => {
       const user = res.data;
       this.setState({ ...user })

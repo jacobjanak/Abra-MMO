@@ -99,7 +99,7 @@ router.get('/user/game', isAuthenticated, (req, res) => {
 })
 
 router.get('/user/:username', (req, res) => {
-  db.User.findOne({ username: req.params.username })
+  db.User.findOne('username', req.params.username)
   .then(data => res.json(data))
   .catch(err => res.status(404).send('No user found'))
 })

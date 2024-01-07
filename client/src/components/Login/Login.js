@@ -11,7 +11,7 @@ class Login extends Component {
 
   UNSAFE_componentWillMount() {
     if (this.Auth.user()) {
-      this.props.history.replace('/');
+      window.location.href = '/';
     }
   }
 

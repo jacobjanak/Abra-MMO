@@ -17,7 +17,7 @@ class Signup extends Component {
 
   UNSAFE_componentWillMount() {
     if (this.Auth.user()) {
-      this.props.history.replace('/');
+      window.location.href = '/';
     }
   }
 
@@ -29,10 +29,12 @@ class Signup extends Component {
         email: this.state.email,
         password: this.state.password
       })
-      .then(res => this.props.history.replace('/login'))
+      .then(() => {
+        window.location.href = '/login';
+      })
       .catch(err => alert(err));
     } else {
-      this.setState({ 
+      this.setState({
         confirm: '',
         confirmError: true
       })

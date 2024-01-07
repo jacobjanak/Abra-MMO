@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
-import withAuth from './withAuth';
 
 // components
 import NavBar from './NavBar/';

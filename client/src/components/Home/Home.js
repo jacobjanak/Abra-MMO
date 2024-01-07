@@ -4,8 +4,6 @@ import AuthService from '../AuthService';
 import Logo from '../Logo';
 import './Home.css';
 
-const Auth = new AuthService();
-
 class Home extends Component {
     render() {
         const style = {
@@ -18,8 +16,6 @@ class Home extends Component {
                 <Logo/>
 
                 <h1 id="logo-subtext" className="display-6">Abra, the Strategy Game</h1>
-
-                {/* <p className="lead">Welcome to the best game you've ever played.</p> */}
 
                 <Link to={"/play"} id="play-now" className="btn btn-dark btn-lg">
                     Play now <i className="fas fa-play" style={{marginLeft: 4}}></i>

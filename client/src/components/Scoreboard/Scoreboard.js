@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import MoveList from '../MoveList';
 import Timer from '../Timer';
 import './Scoreboard.css';
 

@@ -15,7 +15,6 @@ class Game extends Component {
         playerCount: false
     };
 
-    audio = new Audio('./newmove.mp3');
     interval;
 
     componentDidMount() {
@@ -76,15 +75,6 @@ class Game extends Component {
                 ...game
             })
         } else if (newMove) {
-
-            // if newMove is from the enemy player we play a sound
-            if ((this.state.moves.length % 2 === 0 && !this.state.userIsPlayer1)
-                || (this.state.moves.length % 2 === 1 && this.state.userIsPlayer1)) {
-                // this.audio.play()
-                // need to catch err or else site will crash on safari
-                // .catch(err => {});
-            }
-
             this.setState(state => ({
                 moves: [...state.moves, newMove.move],
                 time: newMove.time
@@ -140,30 +130,16 @@ class Game extends Component {
                     )}
                 </div>
             );
-            // <div>
-            //   <Scoreboard
-            //     player1={player1}
-            //     player2={player2}
-            //     moves={moves}
-            //     time={time}
-            //     winner={winner}
-            //     reloadGame={this.reloadGame}
-            //   />
-            // </div>
         } else {
             // no game, user should queue up
             const style = {
                 textAlign: 'center',
             };
 
-            // const buttonStyle = {
-            //   marginTop: 24,
-            // };
-
             return (
                 <div className="container pt-4" style={style}>
                     <h1 className="display-4">Play now</h1>
-                    {(playerCount || playerCount === 0) && (
+                    {(typeof playerCount === 'number') && (
                         <p className="lead mb-0">
                             {playerCount} players currently playing
                         </p>
@@ -176,9 +152,6 @@ class Game extends Component {
                     </button>
                     {queued && (
                         <div>
-                            {/* <p className="lead mb-0 mt-4" style={{ fontSize: "1em"}}>
-                Finding opponent
-              </p> */}
                             <img src="spinner.gif" alt="Loading" height="140"/>
                         </div>
                     )}

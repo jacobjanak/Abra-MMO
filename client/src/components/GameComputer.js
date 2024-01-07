@@ -5,9 +5,6 @@ import Turn from './Turn/';
 class Game extends Component {
     constructor(props) {
         super(props)
-        this.audio = new Audio('./newmove.mp3');
-        //NOTE: check localStorage for game?
-        // moves = localstorage
         this.state = {
             userIsPlayer1: true,
             userIsActive: true,
@@ -45,9 +42,6 @@ class Game extends Component {
             this.setState({
                 userIsActive: true,
                 moves: [...this.state.moves, move]
-            }, () => {
-                // this.audio.play()
-                // .catch(err => {})
             })
         }
     };

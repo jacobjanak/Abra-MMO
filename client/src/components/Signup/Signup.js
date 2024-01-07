@@ -44,7 +44,7 @@ class Signup extends Component {
     handleChange = event => {
         const {name, value} = event.target;
         let fixingConfirm = this.state.confirmError && name === 'confirm';
-        if (fixingConfirm && value == this.state.password) {
+        if (fixingConfirm && value === this.state.password) {
             this.setState({
                 confirm: value,
                 confirmError: false

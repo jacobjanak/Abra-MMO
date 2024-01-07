@@ -4,8 +4,8 @@ import AuthService from '../AuthService';
 import './Login.css';
 
 class Login extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.Auth = new AuthService();
     }
 
@@ -19,7 +19,7 @@ class Login extends Component {
         event.preventDefault();
 
         this.Auth.login(this.state.email, this.state.password)
-            .then(user => window.location.reload())
+            .then(() => window.location.reload())
             .catch(err => alert(err.response.data.message))
     };
 

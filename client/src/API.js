@@ -6,10 +6,18 @@ const socket = openSocket(window.location.origin);
 const Auth = new AuthService();
 
 const API = {
-    getUser: (username = '') => axios.get('/user/' + username),
-    getGame: (id = '') => axios.get('/game/' + id),
-    getActiveGame: () => axios.get('/user/game'),
-    signUpUser: user => axios.post('/api/signup', user),
+    getUser: (username = '') => {
+        return axios.get('/user/' + username);
+    },
+    getGame: (id = '') => {
+        return axios.get('/game/' + id);
+    },
+    getActiveGame: () => {
+        return axios.get('/user/game');
+    },
+    signUpUser: user => {
+        return axios.post('/api/signup', user);
+    },
     queue: cb => {
         const userId = Auth.user().id;
         socket.emit('queue', userId)
@@ -21,7 +29,10 @@ const API = {
     joinGame: (gameId, cb) => {
         API.openSocket(cb)
         const userId = Auth.user().id;
-        socket.emit('joinGame', {gameId, userId})
+        socket.emit('joinGame', {
+            gameId,
+            userId
+        })
     },
     openSocket: cb => {
         socket.on('gameJoined', game => cb(game, null, null))

@@ -6,14 +6,21 @@ class Turn extends Component {
         const {movesLength, userIsActive, winner} = this.props;
 
         let message;
-        if (userIsActive) message = "Your turn";
-        else message = "Computer thinking...";
-        if (movesLength === 2) message = "Connect 5 in a row";
         if (winner) {
-            if (userIsActive) message = "You lose";
-            else message = "You win!";
+            if (userIsActive)
+                message = 'You lose';
+            else
+                message = 'You win!';
         }
-
+        else if (movesLength === 2) {
+            message = 'Connect 5 in a row';
+        }
+        else {
+            if (userIsActive)
+                message = 'Your turn';
+            else
+                message = 'Computer thinking...';
+        }
 
         return (
             <h2 id="turn">{message}</h2>

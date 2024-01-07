@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 class Timer extends Component {
     constructor(props) {
-        super()
+        super(props)
         this.countdown = false;
         this.state = {
             unix: props.unix

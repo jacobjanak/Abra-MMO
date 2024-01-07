@@ -40,7 +40,6 @@ router.post('/api/login', (req, res) => {
 
 router.post('/api/signup', (req, res) => {
     if (req.body.username.length > 12) {
-        //NOTE: the message never actually gets sent
         res.status(400).send({message: "Username cannot be more than 12 characters long"})
     } else if (req.body.email.length > 50) {
         res.status(400).send({message: "Email cannot be more than 50 characters long"})
@@ -71,7 +70,6 @@ router.get('/api/user/:id', isAuthenticated, (req, res) => {
         })
         .catch(() => res.status(404).send('No user found'))
 })
-// END TEMPLATE CODE
 
 router.get('/user/', isAuthenticated, (req, res) => {
     db.User.findById(req.auth.id)

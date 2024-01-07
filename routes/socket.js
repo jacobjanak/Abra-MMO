@@ -1,3 +1,4 @@
+const { Server } = require('socket.io');
 const abraLogic = require('../abra-logic/');
 const db = require('../models');
 
@@ -6,7 +7,7 @@ const clients = {};
 const queue = [];
 
 function socket(http) {
-    const io = require('socket.io')(http);
+    const io = new Server(http);
 
     io.on('connection', client => {
 

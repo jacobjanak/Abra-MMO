@@ -4,7 +4,7 @@ const abraLogic = require('../abra-logic/');
 module.exports = db => {
     return {
         create: data => {
-            return new Promise((resolve, reject) => {
+            return new Promise(resolve => {
                 const currentTime = Date.now();
 
                 const game = {

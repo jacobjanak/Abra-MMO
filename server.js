@@ -11,7 +11,6 @@ const http = require('http').Server(app);
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('client/build'))
-// app.use(morgan('dev'))
 
 // routing
 app.use('/', require('./routes/user'))

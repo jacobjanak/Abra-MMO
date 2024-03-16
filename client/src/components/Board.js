@@ -20,12 +20,12 @@ class Board extends Component {
 
     componentDidMount() {
         const {moves} = this.props;
-        abraLogic.width = this.state.width;
+        // abraLogic.width = this.state.width;
         let tiles = abraLogic.movesToTiles(moves);
-        tiles = abraLogic.checkAvailability(tiles); //NOTE: this will be redundant one abra-logic updates
+        tiles = abraLogic.checkAvailability(tiles);
 
         // find the most resent move so that we can display it differently
-        const lastMove = abraLogic.moveToIndex(moves[moves.length - 1]);
+        const lastMove = moves[moves.length - 1];
 
         this.setState({
             tiles,
@@ -77,7 +77,7 @@ class Board extends Component {
     };
 
     handleClick = index => {
-        const {computer, moves, userIsActive, userIsPlayer1, winner, makeMove} = this.props
+        const {computer, moves, userIsActive, winner, makeMove} = this.props
         const move = abraLogic.indexToMove(index);
 
         if (!computer) {
@@ -89,8 +89,8 @@ class Board extends Component {
                 if (userIsActive) {
                     makeMove(move)
                     setTimeout(() => {
-                        if (!this.props.winner) {
-                            const cpuMove = abraLogic.computerMove(this.props.moves, !userIsPlayer1);
+                        if (!winner) {
+                            const cpuMove = abraLogic.computerMove(moves);
                             makeMove(cpuMove)
                         }
                     }, 500 + Math.random() * 1500)

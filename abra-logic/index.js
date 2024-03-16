@@ -1,18 +1,19 @@
+const {Integer} = require("yarn/lib/cli");
 const abraLogic = {
-    width: 39,
+    // width: 39,
 
     // index of the middle tile. using get allows this to update as width changes.
-    get middle() {
-        return Math.ceil(abraLogic.width ** 2 / 2);
-    },
+    // get middle() {
+    //     return Math.ceil(abraLogic.width ** 2 / 2);
+    // },
 
-    indexToMove: index => {
-        // get distances from the middle square
-        const relativeX = (index % abraLogic.width) - (abraLogic.middle % abraLogic.width);
-        const relativeY = Math.floor(abraLogic.middle / abraLogic.width) - Math.floor(index / abraLogic.width);
-
-        return relativeX + ',' + relativeY;
-    },
+    // indexToMove: index => {
+    //     // get distances from the middle square
+    //     const relativeX = (index % abraLogic.width) - (abraLogic.middle % abraLogic.width);
+    //     const relativeY = Math.floor(abraLogic.middle / abraLogic.width) - Math.floor(index / abraLogic.width);
+    //
+    //     return relativeX + ',' + relativeY;
+    // },
 
     // Checks time and moves for a winner
     // Note: this function may update the game param
@@ -42,34 +43,39 @@ const abraLogic = {
         let winner = null;
         const tiles = abraLogic.movesToTiles(game.moves);
 
-        tiles.forEach((tile, i) => {
+        Object.entries(tiles).forEach((move, tile) => {
+            let [x, y] = move.split(',');
+            x = Integer(x);
+            y = Integer(y);
+
             if (tile.owner) {
                 // horizontal
-                if (tile.owner === tiles[i + 2].owner
-                    && tile.owner === tiles[i + 1].owner
-                    && tile.owner === tiles[i - 1].owner
-                    && tile.owner === tiles[i - 2].owner) {
+                // tiles + 2 => "5,5" look for "7,5"
+                if (tile.owner === tiles[(x+2) + ',' + y]?.owner
+                    && tile.owner === tiles[(x+1) + ',' + y]?.owner
+                    && tile.owner === tiles[(x-1) + ',' + y]?.owner
+                    && tile.owner === tiles[(x-2) + ',' + y]?.owner) {
                     winner = tile.owner;
                 }
                 // vertical
-                else if (tile.owner === tiles[i + abraLogic.width * 2].owner
-                    && tile.owner === tiles[i + abraLogic.width].owner
-                    && tile.owner === tiles[i - abraLogic.width].owner
-                    && tile.owner === tiles[i - abraLogic.width * 2].owner) {
+                else if (tile.owner === tiles[x + ',' + (y+2)]?.owner
+                    && tile.owner === tiles[x + ',' + (y+1)]?.owner
+                    && tile.owner === tiles[x + ',' + (y-1)]?.owner
+                    && tile.owner === tiles[x + ',' + (y-2)]?.owner) {
                     winner = tile.owner;
                 }
                 // diagonal
-                else if (tile.owner === tiles[i + abraLogic.width * 2 - 2].owner
-                    && tile.owner === tiles[i + abraLogic.width - 1].owner
-                    && tile.owner === tiles[i - abraLogic.width + 1].owner
-                    && tile.owner === tiles[i - abraLogic.width * 2 + 2].owner) {
+                else if (tile.owner === tiles[(x+2) + ',' + (y+2)]?.owner
+                    && tile.owner === tiles[(x+1) + ',' + (y+1)]?.owner
+                    && tile.owner === tiles[(x-1) + ',' + (y-1)]?.owner
+                    && tile.owner === tiles[(x-2) + ',' + (y-2)]?.owner) {
                     winner = tile.owner;
                 }
                 // diagonal
-                else if (tile.owner === tiles[i + abraLogic.width * 2 + 2].owner
-                    && tile.owner === tiles[i + abraLogic.width + 1].owner
-                    && tile.owner === tiles[i - abraLogic.width - 1].owner
-                    && tile.owner === tiles[i - abraLogic.width * 2 - 2].owner) {
+                else if (tile.owner === tiles[(x+2) + ',' + (y-2)]?.owner
+                    && tile.owner === tiles[(x+1) + ',' + (y-1)]?.owner
+                    && tile.owner === tiles[(x-1) + ',' + (y+1)]?.owner
+                    && tile.owner === tiles[(x-2) + ',' + (y+2)]?.owner) {
                     winner = tile.owner;
                 }
             }
@@ -82,61 +88,51 @@ const abraLogic = {
     },
 
     movesToTiles: moves => {
-        const tiles = [];
-
-        for (let i = 0; i < abraLogic.width ** 2; i++) {
-            tiles.push({})
-        }
+        const tiles = {};
 
         moves.forEach((move, i) => {
-            const tileIndex = abraLogic.moveToIndex(move, tiles);
-            tiles[tileIndex].owner = i % 2 === 0 ? 'player1' : 'player2';
+            tiles[move] = {
+                owner: i % 2 === 0 ? 'player1' : 'player2',
+            };
         })
 
-        return abraLogic.checkAvailability(tiles);
+        return tiles;
     },
 
-    moveToIndex: move => {
-        const xy = move.split(',');
-        return abraLogic.middle + Number(xy[0]) - (Number(xy[1]) * abraLogic.width);
+    // moveToIndex: move => {
+    //     const xy = move.split(',');
+    //     return abraLogic.middle + Number(xy[0]) - (Number(xy[1]) * abraLogic.width);
+    // },
+
+    checkLegality: (move, tiles) => {
+        return abraLogic.isTileAvailable(move, tiles);
     },
 
-    checkLegality: (move, movesOrTiles) => {
-        let tiles;
-        const index = abraLogic.moveToIndex(move);
-
-        // if movesOrTiles is moves then convert it to tiles
-        if (typeof movesOrTiles[0] === 'string') {
-            tiles = abraLogic.movesToTiles(movesOrTiles);
-        } else {
-            tiles = movesOrTiles;
-        }
-
-        // not legal to move to a taken tile
-        if (tiles[index].owner)
+    isTileAvailable: (move, tiles) => {
+        if (tiles[move]?.owner)
             return false;
 
-        // check if each tile is available
-        tiles = abraLogic.checkAvailability(tiles);
-        return !!tiles[index].available;
+        let [x, y] = move.split(',');
+        x = Integer(x);
+        y = Integer(y);
+
+        return (
+            tiles[(x+1) + ',' + y]?.owner
+            || tiles[(x-1) + ',' + y]?.owner
+            || tiles[x + ',' + (y+1)]?.owner
+            || tiles[x + ',' + (y-1)]?.owner
+        );
     },
 
     checkAvailability: tiles => {
-        tiles.forEach((tile, i) => {
+        Object.keys(tiles).forEach(move => {
+            const tile = tiles[move];
+
             if (tile.owner) {
                 tile.available = false;
             }
-            else if (i >= abraLogic.width && tiles[i - abraLogic.width].owner) {
-                tile.available = true; // up
-            }
-            else if (i < abraLogic.width * (abraLogic.width - 1) && tiles[i + abraLogic.width].owner) {
-                tile.available = true; // down
-            }
-            else if (i % abraLogic.width !== 0 && tiles[i - 1].owner) {
-                tile.available = true; // left
-            }
-            else if (i % abraLogic.width !== abraLogic.width - 1 && tiles[i + 1].owner) {
-                tile.available = true; // right
+            else if (abraLogic.isTileAvailable(move, tiles)) {
+                tile.available = true;
             }
             else if (tile.available) {
                 tile.available = false;
@@ -146,93 +142,171 @@ const abraLogic = {
         return tiles;
     },
 
-    computerMove: (moves, compIsPlayer1, returnEnemyScoreInstead, avoidScore) => {
-        let tiles = abraLogic.movesToTiles(moves);
-        let bestIndexes = [];
-        let bestScore = 0;
-        tiles.forEach((tile, i) => {
-            if (!tile.available)
-                return;
+    getAvailableMoves: (moves) => {
+        const availableMoves = {};
 
-            for (let direction = 0; direction < 4; direction++) {
-                for (let j = 0; j < 5; j++) {
+        moves.forEach(move => {
+            let [x, y] = move.split(',');
+            x = Integer(x);
+            y = Integer(y);
 
-                    let score1 = 0;
-                    if (!returnEnemyScoreInstead || (returnEnemyScoreInstead && !compIsPlayer1)) {
-                        for (let k = 0; k < 5; k++) {
-                            let index;
-                            if (direction === 0) index = i - j + k;
-                            else if (direction === 1) index = i - j * abraLogic.width + k * abraLogic.width;
-                            else if (direction === 2) index = i - j * abraLogic.width - j + k * abraLogic.width + k;
-                            else if (direction === 3) index = i - j * abraLogic.width + j + k * abraLogic.width - k;
-
-                            if (index !== i) {
-                                if (tiles[index].owner === 'player1') {
-                                    score1++;
-                                } else if (tiles[index].owner === 'player2') {
-                                    if (index < i) score1 = 0;
-                                    else break;
-                                }
-                            }
-                        }
-                    }
-
-                    let score2 = 0;
-                    if (!returnEnemyScoreInstead || (returnEnemyScoreInstead && compIsPlayer1)) {
-                        for (let k = 0; k < 5; k++) {
-                            let index;
-                            if (direction === 0) index = i - j + k;
-                            else if (direction === 1) index = i - j * abraLogic.width + k * abraLogic.width;
-                            else if (direction === 2) index = i - j * abraLogic.width - j + k * abraLogic.width + k;
-                            else if (direction === 3) index = i - j * abraLogic.width + j + k * abraLogic.width - k;
-
-                            if (index !== i) {
-                                if (tiles[index].owner === 'player2') {
-                                    score2++;
-                                } else if (tiles[index].owner === 'player1') {
-                                    if (index < i) score2 = 0;
-                                    else break;
-                                }
-                            }
-                        }
-                    }
-
-                    // look for instant wins
-                    if (compIsPlayer1 && score1 === 4) {
-                        bestScore = 5;
-                        bestIndexes = [i];
-                    } else if (!compIsPlayer1 && score2 === 4) {
-                        bestScore = 5;
-                        bestIndexes = [i];
-                    }
-                    else {
-                        if (score1 === bestScore)
-                            bestIndexes.push(i);
-
-                        if (score2 === bestScore)
-                            bestIndexes.push(i);
-
-                        if (score1 > bestScore && score1 !== avoidScore) {
-                            bestScore = score1;
-                            bestIndexes = [i];
-                        }
-
-                        if (score2 > bestScore && score2 !== avoidScore) {
-                            bestScore = score2;
-                            bestIndexes = [i];
-                        }
-                    }
-                }
-            }
+            availableMoves[(x+1) + ',' + y] = true;
+            availableMoves[(x-1) + ',' + y] = true;
+            availableMoves[x + ',' + (y+1)] = true;
+            availableMoves[x + ',' + (y-1)] = true;
         })
 
-        if (returnEnemyScoreInstead)
-            return bestScore;
+        for (const move in availableMoves) {
+            if (moves.hasOwnProperty(move))
+                delete availableMoves[move];
+        }
 
-        const randomIndex = Math.floor(Math.random() * bestIndexes.length);
-        const result = bestIndexes[randomIndex];
+        return availableMoves
+    },
 
-        return abraLogic.indexToMove(result);
+    computerMove: (tiles) => {
+        const availableMoves = abraLogic.getAvailableMoves(tiles);
+        const computerPlayer = Object.keys(tiles).length % 2 ? 'player2' : 'player1';
+
+        let bestMoves = [];
+        let bestScore = 0;
+        for (const move of Object.keys(availableMoves)) {
+            if (!abraLogic.isTileAvailable(move, tiles))
+                return;
+
+            let [x, y] = move.split(',');
+            x = Integer(x);
+            y = Integer(y);
+
+            let score = 0;
+            let isDefensive;
+
+            ['right', 'left', 'up', 'down'].forEach(direction => {
+                for (let i = 1; i < 5; i++) {
+                    let moveToCheck;
+
+                    switch(direction) {
+                        case 'right':
+                            moveToCheck = (x+i) + ',' + y;
+                            break;
+                        case 'left':
+                            moveToCheck = (x-i) + ',' + y;
+                            break;
+                        case 'up':
+                            moveToCheck = x + ',' + (y-i);
+                            break;
+                        case 'down':
+                            moveToCheck = x + ',' + (y+i);
+                    }
+
+                    if (!tiles[moveToCheck]?.owner)
+                        break;
+
+                    if (tiles[moveToCheck]?.owner === computerPlayer) {
+                        if (i === 1)
+                            isDefensive = false;
+                        else if (isDefensive)
+                            break;
+                    } else {
+                        if (i === 1)
+                            isDefensive = true;
+                        else if (!isDefensive)
+                            break;
+                    }
+
+                    score++;
+
+                    // look for instant wins
+                    if (!isDefensive && score === 4)
+                        return move;
+
+                    // check if this move is the best move so far
+                    if (score === bestScore) {
+                        bestMoves.push(move)
+                    }
+                    else if (score > bestScore) {
+                        bestScore = score;
+                        bestMoves = [move];
+                    }
+                }
+
+
+                // for (let j = 0; j < 5; j++) {
+                //
+                //     let score1 = 0;
+                //     if (!returnEnemyScoreInstead || (returnEnemyScoreInstead && !compIsPlayer1)) {
+                //         for (let k = 0; k < 5; k++) {
+                //             let index;
+                //             if (direction === 0) index = i - j + k;
+                //             else if (direction === 1) index = i - j * abraLogic.width + k * abraLogic.width;
+                //             else if (direction === 2) index = i - j * abraLogic.width - j + k * abraLogic.width + k;
+                //             else if (direction === 3) index = i - j * abraLogic.width + j + k * abraLogic.width - k;
+                //
+                //             if (index !== i) {
+                //                 if (tiles[index].owner === 'player1') {
+                //                     score1++;
+                //                 } else if (tiles[index].owner === 'player2') {
+                //                     if (index < i) score1 = 0;
+                //                     else break;
+                //                 }
+                //             }
+                //         }
+                //     }
+                //
+                //     let score2 = 0;
+                //     if (!returnEnemyScoreInstead || (returnEnemyScoreInstead && compIsPlayer1)) {
+                //         for (let k = 0; k < 5; k++) {
+                //             let index;
+                //             if (direction === 0) index = i - j + k;
+                //             else if (direction === 1) index = i - j * abraLogic.width + k * abraLogic.width;
+                //             else if (direction === 2) index = i - j * abraLogic.width - j + k * abraLogic.width + k;
+                //             else if (direction === 3) index = i - j * abraLogic.width + j + k * abraLogic.width - k;
+                //
+                //             if (index !== i) {
+                //                 if (tiles[index].owner === 'player2') {
+                //                     score2++;
+                //                 } else if (tiles[index].owner === 'player1') {
+                //                     if (index < i) score2 = 0;
+                //                     else break;
+                //                 }
+                //             }
+                //         }
+                //     }
+                //
+                //     // look for instant wins
+                //     if (compIsPlayer1 && score1 === 4) {
+                //         bestScore = 5;
+                //         bestIndexes = [i];
+                //     } else if (!compIsPlayer1 && score2 === 4) {
+                //         bestScore = 5;
+                //         bestIndexes = [i];
+                //     }
+                //     else {
+                //         if (score1 === bestScore)
+                //             bestIndexes.push(i);
+                //
+                //         if (score2 === bestScore)
+                //             bestIndexes.push(i);
+                //
+                //         if (score1 > bestScore && score1 !== avoidScore) {
+                //             bestScore = score1;
+                //             bestIndexes = [i];
+                //         }
+                //
+                //         if (score2 > bestScore && score2 !== avoidScore) {
+                //             bestScore = score2;
+                //             bestIndexes = [i];
+                //         }
+                //     }
+                // }
+            })
+        }
+
+        // if (returnEnemyScoreInstead)
+        //     return bestScore;
+
+        const randomIndex = Math.floor(Math.random() * bestMoves.length);
+        return bestMoves[randomIndex];
     }
 };
 

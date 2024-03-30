@@ -10,7 +10,7 @@
 		"react-scripts": "^5.0.1"
 	},
 	"dependencies": {
-		"abra-logic": "^1.0.6",
+		"abra-logic": "^2.0.0",
 		"autoscroll-react": "^3.2.0",
 		"axios": "^1.6.3",
 		"jwt-decode": "^4.0.0",

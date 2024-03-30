@@ -37,7 +37,7 @@ class Board extends Component {
 
         // check for winner in player vs computer
         if (prevProps.computer && !prevProps.winner) {
-            const winner = abraLogic.findWinner(prevProps.moves);
+            const winner = abraLogic.findWinner(prevProps); //
 
             if (winner)
                 prevProps.declareWinner(winner)
@@ -70,6 +70,7 @@ class Board extends Component {
     handleClick = move => {
         const { computer, moves, userIsActive, winner, makeMove } = this.props;
 
+        // <Tile> already checks this, but might as well double check
         if (!userIsActive || winner)
             return;
 
@@ -96,8 +97,7 @@ class Board extends Component {
         const { winner, userIsActive, userIsPlayer1 } = this.props;
 
         const gameStyles = {
-            // width: width * tileSize,
-            // height: width * tileSize,
+            transform: `translate(-${tileSize / 2}px, -${tileSize / 2}px)`,
         };
 
         return (
@@ -111,6 +111,7 @@ class Board extends Component {
                             userIsActive={userIsActive}
                             userIsPlayer1={userIsPlayer1}
                             isLastMove={move === lastMove}
+                            tileSize={tileSize}
                             key={move}
                             makeMove={this.handleClick}
                         />

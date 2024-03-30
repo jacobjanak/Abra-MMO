@@ -13,35 +13,28 @@ body {
     height: calc(100vh - 56px); /* subtract 56 for navbar */
     width: 100%;
     max-width: 100%;
-    overflow: scroll;
     font-size: 0;
     z-index: 10;
 }
 
 #game {
-    box-sizing: content-box;
-    margin: auto;
-    padding-left: 50vw;
-    padding-right: 50vw;
+    /* <Board> applies a translate to perfectly center this */
+    margin-left: 50%;
+    margin-top: 40vh;
 }
 
 .tile {
-    display: inline-block;
-    height: 50px;
-    width: 50px;
-    margin: -1px 0 0 -1px;
+    position: absolute;
 }
 
-.tile.owned {
+.tile.owned,
+.tile.available {
     -webkit-box-shadow: inset 0 0 1px 1px #000;
     -moz-box-shadow: inset 0 0 1px 1px #000;
     box-shadow: inset 0 0 1px 1px #000;
 }
 
 .tile.available {
-    -webkit-box-shadow: inset 0 0 1px 1px #000;
-    -moz-box-shadow: inset 0 0 1px 1px #000;
-    box-shadow: inset 0 0 1px 1px #000;
     background-color: white;
 }
 
@@ -52,10 +45,6 @@ body {
 .tile.available.player-active:hover {
     background-color: blue;
     cursor: pointer;
-}
-
-.tile.locked {
-    background-color: transparent;
 }
 
 .tile.last-move {

@@ -1,4 +1,3 @@
-const {Integer} = require("yarn/lib/cli");
 const abraLogic = {
     // width: 39,
 
@@ -21,70 +20,66 @@ const abraLogic = {
         if (game.winner)
             return game.winner;
 
-        // Check if a player is out of time
-        const activePlayer = game.moves.length % 2 ? 'player2' : 'player1';
-        const unix = new Date().getTime();
-        game.time[activePlayer] -= unix - game.time.lastMove;
+        // Check if a player is out of time (skip for offline games)
+        if (game.time) {
+            const activePlayer = game.moves.length % 2 ? 'player2' : 'player1';
+            const unix = new Date().getTime();
+            game.time[activePlayer] -= unix - game.time.lastMove;
 
-        if (game.time['player1'] <= 0) {
-            game.time['player1'] = 0;
-            game.winner = 'player2';
+            if (game.time['player1'] <= 0) {
+                game.time['player1'] = 0;
+                game.winner = 'player2';
+            }
+
+            if (game.time['player2'] <= 0) {
+                game.time['player2'] = 0;
+                game.winner = 'player1';
+            }
+
+            if (game.winner)
+                return game.winner;
         }
-
-        if (game.time['player2'] <= 0) {
-            game.time['player2'] = 0;
-            game.winner = 'player1';
-        }
-
-        if (game.winner)
-            return game.winner;
 
         // Check if a player has 5 in a row
-        let winner = null;
         const tiles = abraLogic.movesToTiles(game.moves);
+        for (const [move, tile] of Object.entries(tiles)) {
+            if (!tile.owner)
+                continue;
 
-        Object.entries(tiles).forEach((move, tile) => {
             let [x, y] = move.split(',');
-            x = Integer(x);
-            y = Integer(y);
+            x = parseInt(x);
+            y = parseInt(y);
 
-            if (tile.owner) {
-                // horizontal
-                // tiles + 2 => "5,5" look for "7,5"
-                if (tile.owner === tiles[(x+2) + ',' + y]?.owner
+            // Check horizontal, vertical, and both diagonals for 5 in a row
+            if (
+                (
+                    tile.owner === tiles[(x+2) + ',' + y]?.owner
                     && tile.owner === tiles[(x+1) + ',' + y]?.owner
                     && tile.owner === tiles[(x-1) + ',' + y]?.owner
-                    && tile.owner === tiles[(x-2) + ',' + y]?.owner) {
-                    winner = tile.owner;
-                }
-                // vertical
-                else if (tile.owner === tiles[x + ',' + (y+2)]?.owner
+                    && tile.owner === tiles[(x-2) + ',' + y]?.owner
+                ) || (
+                    tile.owner === tiles[x + ',' + (y+2)]?.owner
                     && tile.owner === tiles[x + ',' + (y+1)]?.owner
                     && tile.owner === tiles[x + ',' + (y-1)]?.owner
-                    && tile.owner === tiles[x + ',' + (y-2)]?.owner) {
-                    winner = tile.owner;
-                }
-                // diagonal
-                else if (tile.owner === tiles[(x+2) + ',' + (y+2)]?.owner
+                    && tile.owner === tiles[x + ',' + (y-2)]?.owner
+                ) || (
+                    tile.owner === tiles[(x+2) + ',' + (y+2)]?.owner
                     && tile.owner === tiles[(x+1) + ',' + (y+1)]?.owner
                     && tile.owner === tiles[(x-1) + ',' + (y-1)]?.owner
-                    && tile.owner === tiles[(x-2) + ',' + (y-2)]?.owner) {
-                    winner = tile.owner;
-                }
-                // diagonal
-                else if (tile.owner === tiles[(x+2) + ',' + (y-2)]?.owner
+                    && tile.owner === tiles[(x-2) + ',' + (y-2)]?.owner
+                ) || (
+                    tile.owner === tiles[(x+2) + ',' + (y-2)]?.owner
                     && tile.owner === tiles[(x+1) + ',' + (y-1)]?.owner
                     && tile.owner === tiles[(x-1) + ',' + (y+1)]?.owner
-                    && tile.owner === tiles[(x-2) + ',' + (y+2)]?.owner) {
-                    winner = tile.owner;
-                }
+                    && tile.owner === tiles[(x-2) + ',' + (y+2)]?.owner
+                )
+            ) {
+                game.winner = tile.owner;
+                return tile.owner;
             }
-        })
+        }
 
-        if (winner)
-            game.winner = winner;
-
-        return winner;
+        return false;
     },
 
     movesToTiles: moves => {
@@ -113,8 +108,8 @@ const abraLogic = {
             return false;
 
         let [x, y] = move.split(',');
-        x = Integer(x);
-        y = Integer(y);
+        x = parseInt(x);
+        y = parseInt(y);
 
         return (
             tiles[(x+1) + ',' + y]?.owner
@@ -140,8 +135,8 @@ const abraLogic = {
 
         for (const move in tiles) {
             let [x, y] = move.split(',');
-            x = Integer(x);
-            y = Integer(y);
+            x = parseInt(x);
+            y = parseInt(y);
 
             availableMoveMap[(x+1) + ',' + y] = true;
             availableMoveMap[(x-1) + ',' + y] = true;
@@ -165,8 +160,8 @@ const abraLogic = {
         let bestScore = 0;
         for (const move in availableMoveMap) {
             let [x, y] = move.split(',');
-            x = Integer(x);
-            y = Integer(y);
+            x = parseInt(x);
+            y = parseInt(y);
 
             let score = 0;
             let isDefensive;

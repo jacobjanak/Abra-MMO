@@ -3,7 +3,7 @@ import './Turn.css';
 
 class Turn extends Component {
     render() {
-        const {movesLength, userIsActive, winner} = this.props;
+        const { movesLength, userIsActive, winner } = this.props;
 
         let message;
         if (winner) {

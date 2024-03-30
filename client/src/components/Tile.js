@@ -6,13 +6,12 @@ class Tile extends Component {
     };
 
     handleClick = () => {
-        if (this.state.available) {
+        if (this.state.available)
             this.props.makeMove(this.props.move)
-        }
     };
 
     render() {
-        const {owner, available, winner, userIsActive, userIsPlayer1, isLastMove} = this.props;
+        const { owner, available, winner, userIsActive, userIsPlayer1, isLastMove } = this.props;
 
         if (owner) {
             // user always has blue
@@ -25,16 +24,18 @@ class Tile extends Component {
 
             // offCenter is just for the <Logo> component on the homepage
             if (this.props.offCenterX) {
-                style.transform = "translateX(-50%)";
+                style.transform = 'translateX(-50%)';
             }
             if (this.props.offCenterY) {
-                style.transform = "translateY(-50%)";
+                style.transform = 'translateY(-50%)';
             }
 
             return (
-                <div className={"tile owned" + (isLastMove ? " last-move" : "")} style={style}></div>
+                <div className={'tile owned' + (isLastMove ? ' last-move' : '')} style={style}></div>
             );
-        } else if (available && !winner) {
+        }
+
+        if (available && !winner) {
             // user cannot click if it's not their turn
             if (userIsActive) {
                 return (
@@ -45,11 +46,11 @@ class Tile extends Component {
                     <div className="tile available player-inactive"></div>
                 );
             }
-        } else {
-            return (
-                <div className="tile locked"></div>
-            );
         }
+
+        return (
+            <div className="tile locked"></div>
+        );
     }
 }
 

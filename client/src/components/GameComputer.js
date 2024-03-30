@@ -33,7 +33,7 @@ class Game extends Component {
             || (moves.length % 2 === 1 && userIsActive && !userIsPlayer1)) {
             this.setState({
                 userIsActive: false,
-                moves: [...this.state.moves, move]
+                moves: [...moves, move]
             })
         }
         // computer move
@@ -41,7 +41,7 @@ class Game extends Component {
             || (moves.length % 2 === 0 && !userIsActive && !userIsPlayer1)) {
             this.setState({
                 userIsActive: true,
-                moves: [...this.state.moves, move]
+                moves: [...moves, move]
             })
         }
     };

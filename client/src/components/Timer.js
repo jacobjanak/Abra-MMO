@@ -61,12 +61,10 @@ class Timer extends Component {
     }
 
     render() {
-        const {unix} = this.state;
+        const { unix } = this.state;
 
-        if (unix < 0) {
+        if (unix < 0)
             this.stopCountdown()
-            // this.props.reloadGame() Commenting out due to infinite recursion
-        }
 
         return (
             <span>{this.unixToTime(unix)}</span>

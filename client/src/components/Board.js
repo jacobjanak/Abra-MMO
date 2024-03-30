@@ -20,11 +20,11 @@ class Board extends Component {
 
     componentDidMount() {
         const {moves} = this.props;
-        // abraLogic.width = this.state.width;
+        // abraLogic.width = this.state.width; // TODO:
         let tiles = abraLogic.movesToTiles(moves);
-        tiles = abraLogic.checkAvailability(tiles);
+        tiles = abraLogic.addAvailableTiles(tiles);
 
-        // find the most resent move so that we can display it differently
+        // find the most recent move so that we can display it differently
         const lastMove = moves[moves.length - 1];
 
         this.setState({
@@ -35,35 +35,32 @@ class Board extends Component {
 
     UNSAFE_componentWillReceiveProps(prevProps) {
         // check if a winner was just announced due to time out
-        if (prevProps.winner) {
-            this.setState({
-                tiles: abraLogic.checkAvailability(this.state.tiles)
-            })
-        }
+        // if (prevProps.winner) {
+        //     this.setState({
+        //         tiles: abraLogic.addAvailableTiles(this.state.tiles) // TODO: why?
+        //     })
+        // }
 
         // check for winner in player vs computer
         if (prevProps.computer && !prevProps.winner) {
-            const winner = abraLogic.findWinner(prevProps.moves); // TODO: this will break when I pull the latest npm version
-            if (winner) {
+            const winner = abraLogic.findWinner(prevProps.moves);
+
+            if (winner)
                 prevProps.declareWinner(winner)
-            }
         }
 
-        // NOTE: this function is only setup to handle one move which may cause issues
         // check if new move was sent
         const moves = prevProps.moves;
         if (moves) {
-            const index = abraLogic.moveToIndex(moves[moves.length - 1]);
-            const player = moves.length % 2 === 1 ? 'player1' : 'player2'
+            const newMove = moves[moves.length - 1];
+            const player = moves.length % 2 ? 'player1' : 'player2'
 
-            let tiles = this.state.tiles;
-            tiles[index].owner = player;
-
-            tiles = abraLogic.checkAvailability(tiles);
+            const tiles = this.state.tiles;
+            tiles[newMove] = { owner: player };
 
             this.setState({
-                tiles,
-                lastMove: moves.length > 2 ? index : -1,
+                tiles: abraLogic.addAvailableTiles(tiles),
+                lastMove: moves.length > 2 ? newMove : null,
             });
         }
     }
@@ -76,32 +73,33 @@ class Board extends Component {
         container.scrollLeft = halfWay + tileSize / 2 + 4;
     };
 
-    handleClick = index => {
-        const {computer, moves, userIsActive, winner, makeMove} = this.props
-        const move = abraLogic.indexToMove(index);
+    handleClick = move => {
+        const { computer, moves, userIsActive, winner, makeMove } = this.props;
 
+        if (!userIsActive || winner)
+            return;
+
+        // for online games, we let the server handle all the safety checking
         if (!computer) {
             makeMove(move)
-        } else {
-            // probably no need to check legality, but it's for safety
-            const {tiles} = this.state;
-            if (abraLogic.checkLegality(move, tiles)) {
-                if (userIsActive) {
-                    makeMove(move)
-                    setTimeout(() => {
-                        if (!winner) {
-                            const cpuMove = abraLogic.computerMove(moves);
-                            makeMove(cpuMove)
-                        }
-                    }, 500 + Math.random() * 1500)
-                }
-            }
+            return;
+        }
+
+        // probably no need to check legality, but it's for safety
+        const { tiles } = this.state;
+        if (abraLogic.checkLegality(move, tiles)) {
+            makeMove(move)
+            moves.push(move)
+
+            // computer should make a move after a random delay
+            const computerMove = abraLogic.computerMove(moves);
+            setTimeout(() => makeMove(computerMove), 500 + Math.random() * 1500)
         }
     }
 
     render() {
-        const {width, tiles, tileSize, lastMove} = this.state;
-        const {winner, userIsActive, userIsPlayer1} = this.props;
+        const { width, tiles, tileSize, lastMove } = this.state;
+        const { winner, userIsActive, userIsPlayer1 } = this.props;
 
         const gameStyles = {
             width: width * tileSize,
@@ -111,15 +109,15 @@ class Board extends Component {
         return (
             <div id="game-container" ref="container">
                 <div id="game" style={gameStyles}>
-                    {tiles.map((tile, i) => (
+                    {Object.entries(tiles).map(([move, tile]) => (
                         <Tile
                             {...tile}
+                            move={move}
                             winner={winner}
                             userIsActive={userIsActive}
                             userIsPlayer1={userIsPlayer1}
-                            isLastMove={lastMove === i}
-                            index={i}
-                            key={i}
+                            isLastMove={move === lastMove}
+                            key={move}
                             makeMove={this.handleClick}
                         />
                     ))}

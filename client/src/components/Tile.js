@@ -7,7 +7,7 @@ class Tile extends Component {
 
     handleClick = () => {
         if (this.state.available) {
-            this.props.makeMove(this.props.index)
+            this.props.makeMove(this.props.move)
         }
     };
 

@@ -92,7 +92,7 @@ const abraLogic = {
 
         moves.forEach((move, i) => {
             tiles[move] = {
-                owner: i % 2 === 0 ? 'player1' : 'player2',
+                owner: i % 2 ? 'player2' : 'player1',
             };
         })
 
@@ -124,56 +124,46 @@ const abraLogic = {
         );
     },
 
-    checkAvailability: tiles => {
-        Object.keys(tiles).forEach(move => {
-            const tile = tiles[move];
+    addAvailableTiles: tiles => {
+        const availableMoveMap = abraLogic.getAvailableMoveMap(tiles);
 
-            if (tile.owner) {
-                tile.available = false;
-            }
-            else if (abraLogic.isTileAvailable(move, tiles)) {
-                tile.available = true;
-            }
-            else if (tile.available) {
-                tile.available = false;
-            }
-        })
+        for (const move in availableMoveMap) {
+            tiles[move] = { owner: null };
+        }
 
         return tiles;
     },
 
-    getAvailableMoves: (moves) => {
-        const availableMoves = {};
+    getAvailableMoveMap: (tiles) => {
+        // Initial value is necessary in case there hasn't been any moves yet
+        const availableMoveMap = { '0,0': true };
 
-        moves.forEach(move => {
+        for (const move in tiles) {
             let [x, y] = move.split(',');
             x = Integer(x);
             y = Integer(y);
 
-            availableMoves[(x+1) + ',' + y] = true;
-            availableMoves[(x-1) + ',' + y] = true;
-            availableMoves[x + ',' + (y+1)] = true;
-            availableMoves[x + ',' + (y-1)] = true;
-        })
-
-        for (const move in availableMoves) {
-            if (moves.hasOwnProperty(move))
-                delete availableMoves[move];
+            availableMoveMap[(x+1) + ',' + y] = true;
+            availableMoveMap[(x-1) + ',' + y] = true;
+            availableMoveMap[x + ',' + (y+1)] = true;
+            availableMoveMap[x + ',' + (y-1)] = true;
         }
 
-        return availableMoves
+        for (const [move, tile] of Object.entries(tiles)) {
+            if (tile.owner)
+                delete availableMoveMap[move];
+        }
+
+        return availableMoveMap
     },
 
     computerMove: (tiles) => {
-        const availableMoves = abraLogic.getAvailableMoves(tiles);
+        const availableMoveMap = abraLogic.getAvailableMoveMap(tiles);
         const computerPlayer = Object.keys(tiles).length % 2 ? 'player2' : 'player1';
 
         let bestMoves = [];
         let bestScore = 0;
-        for (const move of Object.keys(availableMoves)) {
-            if (!abraLogic.isTileAvailable(move, tiles))
-                return;
-
+        for (const move in availableMoveMap) {
             let [x, y] = move.split(',');
             x = Integer(x);
             y = Integer(y);

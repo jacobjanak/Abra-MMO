@@ -6,29 +6,23 @@ import Tile from './Tile';
 class Board extends Component {
     constructor(props) {
         super(props)
-        const width = 39; // must be an odd number
-        const middleTile = Math.ceil(width ** 2 / 2);
         this.state = {
-            width,
-            middleTile,
-            lastMove: -1,
+            tiles: {},
             tileSize: 50,
-            tiles: [],
+            lastMove: -1,
             moveCount: 0,
         };
     }
 
     componentDidMount() {
-        const {moves} = this.props;
-        // abraLogic.width = this.state.width; // TODO:
-        let tiles = abraLogic.movesToTiles(moves);
-        tiles = abraLogic.addAvailableTiles(tiles);
+        const { moves } = this.props;
+        const tiles = abraLogic.movesToTiles(moves);
 
         // find the most recent move so that we can display it differently
         const lastMove = moves[moves.length - 1];
 
         this.setState({
-            tiles,
+            tiles: abraLogic.addAvailableTiles(tiles),
             lastMove: moves.length > 2 ? lastMove : -1
         }, this.centerView)
     }
@@ -66,11 +60,11 @@ class Board extends Component {
     }
 
     centerView = () => {
-        const {width, tileSize} = this.state;
-        const container = ReactDOM.findDOMNode(this.refs.container);
-        const halfWay = width * tileSize / 2;
-        container.scrollTop = halfWay - container.clientHeight / 2 - 20;
-        container.scrollLeft = halfWay + tileSize / 2 + 4;
+        // const {width, tileSize} = this.state;
+        // const container = ReactDOM.findDOMNode(this.refs.container);
+        // const halfWay = width * tileSize / 2;
+        // container.scrollTop = halfWay - container.clientHeight / 2 - 20;
+        // container.scrollLeft = halfWay + tileSize / 2 + 4;
     };
 
     handleClick = move => {
@@ -98,12 +92,12 @@ class Board extends Component {
     }
 
     render() {
-        const { width, tiles, tileSize, lastMove } = this.state;
+        const { tiles, tileSize, lastMove } = this.state;
         const { winner, userIsActive, userIsPlayer1 } = this.props;
 
         const gameStyles = {
-            width: width * tileSize,
-            height: width * tileSize,
+            // width: width * tileSize,
+            // height: width * tileSize,
         };
 
         return (

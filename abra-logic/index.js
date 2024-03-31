@@ -1,19 +1,4 @@
 const abraLogic = {
-    // width: 39,
-
-    // index of the middle tile. using get allows this to update as width changes.
-    // get middle() {
-    //     return Math.ceil(abraLogic.width ** 2 / 2);
-    // },
-
-    // indexToMove: index => {
-    //     // get distances from the middle square
-    //     const relativeX = (index % abraLogic.width) - (abraLogic.middle % abraLogic.width);
-    //     const relativeY = Math.floor(abraLogic.middle / abraLogic.width) - Math.floor(index / abraLogic.width);
-    //
-    //     return relativeX + ',' + relativeY;
-    // },
-
     // Checks time and moves for a winner
     // Note: this function may update the game param
     findWinner: game => {
@@ -94,15 +79,6 @@ const abraLogic = {
         return tiles;
     },
 
-    // moveToIndex: move => {
-    //     const xy = move.split(',');
-    //     return abraLogic.middle + Number(xy[0]) - (Number(xy[1]) * abraLogic.width);
-    // },
-
-    checkLegality: (move, tiles) => {
-        return abraLogic.isTileAvailable(move, tiles);
-    },
-
     isTileAvailable: (move, tiles) => {
         if (tiles[move]?.owner)
             return false;
@@ -133,7 +109,10 @@ const abraLogic = {
         // Initial value is necessary in case there hasn't been any moves yet
         const availableMoveMap = { '0,0': true };
 
-        for (const move in tiles) {
+        for (const [move, tile] of Object.entries(tiles)) {
+            if (!tile.owner)
+                continue;
+
             let [x, y] = move.split(',');
             x = parseInt(x);
             y = parseInt(y);
@@ -152,9 +131,10 @@ const abraLogic = {
         return availableMoveMap
     },
 
-    computerMove: (tiles) => {
+    computerMove: (moves) => {
+        const tiles = abraLogic.movesToTiles(moves);
         const availableMoveMap = abraLogic.getAvailableMoveMap(tiles);
-        const computerPlayer = Object.keys(tiles).length % 2 ? 'player2' : 'player1';
+        const computerPlayer = moves.length % 2 ? 'player2' : 'player1';
 
         let bestMoves = [];
         let bestScore = 0;
@@ -164,9 +144,9 @@ const abraLogic = {
             y = parseInt(y);
 
             let score = 0;
-            let isDefensive;
+            let isDefensive = null;
 
-            ['right', 'left', 'up', 'down'].forEach(direction => {
+            for (const direction of ['right', 'left', 'up', 'down']) {
                 for (let i = 1; i < 5; i++) {
                     let moveToCheck;
 
@@ -205,90 +185,20 @@ const abraLogic = {
                     if (!isDefensive && score === 4)
                         return move;
 
+                    // add bias to defensive moves
+                    const adjustedScore = score + isDefensive * 0.1;
+
                     // check if this move is the best move so far
-                    if (score === bestScore) {
+                    if (adjustedScore === bestScore) {
                         bestMoves.push(move)
                     }
-                    else if (score > bestScore) {
-                        bestScore = score;
+                    else if (adjustedScore > bestScore) {
+                        bestScore = adjustedScore;
                         bestMoves = [move];
                     }
                 }
-
-
-                // for (let j = 0; j < 5; j++) {
-                //
-                //     let score1 = 0;
-                //     if (!returnEnemyScoreInstead || (returnEnemyScoreInstead && !compIsPlayer1)) {
-                //         for (let k = 0; k < 5; k++) {
-                //             let index;
-                //             if (direction === 0) index = i - j + k;
-                //             else if (direction === 1) index = i - j * abraLogic.width + k * abraLogic.width;
-                //             else if (direction === 2) index = i - j * abraLogic.width - j + k * abraLogic.width + k;
-                //             else if (direction === 3) index = i - j * abraLogic.width + j + k * abraLogic.width - k;
-                //
-                //             if (index !== i) {
-                //                 if (tiles[index].owner === 'player1') {
-                //                     score1++;
-                //                 } else if (tiles[index].owner === 'player2') {
-                //                     if (index < i) score1 = 0;
-                //                     else break;
-                //                 }
-                //             }
-                //         }
-                //     }
-                //
-                //     let score2 = 0;
-                //     if (!returnEnemyScoreInstead || (returnEnemyScoreInstead && compIsPlayer1)) {
-                //         for (let k = 0; k < 5; k++) {
-                //             let index;
-                //             if (direction === 0) index = i - j + k;
-                //             else if (direction === 1) index = i - j * abraLogic.width + k * abraLogic.width;
-                //             else if (direction === 2) index = i - j * abraLogic.width - j + k * abraLogic.width + k;
-                //             else if (direction === 3) index = i - j * abraLogic.width + j + k * abraLogic.width - k;
-                //
-                //             if (index !== i) {
-                //                 if (tiles[index].owner === 'player2') {
-                //                     score2++;
-                //                 } else if (tiles[index].owner === 'player1') {
-                //                     if (index < i) score2 = 0;
-                //                     else break;
-                //                 }
-                //             }
-                //         }
-                //     }
-                //
-                //     // look for instant wins
-                //     if (compIsPlayer1 && score1 === 4) {
-                //         bestScore = 5;
-                //         bestIndexes = [i];
-                //     } else if (!compIsPlayer1 && score2 === 4) {
-                //         bestScore = 5;
-                //         bestIndexes = [i];
-                //     }
-                //     else {
-                //         if (score1 === bestScore)
-                //             bestIndexes.push(i);
-                //
-                //         if (score2 === bestScore)
-                //             bestIndexes.push(i);
-                //
-                //         if (score1 > bestScore && score1 !== avoidScore) {
-                //             bestScore = score1;
-                //             bestIndexes = [i];
-                //         }
-                //
-                //         if (score2 > bestScore && score2 !== avoidScore) {
-                //             bestScore = score2;
-                //             bestIndexes = [i];
-                //         }
-                //     }
-                // }
-            })
+            }
         }
-
-        // if (returnEnemyScoreInstead)
-        //     return bestScore;
 
         const randomIndex = Math.floor(Math.random() * bestMoves.length);
         return bestMoves[randomIndex];

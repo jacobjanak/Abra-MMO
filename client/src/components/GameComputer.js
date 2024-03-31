@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Board from './Board';
 import Turn from './Turn/';
+import abraLogic from "abra-logic";
 
 class Game extends Component {
     constructor(props) {
@@ -23,26 +24,29 @@ class Game extends Component {
     }
 
     declareWinner = winner => {
-        this.setState({winner})
+        this.setState({ winner })
     };
 
     makeMove = move => {
-        const {userIsPlayer1, userIsActive, moves} = this.state;
-        // user move
-        if ((moves.length % 2 === 0 && userIsActive && userIsPlayer1)
-            || (moves.length % 2 === 1 && userIsActive && !userIsPlayer1)) {
-            this.setState({
-                userIsActive: false,
-                moves: [...moves, move]
-            })
-        }
-        // computer move
-        else if ((moves.length % 2 === 1 && !userIsActive && userIsPlayer1)
-            || (moves.length % 2 === 0 && !userIsActive && !userIsPlayer1)) {
-            this.setState({
-                userIsActive: true,
-                moves: [...moves, move]
-            })
+        const { moves, userIsActive, winner } = this.state;
+        const updatedMoves = [...moves, move];
+
+        // this is to prevent the computer from making a move after the user has won
+        // it should be improved because it's a race condition
+        if (winner)
+            return;
+
+        this.setState({
+            moves: updatedMoves,
+            userIsActive: !userIsActive,
+        })
+
+        // make computer move after a delay to simulate thinking
+        if (userIsActive) {
+            setTimeout(() => {
+                const computerMove = abraLogic.computerMove(updatedMoves);
+                this.makeMove(computerMove)
+            }, 500 + Math.random() * 1500)
         }
     };
 

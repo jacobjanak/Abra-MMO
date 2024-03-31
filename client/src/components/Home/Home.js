@@ -11,10 +11,10 @@ class Home extends Component {
             textAlign: 'center',
         };
 
+        // <Logo/>
+
         return (
             <div style={style}>
-                <Logo/>
-
                 <h1 id="logo-subtext" className="display-6">Abra, the Strategy Game</h1>
 
                 <Link to={"/play"} id="play-now" className="btn btn-dark btn-lg">

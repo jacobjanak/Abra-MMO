@@ -146,22 +146,35 @@ const abraLogic = {
             let score = 0;
             let isDefensive = null;
 
-            for (const direction of ['right', 'left', 'up', 'down']) {
+            for (const direction of ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']) {
                 for (let i = 1; i < 5; i++) {
                     let moveToCheck;
 
                     switch(direction) {
-                        case 'right':
-                            moveToCheck = (x+i) + ',' + y;
-                            break;
-                        case 'left':
-                            moveToCheck = (x-i) + ',' + y;
-                            break;
-                        case 'up':
+                        case 'N':
                             moveToCheck = x + ',' + (y-i);
                             break;
-                        case 'down':
+                        case 'NE':
+                            moveToCheck = (x+i) + ',' + (y-i);
+                            break;
+                        case 'E':
+                            moveToCheck = (x+i) + ',' + y;
+                            break;
+                        case 'SE':
+                            moveToCheck = (x+i) + ',' + (y+i);
+                            break;
+                        case 'S':
                             moveToCheck = x + ',' + (y+i);
+                            break;
+                        case 'SW':
+                            moveToCheck = (x-i) + ',' + (y+i);
+                            break;
+                        case 'W':
+                            moveToCheck = (x-i) + ',' + y;
+                            break;
+                        case 'NW':
+                            moveToCheck = (x-i) + ',' + (y-i);
+                            break;
                     }
 
                     if (!tiles[moveToCheck]?.owner)

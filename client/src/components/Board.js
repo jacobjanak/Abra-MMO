@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import abraLogic from 'abra-logic';
 import Tile from './Tile';
-import {left} from "yarn/lib/cli";
 
 class Board extends Component {
     constructor(props) {
@@ -62,9 +61,10 @@ class Board extends Component {
                 leftmost = x;
         }
 
+        // adding 3 because board size includes available squares
         this.setState({
-            boardHeight: Math.abs(topmost - bottommost),
-            boardWidth: Math.abs(rightmost - leftmost),
+            boardHeight: Math.abs(topmost - bottommost) + 3,
+            boardWidth: Math.abs(rightmost - leftmost) + 3,
         });
     }
 

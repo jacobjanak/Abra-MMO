@@ -10,8 +10,12 @@ class Board extends Component {
             tiles: {},
             tileSize: 50,
             lastMove: -1,
-            boardWidth: 0,
-            boardHeight: 0,
+            dimensions: {
+                top: 0,
+                bottom: 0,
+                right: 0,
+                left: 0,
+            },
         };
     }
 
@@ -19,18 +23,15 @@ class Board extends Component {
         this.updateSelf(this.props.moves)
     }
 
-    UNSAFE_componentWillReceiveProps(prevProps) {
-        // check for winner in player vs computer
-        // TODO: I should move this
-        if (prevProps.computer && !prevProps.winner) {
-            const winner = abraLogic.findWinner(prevProps);
+    UNSAFE_componentWillReceiveProps(newProps) {
+        if (newProps.computer && !newProps.winner) {
+            const winner = abraLogic.findWinner(newProps);
 
             if (winner)
-                prevProps.declareWinner(winner)
+                newProps.declareWinner(winner)
         }
 
-        if (prevProps.moves)
-            this.updateSelf(prevProps.moves)
+        this.updateSelf(newProps.moves)
     }
 
     // this could be more efficient if we only processed the last move
@@ -41,6 +42,8 @@ class Board extends Component {
     }
 
     setBoardSize = moves => {
+        const { tileSize, dimensions: { top, left } } = this.state;
+
         let topmost = 0;
         let bottommost = 0;
         let rightmost = 0;
@@ -61,10 +64,23 @@ class Board extends Component {
                 leftmost = x;
         }
 
-        // adding 3 because board size includes available squares
+        // adjust scroll position so user doesn't notice the board size increase
+        // const viewport = ReactDOM.findDOMNode(this.refs.viewport);
+        //
+        // if (topmost < top) {
+        //     viewport.scrollTop -= tileSize * (top - topmost);
+        // }
+        // if (leftmost < left) {
+        //     viewport.scrollTop -= tileSize * (left - leftmost);
+        // }
+
         this.setState({
-            boardHeight: Math.abs(topmost - bottommost) + 3,
-            boardWidth: Math.abs(rightmost - leftmost) + 3,
+            dimensions: {
+                top: topmost * -1 + 1,
+                bottom: bottommost + 2,
+                right: rightmost + 2,
+                left: leftmost * -1 + 1,
+            },
         });
     }
 
@@ -93,43 +109,44 @@ class Board extends Component {
         this.props.makeMove(move)
     }
 
-    getContainerStyle = () => {
-        const { boardHeight, boardWidth, tileSize } = this.state;
+    getBoardSize = () => {
+        const { tileSize, dimensions: { top, bottom, right, left } } = this.state;
 
         return {
-            height: boardHeight * tileSize + 'px',
-            width: boardWidth * tileSize + 'px',
-        };
-    }
-
-    getGameStyle = () => {
-        const { tileSize } = this.state;
-
-        return {
-            transform: `translate(-${tileSize / 2}px, -${tileSize / 2}px)`,
+            height: (top + bottom + 2) * tileSize + 1,
+            width: (right + left + 2) * tileSize + 1,
         };
     }
 
     render() {
-        const { tiles, tileSize, lastMove } = this.state;
+        const { tiles, tileSize, lastMove, dimensions: { top, left }} = this.state;
         const { winner, userIsActive, userIsPlayer1 } = this.props;
 
+        const topAdjust = (top + 1) * tileSize;
+        const leftAdjust = (left + 1) * tileSize;
+
         return (
-            <div id="game-container" ref="container" style={this.getContainerStyle()}>
-                <div id="game" style={this.getGameStyle()}>
-                    {Object.entries(tiles).map(([move, tile]) => (
-                        <Tile
-                            {...tile}
-                            move={move}
-                            winner={winner}
-                            userIsActive={userIsActive}
-                            userIsPlayer1={userIsPlayer1}
-                            isLastMove={move === lastMove}
-                            tileSize={tileSize}
-                            key={move}
-                            makeMove={this.handleClick}
-                        />
-                    ))}
+            <div id="game-container">
+                <div id="game-viewport" ref="viewport">
+                    <div id="game-board" style={this.getBoardSize()}></div>
+
+                    <div id="tile-container">
+                        {Object.entries(tiles).map(([move, tile]) => (
+                            <Tile
+                                {...tile}
+                                move={move}
+                                winner={winner}
+                                userIsActive={userIsActive}
+                                userIsPlayer1={userIsPlayer1}
+                                isLastMove={move === lastMove}
+                                tileSize={tileSize}
+                                topAdjust={topAdjust}
+                                leftAdjust={leftAdjust}
+                                key={move}
+                                makeMove={this.handleClick}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         );

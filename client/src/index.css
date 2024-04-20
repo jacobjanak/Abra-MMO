@@ -10,13 +10,26 @@ body {
 
 /* Game */
 #game-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-viewport {
+    position: relative;
+    max-height: calc(100vh - 56px);
+    max-width: 100%;
+    overflow: auto;
+}
+
+#tile-container {
+    height: 0;
+    width: 0;
     z-index: 10;
 }
 
-#game {
-    /* <Board> applies a translate to perfectly center this */
-    margin-left: 50%;
-    margin-top: 40vh;
+#game-board {
+    position: relative;
 }
 
 .tile {
@@ -41,10 +54,6 @@ body {
 .tile.available.player-active:hover {
     background-color: blue;
     cursor: pointer;
-}
-
-.tile.last-move {
-    position: relative;
 }
 
 .tile.last-move:before, .tile.last-move:after {

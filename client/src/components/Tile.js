@@ -28,17 +28,17 @@ class Tile extends Component {
     };
 
     getStyle = () => {
-        const { move, owner, userIsPlayer1, tileSize } = this.props;
+        const { move, owner, userIsPlayer1, tileSize, topAdjust, leftAdjust } = this.props;
 
         let [x, y] = move.split(',');
         x = parseInt(x);
         y = parseInt(y);
 
         const style = {
-            height: tileSize + 'px',
-            width: tileSize + 'px',
-            left: x * (this.props.tileSize - 1) + 'px',
-            top: y * (this.props.tileSize - 1) + 'px',
+            height: tileSize + 1 + 'px',
+            width: tileSize + 1 + 'px',
+            top: y * tileSize + topAdjust + 'px',
+            left: x * tileSize + leftAdjust + 'px',
         };
 
         if (owner) {

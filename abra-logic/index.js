@@ -1,4 +1,12 @@
 const abraLogic = {
+    coords: move => {
+        let [x, y] = move.split(',');
+        x = parseInt(x);
+        y = parseInt(y);
+
+        return [x, y];
+    },
+
     // Checks time and moves for a winner
     // Note: this function may update the game param
     findWinner: game => {
@@ -31,9 +39,7 @@ const abraLogic = {
             if (!tile.owner)
                 continue;
 
-            let [x, y] = move.split(',');
-            x = parseInt(x);
-            y = parseInt(y);
+            const [x, y] = abraLogic.coords(move);
 
             // Check horizontal, vertical, and both diagonals for 5 in a row
             if (
@@ -83,9 +89,7 @@ const abraLogic = {
         if (tiles[move]?.owner)
             return false;
 
-        let [x, y] = move.split(',');
-        x = parseInt(x);
-        y = parseInt(y);
+        const [x, y] = abraLogic.coords(move);
 
         return (
             tiles[(x+1) + ',' + y]?.owner
@@ -113,9 +117,7 @@ const abraLogic = {
             if (!tile.owner)
                 continue;
 
-            let [x, y] = move.split(',');
-            x = parseInt(x);
-            y = parseInt(y);
+            const [x, y] = abraLogic.coords(move);
 
             availableMoveMap[(x+1) + ',' + y] = true;
             availableMoveMap[(x-1) + ',' + y] = true;
@@ -139,9 +141,7 @@ const abraLogic = {
         let bestMoves = [];
         let bestScore = 0;
         for (const move in availableMoveMap) {
-            let [x, y] = move.split(',');
-            x = parseInt(x);
-            y = parseInt(y);
+            const [x, y] = abraLogic.coords(move);
 
             let score = 0;
             let isDefensive = null;

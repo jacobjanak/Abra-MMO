@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
+import abraLogic from 'abra-logic';
 
 class Tile extends Component {
     handleClick = () => {
-        const { owner, winner, userIsActive } = this.props;
+        const { owner, winner, userIsActive, move, makeMove } = this.props;
 
         if (!owner && !winner && userIsActive)
-            this.props.makeMove(this.props.move)
+            makeMove(move)
     };
 
     getClassName = () => {
@@ -29,10 +30,7 @@ class Tile extends Component {
 
     getStyle = () => {
         const { move, owner, userIsPlayer1, tileSize, topAdjust, leftAdjust } = this.props;
-
-        let [x, y] = move.split(',');
-        x = parseInt(x);
-        y = parseInt(y);
+        const [x, y] = abraLogic.coords(move);
 
         const style = {
             height: tileSize + 1 + 'px',

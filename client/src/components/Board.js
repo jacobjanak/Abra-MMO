@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import abraLogic from 'abra-logic';
 import Tile from './Tile';
 
@@ -50,9 +49,7 @@ class Board extends Component {
         let leftmost = 0;
 
         for (let move of moves) {
-            let [x, y] = move.split(',');
-            x = parseInt(x);
-            y = parseInt(y);
+            const [x, y] = abraLogic.coords(move);
 
             if (y < topmost)
                 topmost = y;

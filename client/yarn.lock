@@ -2393,10 +2393,10 @@ abab@^2.0.3, abab@^2.0.5:
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.6.tgz#41b80f2c871d19686216b82309231cfd3cb3d291"
   integrity sha512-j2afSsaIENvHZN2B8GOpF566vZ5WVk5opAiMTvWgaQT8DkbOqsTfvNAvHoRGU2zzP8cPoqys+xHTRDWW8L+/BA==
 
-abra-logic@2.0.6:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/abra-logic/-/abra-logic-2.0.6.tgz#92f28c15bac3cf9206245b743da7d69f2ac93900"
-  integrity sha512-kLPcrOrIY3krByDW08GE/skuZrE3068ow/NzbsCuT70pjqDWd5MGfyVsEbrrd74RmAKAthMZ5jnNIKQTo8b8/Q==
+abra-logic@^2.0.6:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/abra-logic/-/abra-logic-2.0.7.tgz#dc4f79eeb63e7f9c1dbd6bb501bbc384b187a834"
+  integrity sha512-v9+8Buu5IVUr1IpA9EhZWsGbidYy4W7NM/ZipG472aCDUbeXppVaqkhlAuenlhpBEnXl6Nb6+5QIPgpr9umJWQ==
 
 accepts@~1.3.4, accepts@~1.3.5, accepts@~1.3.8:
   version "1.3.8"

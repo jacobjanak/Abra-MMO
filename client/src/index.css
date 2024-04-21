@@ -38,9 +38,7 @@ body {
 
 .tile.owned,
 .tile.available {
-    -webkit-box-shadow: inset 0 0 1px 1px #000;
-    -moz-box-shadow: inset 0 0 1px 1px #000;
-    box-shadow: inset 0 0 1px 1px #000;
+    border: 1px solid black;
 }
 
 .tile.available {

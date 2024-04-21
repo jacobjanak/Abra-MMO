@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import AuthService from '../AuthService';
-import Logo from '../Logo';
 import './Home.css';
 
 class Home extends Component {
@@ -10,8 +8,6 @@ class Home extends Component {
             paddingTop: 24,
             textAlign: 'center',
         };
-
-        // <Logo/>
 
         return (
             <div style={style}>

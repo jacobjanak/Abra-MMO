@@ -50,12 +50,6 @@ class Tile extends Component {
             }
         }
 
-        // offCenter is just for the <Logo> component on the homepage
-        if (this.props.offCenterX)
-            style.transform = 'translateX(-50%)';
-        if (this.props.offCenterY)
-            style.transform = 'translateY(-50%)';
-
         return style;
     };
 

@@ -7,13 +7,10 @@
 	"main": "server.js",
 	"scripts": {
 		"start": "node server.js",
+		"build": "cd client && yarn build",
 		"client": "cd client && yarn start",
 		"dev": "concurrently \"nodemon server.js\" \"npm run client\"",
-		"prod": "cd client && yarn build && cd .. && NODE_ENV=production npm start",
-		"build": "cd client && yarn run build",
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"install-deps": "npm install && cd client && yarn install",
-		"heroku-postbuild": "cd client && yarn install && yarn run build"
+		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"devDependencies": {
 		"concurrently": "^8.2.2",

@@ -12,8 +12,6 @@ function socket(server) {
     io.on('connection', client => {
 
         client.on('queue', userId => {
-            console.log('queue')
-
             // Check if user already in queue or in a game
             if (queue.includes(userId) || userId in clients)
                 return;
@@ -68,35 +66,27 @@ function socket(server) {
                     clients[opponentId].join(game._id)
                     clients[opponentId].emit('gameJoined', game)
                 })
-                .catch(err => console.log(err))
+                .catch(err => console.error(err))
         })
 
         client.on('dequeue', () => {
-            console.log('dequeue')
-
             leaveQueue(client)
             delete clients[client.userId];
             updatePlayerCount(io)
         })
 
         client.on('disconnect', () => {
-            console.log('disconnect')
-
             leaveQueue(client)
             delete clients[client.userId];
             updatePlayerCount(io)
         })
 
         client.on('getPlayerCount', () => {
-            console.log('getPlayerCount')
-
             const playerCount = Object.keys(clients).length;
             client.emit('playerCount', playerCount)
         })
 
         client.on('joinGame', data => {
-            console.log('joinGame')
-
             client.userId = data.userId;
             clients[client.userId] = client;
             updatePlayerCount(io)
@@ -123,8 +113,6 @@ function socket(server) {
         })
 
         client.on('move', move => {
-            console.log('move')
-
             const gameId = Array.from(client.rooms)[1];
             db.Game.findById(gameId)
                 .then(game => {

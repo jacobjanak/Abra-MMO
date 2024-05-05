@@ -3,8 +3,8 @@ const jwt = require('jsonwebtoken');
 const {expressjwt: exjwt} = require('express-jwt');
 const db = require('../models');
 
-// create req.auth and redirect logged-out users
-const secret = 'my secret';
+const secret = process.env.NODE_ENV === 'production' ? process.env.SECRET : 'secret';
+
 const isAuthenticated = exjwt({
     secret: secret,
     algorithms: ['HS256'],

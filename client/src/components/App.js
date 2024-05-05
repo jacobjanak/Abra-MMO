@@ -17,12 +17,12 @@ class App extends Component {
                 <div>
                     <NavBar/>
                     <Routes>
-                        <Route exact path="/" element={<Home/>}/>
                         <Route exact path="/login" element={<Login/>}/>
                         <Route exact path="/signup" element={<Signup/>}/>
                         <Route exact path="/profile/:username" element={<Profile/>}/>
                         <Route exact path="/play" element={<GameComputer/>}/>
                         <Route exact path="/online" element={<GameOnline/>}/>
+                        <Route path="/*" element={<Home/>}/>
                     </Routes>
                 </div>
             </Router>

@@ -97,8 +97,8 @@ function socket(server) {
         client.on('joinGame', data => {
             console.log('joinGame')
 
-            client.userId = data.userId; // TODO: Do I need this?
-            clients[client.userId] = client; // TODO: Do I need this?
+            client.userId = data.userId;
+            clients[client.userId] = client;
             updatePlayerCount(io)
 
             let game;

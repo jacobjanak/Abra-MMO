@@ -1,3 +1,7 @@
+.navbar {
+    z-index: 500;
+}
+
 .nav-link {
     padding-top: 0;
     padding-bottom: 0;

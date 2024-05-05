@@ -5,11 +5,9 @@
 	"proxy": "http://localhost:3001",
 	"secure": false,
 	"changeOrigin": true,
-	"devDependencies": {
-		"@babel/plugin-proposal-private-property-in-object": "^7.21.11"
-	},
 	"dependencies": {
 		"@babel/core": "^7.0.0",
+		"@babel/plugin-proposal-private-property-in-object": "^7.21.11",
 		"abra-logic": "^2.0.6",
 		"autoscroll-react": "^3.2.0",
 		"axios": "^1.6.3",

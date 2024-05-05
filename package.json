@@ -8,6 +8,7 @@
 	"scripts": {
 		"start": "node server.js",
 		"build": "cd client && yarn build",
+		"heroku-postbuild": "cd client && yarn install && yarn build",
 		"client": "cd client && yarn start",
 		"dev": "concurrently \"nodemon server.js\" \"npm run client\"",
 		"test": "echo \"Error: no test specified\" && exit 1"

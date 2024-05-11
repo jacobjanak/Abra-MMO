@@ -52,6 +52,10 @@ class Game extends Component {
             })
     }
 
+    reportTimeout = () => {
+        API.reportTimeout()
+    }
+
     makeMove = move => {
         // server checks if the move is legal
         API.move(move)
@@ -67,7 +71,7 @@ class Game extends Component {
         }
     };
 
-    socketCallback = (game, newMove, winner) => {
+    socketCallback = (game, newMove) => {
         if (game) {
             const userIsPlayer1 = game.player1._id === this.props.user.id;
             this.setState({
@@ -81,10 +85,6 @@ class Game extends Component {
                 moves: [...state.moves, newMove.move],
                 time: newMove.time
             }))
-        }
-
-        if (winner) {
-            this.setState({winner})
         }
     };
 
@@ -121,6 +121,7 @@ class Game extends Component {
                         time={time}
                         winner={winner}
                         reloadGame={this.reloadGame}
+                        reportTimeout={this.reportTimeout}
                     />
 
                     {moves && (

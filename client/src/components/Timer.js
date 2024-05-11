@@ -36,11 +36,16 @@ class Timer extends Component {
 
         // TODO: can't guarantee the interval is exactly 1 second
         this.countdown = window.setInterval(() => {
-            const { timeLeftInternal } = this.state;
+            let { timeLeftInternal } = this.state;
 
-            this.setState({
-                timeLeftInternal: timeLeftInternal - 1000,
-            })
+            timeLeftInternal = timeLeftInternal - 1000;
+
+            if (timeLeftInternal <= 0) {
+                this.props.reportTimeout()
+                this.stopCountdown()
+            }
+
+            this.setState({ timeLeftInternal });
         }, 1000)
     }
 

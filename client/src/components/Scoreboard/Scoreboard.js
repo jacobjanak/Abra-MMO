@@ -4,7 +4,15 @@ import './Scoreboard.css';
 
 class Scoreboard extends Component {
     render() {
-        const {player1, player2, moves, time, winner, reloadGame} = this.props;
+        const {
+            player1,
+            player2,
+            moves,
+            time,
+            winner,
+            reloadGame,
+            reportTimeout
+        } = this.props;
 
         let activePlayer = moves.length % 2 ? 'player2' : 'player1';
         if (winner) activePlayer = false;
@@ -27,6 +35,7 @@ class Scoreboard extends Component {
                                 active={activePlayer === 'player1'}
                                 lastMove={time.lastMove}
                                 reloadGame={reloadGame}
+                                reportTimeout={reportTimeout}
                             />
                         )}
                     </span>
@@ -43,6 +52,7 @@ class Scoreboard extends Component {
                                 active={activePlayer === 'player2'}
                                 lastMove={time.lastMove}
                                 reloadGame={reloadGame}
+                                reportTimeout={reportTimeout}
                             />
                         )}
                     </span>

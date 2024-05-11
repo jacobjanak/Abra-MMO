@@ -42,15 +42,15 @@ const API = {
         })
     },
     openSocket: cb => {
-        socket().on('gameJoined', game => cb(game, null, null))
-        socket().on('newMove', move => cb(null, move, null))
-        socket().on('winner', winner => cb(null, null, winner))
+        socket().on('game', game => cb(game, null))
+        socket().on('newMove', move => cb(null, move))
     },
     getPlayerCount: cb => {
         socket().emit('getPlayerCount')
         socket().on('playerCount', playerCount => cb(playerCount))
     },
-    move: move => socket().emit('move', move)
+    move: move => socket().emit('move', move),
+    reportTimeout: () => socket().emit('reportTimeout'),
 };
 
 export default API;

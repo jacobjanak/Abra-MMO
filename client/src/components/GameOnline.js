@@ -74,12 +74,16 @@ class Game extends Component {
                 userIsPlayer1,
                 ...game
             })
-        } else if (newMove) {
+        }
+
+        if (newMove) {
             this.setState(state => ({
                 moves: [...state.moves, newMove.move],
                 time: newMove.time
             }))
-        } else if (winner) {
+        }
+
+        if (winner) {
             this.setState({winner})
         }
     };

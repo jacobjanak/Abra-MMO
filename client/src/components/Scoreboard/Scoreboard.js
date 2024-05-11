@@ -23,7 +23,7 @@ class Scoreboard extends Component {
                     >
                         {time && (
                             <Timer
-                                unix={time.player1}
+                                timeLeft={time.player1}
                                 active={activePlayer === 'player1'}
                                 lastMove={time.lastMove}
                                 reloadGame={reloadGame}
@@ -39,7 +39,7 @@ class Scoreboard extends Component {
                     >
                         {time && (
                             <Timer
-                                unix={time.player2}
+                                timeLeft={time.player2}
                                 active={activePlayer === 'player2'}
                                 lastMove={time.lastMove}
                                 reloadGame={reloadGame}

@@ -5,7 +5,7 @@ class Timer extends Component {
         super(props)
         this.countdown = false;
         this.state = {
-            unix: props.unix
+            timeLeftInternal: props.timeLeft,
         };
     }
 
@@ -21,8 +21,9 @@ class Timer extends Component {
 
     UNSAFE_componentWillReceiveProps(prevProps) {
         this.stopCountdown()
+
         this.setState({
-            unix: prevProps.unix
+            timeLeftInternal: prevProps.timeLeft,
         }, () => {
             if (prevProps.active) {
                 this.startCountdown()
@@ -31,27 +32,29 @@ class Timer extends Component {
     }
 
     startCountdown = () => {
-        const {unix, lastMove} = this.props;
-        const millisecondsLeft = 1000 - (new Date().getDate() % 1000);
-        this.countdown = setTimeout(() => {
-            const currentTime = new Date().getTime();
+        this.stopCountdown()
+
+        // TODO: can't guarantee the interval is exactly 1 second
+        this.countdown = window.setInterval(() => {
+            const { timeLeftInternal } = this.state;
+
             this.setState({
-                unix: unix - currentTime + lastMove
-            }, this.startCountdown)
-        }, millisecondsLeft)
+                timeLeftInternal: timeLeftInternal - 1000,
+            })
+        }, 1000)
     }
 
     stopCountdown = () => {
         clearTimeout(this.countdown)
     }
 
-    unixToTime = unix => {
-        if (unix <= 0) {
+    formatTime = timeLeft => {
+        if (timeLeft <= 0) {
             return '0:00';
         }
 
-        let minutes = Math.floor(unix / (1000 * 60)).toString();
-        let seconds = Math.floor(unix / 1000 % 60).toString();
+        let minutes = Math.floor(timeLeft / (1000 * 60)).toString();
+        let seconds = Math.floor(timeLeft / 1000 % 60).toString();
 
         if (seconds.length === 1) {
             seconds = '0' + seconds;
@@ -61,13 +64,10 @@ class Timer extends Component {
     }
 
     render() {
-        const { unix } = this.state;
-
-        if (unix < 0)
-            this.stopCountdown()
+        const { timeLeftInternal } = this.state;
 
         return (
-            <span>{this.unixToTime(unix)}</span>
+            <span>{this.formatTime(timeLeftInternal)}</span>
         );
     }
 }

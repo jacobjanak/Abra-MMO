@@ -143,10 +143,10 @@ const abraLogic = {
         for (const move in availableMoveMap) {
             const [x, y] = abraLogic.coords(move);
 
-            let score = 0;
-            let isDefensive = null;
-
             for (const direction of ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']) {
+                let score = 0;
+                let isDefensive = null;
+
                 for (let i = 1; i < 5; i++) {
                     let moveToCheck;
 

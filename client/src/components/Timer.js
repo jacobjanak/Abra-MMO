@@ -5,7 +5,7 @@ class Timer extends Component {
         super(props)
         this.countdown = false;
         this.state = {
-            timeLeftInternal: props.timeLeft,
+            timeLeftInternal: props.timeLeft - (new Date().getTime() - props.lastMove),
         };
     }
 
@@ -34,11 +34,10 @@ class Timer extends Component {
     startCountdown = () => {
         this.stopCountdown()
 
-        // TODO: can't guarantee the interval is exactly 1 second
         this.countdown = window.setInterval(() => {
-            let { timeLeftInternal } = this.state;
+            const { timeLeft, lastMove } = this.props;
 
-            timeLeftInternal = timeLeftInternal - 1000;
+            const timeLeftInternal = timeLeft - new Date().getTime() + lastMove;
 
             if (timeLeftInternal <= 0) {
                 this.props.reportTimeout()
@@ -46,7 +45,7 @@ class Timer extends Component {
             }
 
             this.setState({ timeLeftInternal });
-        }, 1000)
+        }, 250)
     }
 
     stopCountdown = () => {

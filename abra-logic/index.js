@@ -7,31 +7,27 @@ const abraLogic = {
         return [x, y];
     },
 
+    // Check if a player is out of time
+    // Note: this function updates the game prop
+    findTimeoutWinner: game => {
+        if (game.winner || !game.time)
+            return game.winner;
+
+        const activePlayer = game.moves.length % 2 ? 'player2' : 'player1';
+
+        if (game.time[activePlayer] - new Date().getTime() + game.time.lastMove <= 0) {
+            game.time[activePlayer] = 0;
+            game.winner = activePlayer;
+        }
+
+        return game.winner;
+    },
+
     // Checks time and moves for a winner
-    // Note: this function may update the game param
+    // Note: this function updates the game prop
     findWinner: game => {
         if (game.winner)
             return game.winner;
-
-        // Check if a player is out of time (skip for offline games)
-        if (game.time) {
-            const activePlayer = game.moves.length % 2 ? 'player2' : 'player1';
-            const unix = new Date().getTime();
-            game.time[activePlayer] -= unix - game.time.lastMove;
-
-            if (game.time['player1'] <= 0) {
-                game.time['player1'] = 0;
-                game.winner = 'player2';
-            }
-
-            if (game.time['player2'] <= 0) {
-                game.time['player2'] = 0;
-                game.winner = 'player1';
-            }
-
-            if (game.winner)
-                return game.winner;
-        }
 
         // Check if a player has 5 in a row
         const tiles = abraLogic.movesToTiles(game.moves);
@@ -70,7 +66,7 @@ const abraLogic = {
             }
         }
 
-        return false;
+        return null;
     },
 
     movesToTiles: moves => {

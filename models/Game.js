@@ -35,9 +35,10 @@ module.exports = db => {
                             return;
                         }
 
-                        // check for a winner to ensure up-to-date data
                         const game = doc.data();
-                        if (!game.winner && abraLogic.findWinner(game))
+
+                        // Check for a winner to ensure up-to-date data
+                        if (!game.winner && abraLogic.findTimeoutWinner(game))
                             this.save(game);
 
                         resolve(game);

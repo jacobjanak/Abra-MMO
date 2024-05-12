@@ -121,47 +121,39 @@ function socket(server) {
 
                     const clientPlayer = client.userId === game.player1 ? 'player1' : 'player2';
                     const activePlayer = game.moves.length % 2 ? 'player2' : 'player1';
-                    const inactivePlayer = activePlayer === 'player1' ? 'player2' : 'player1';
 
                     if (clientPlayer !== activePlayer)
                         return;
 
-                    // Move is legal
-                    game.moves.push(move)
-                    game.time.lastMove = new Date().getTime();
+                    // Check for winner based on timeout
+                    abraLogic.findTimeoutWinner(game);
 
-                    // Clear the timeout that runs when a player is out of time
-                    // if (client.rooms[game._id].timer) {
-                    //     clearTimeout(client.rooms[game._id].timer)
-                    // }
+                    if (!game.winner) {
+                        // TODO: check legality
 
-                    // Check for a winner
-                    abraLogic.findWinner(game);
+                        // Move is legal
+                        game.moves.push(move)
+
+                        // Update times
+                        const now = new Date().getTime();
+                        game.time[activePlayer] -= now - game.time.lastMove;
+                        game.time.lastMove = now;
+
+                        if (game.time[activePlayer] <= 0)
+                            game.time[activePlayer] = 1;
+
+                        // Check for a winner
+                        abraLogic.findWinner(game);
+                    }
 
                     if (game.winner) {
                         finishGame(io, game)
                     } else {
-                        // TODO: this can be improved
-                        // Set a timeout that will run when the player runs out of time
-                        // Using self-calling function for scoping so that the variables don't get overwritten
-                        // (function (io, game, activePlayer, inactivePlayer) {
-                        //     client.rooms[gameId].timer = setTimeout(function () {
-                        //         db.Game.findById(gameId)
-                        //         .then(game => {
-                        //             game.winner = winner;
-                        //             db.Game.save(game)
-                        //         })
-                        //         .catch(err => console.error(err))
-                        //
-                        //         finishGame(io, game, activePlayer)
-                        //     }, game.time[inactivePlayer] + 500);
-                        // }(io, game, activePlayer, inactivePlayer));
+                        io.to(gameId).emit('newMove', {
+                            move: move,
+                            time: game.time,
+                        })
                     }
-
-                    io.to(gameId).emit('newMove', {
-                        move: move,
-                        time: game.time,
-                    })
 
                     db.Game.save(game)
                 })

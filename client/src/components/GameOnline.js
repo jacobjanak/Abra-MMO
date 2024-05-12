@@ -73,7 +73,9 @@ class Game extends Component {
 
     socketCallback = (game, newMove) => {
         if (game) {
-            const userIsPlayer1 = (game.player1._id ?? game.player1) === this.props.user.id;
+            const player1 = game.player1 ?? this.state.player1;
+            const userIsPlayer1 = player1._id === this.props.user.id;
+
             this.setState({
                 userIsPlayer1,
                 ...game

@@ -200,7 +200,11 @@ function updatePlayerCount(io) {
 }
 
 function finishGame(io, game) {
-    io.to(game._id).emit('game', game)
+    // Send game without user data because it will already be loaded
+    const gamePartial = { ...game };
+    delete gamePartial.player1;
+    delete gamePartial.player2;
+    io.to(game._id).emit('game', gamePartial)
 
     const winner = game.winner;
     const loser = winner === 'player1' ? 'player2' : 'player1';

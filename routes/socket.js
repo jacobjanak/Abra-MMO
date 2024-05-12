@@ -122,6 +122,7 @@ function socket(server) {
                     const clientPlayer = client.userId === game.player1 ? 'player1' : 'player2';
                     const activePlayer = game.moves.length % 2 ? 'player2' : 'player1';
 
+                    // Possibly cheating
                     if (clientPlayer !== activePlayer)
                         return;
 
@@ -129,7 +130,9 @@ function socket(server) {
                     abraLogic.findTimeoutWinner(game);
 
                     if (!game.winner) {
-                        // TODO: check legality
+                        // Possibly cheating
+                        if (!abraLogic.isTileAvailable(game, move))
+                            return;
 
                         // Move is legal
                         game.moves.push(move)

@@ -81,7 +81,9 @@ const abraLogic = {
         return tiles;
     },
 
-    isTileAvailable: (move, tiles) => {
+    isTileAvailable: (game, move) => {
+        const tiles = abraLogic.movesToTiles(game.moves);
+
         if (tiles[move]?.owner)
             return false;
 

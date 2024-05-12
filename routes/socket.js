@@ -12,13 +12,11 @@ function socket(server) {
     io.on('connection', client => {
 
         client.on('queue', userId => {
-            // Check if user already in queue or in a game
-            if (queue.includes(userId) || userId in clients)
-                return;
-
             client.userId = userId;
             clients[userId] = client;
             updatePlayerCount(io)
+
+            leaveQueue(client)
 
             if (queue.length === 0) {
                 queue.push(userId);
@@ -205,6 +203,14 @@ function finishGame(io, game) {
     delete gamePartial.player1;
     delete gamePartial.player2;
     io.to(game._id).emit('game', gamePartial)
+
+    // Close socket connection
+    leaveRooms(clients[game.player1])
+    leaveRooms(clients[game.player2])
+    delete clients[game.player1];
+    delete clients[game.player2];
+
+    updatePlayerCount(io)
 
     const winner = game.winner;
     const loser = winner === 'player1' ? 'player2' : 'player1';

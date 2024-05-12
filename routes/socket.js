@@ -57,14 +57,14 @@ function socket(server) {
                     leaveQueue(client)
                     leaveRooms(client)
                     client.join(game._id)
-                    client.emit('gameJoined', game)
+                    client.emit('game', game)
 
                     // Update the opponents client
                     const opponentId = game.player1._id === userId ? game.player2._id : game.player1._id;
                     leaveQueue(clients[opponentId]);
                     leaveRooms(clients[opponentId])
                     clients[opponentId].join(game._id)
-                    clients[opponentId].emit('gameJoined', game)
+                    clients[opponentId].emit('game', game)
                 })
                 .catch(err => console.error(err))
         })
@@ -107,7 +107,7 @@ function socket(server) {
                     leaveQueue(client);
                     leaveRooms(client)
                     client.join(data.gameId)
-                    client.emit('gameJoined', game)
+                    client.emit('game', game)
                 })
                 .catch(err => console.error(err))
         })
@@ -136,10 +136,10 @@ function socket(server) {
                     // }
 
                     // Check for a winner
-                    const winner = abraLogic.findWinner(game);
+                    abraLogic.findWinner(game);
 
-                    if (winner) {
-                        finishGame(io, game, winner)
+                    if (game.winner) {
+                        finishGame(io, game)
                     } else {
                         // TODO: this can be improved
                         // Set a timeout that will run when the player runs out of time
@@ -167,6 +167,19 @@ function socket(server) {
                 })
                 .catch(err => console.error(err))
         })
+
+        client.on('reportTimeout', () => {
+            const gameId = Array.from(client.rooms)[1];
+            db.Game.findById(gameId)
+                .then(game => {
+                    if (!game)
+                        return;
+
+                    if (game.winner)
+                        finishGame(io, game)
+                })
+                .catch(err => console.error(err))
+        })
     })
 }
 
@@ -191,10 +204,11 @@ function updatePlayerCount(io) {
     io.emit('playerCount', playerCount)
 }
 
-function finishGame(io, game, winner) {
-    const loser = winner === 'player1' ? 'player2' : 'player1';
+function finishGame(io, game) {
+    io.to(game._id).emit('game', game)
 
-    io.to(game._id).emit('winner', winner)
+    const winner = game.winner;
+    const loser = winner === 'player1' ? 'player2' : 'player1';
 
     db.User.findById(game[winner])
         .then(user => {

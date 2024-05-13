@@ -204,6 +204,12 @@ function finishGame(io, game) {
     delete gamePartial.player2;
     io.to(game._id).emit('game', gamePartial)
 
+    // Unfortunate workaround to make the data types consistent
+    if (game.player1._id) {
+        game.player1 = game.player1._id;
+        game.player2 = game.player2._id;
+    }
+
     // Close socket connection
     leaveRooms(clients[game.player1])
     leaveRooms(clients[game.player2])

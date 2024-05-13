@@ -11,7 +11,9 @@ const isAuthenticated = exjwt({
 });
 
 router.post('/api/login', (req, res) => {
-    db.User.findOne('email', req.body.email)
+    const idType = req.body.id.includes('@') ? 'email' : 'username';
+
+    db.User.findOne(idType, req.body.id)
         .then(user => {
             db.User.verifyPassword(user, req.body.password, (err, isMatch) => {
                 if (err || !isMatch) {
@@ -22,7 +24,7 @@ router.post('/api/login', (req, res) => {
                 const token = jwt.sign({
                     id: user._id,
                     email: user.email,
-                    username: user.username
+                    username: user.username,
                 }, secret, {
                     expiresIn: 60 * 60 * 24 * 365
                 });
@@ -39,20 +41,15 @@ router.post('/api/login', (req, res) => {
 })
 
 router.post('/api/signup', (req, res) => {
-    if (req.body.username.length > 12) {
-        res.status(400).send({message: "Username cannot be more than 12 characters long"})
-    } else if (req.body.email.length > 50) {
-        res.status(400).send({message: "Email cannot be more than 50 characters long"})
-    } else if (req.body.username.length < 1) {
-        res.status(400).send({message: "Username cannot be less than 1 character long"})
-    } else if (req.body.email.length < 3) {
-        res.status(400).send({message: "Email cannot be less than 3 characters long"})
+    if (req.body.username.length < 3) {
+        res.status(400).send({message: "Username cannot be less than 3 characters long"})
+    } else if (req.body.username.length > 20) {
+        res.status(400).send({message: "Username cannot be more than 20 characters long"})
     } else if (req.body.password.length < 1) {
         res.status(400).send({message: "Password cannot be less than 1 characters long"})
     } else if (req.body.password.length > 50) {
         res.status(400).send({message: "Password cannot be more than 50 characters long"})
     } else {
-
         db.User.create(req.body)
             .then(user => res.json(user))
             .catch(err => res.status(400).send({message: err}))

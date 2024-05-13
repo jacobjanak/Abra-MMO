@@ -8,7 +8,7 @@ module.exports = db => {
             return new Promise((resolve, reject) => {
                 const user = {
                     _id: generateId(),
-                    email: data.email.toLowerCase().trim(),
+                    email: data.email ? data.email.toLowerCase().trim() : null,
                     username: data.username.trim(),
                     password: data.password,
                     wins: 0,
@@ -19,7 +19,7 @@ module.exports = db => {
 
                 db.collection('users').where('email', '==', user.email).get()
                     .then(snapshot => {
-                        if (!snapshot.empty)
+                        if (data.email && !snapshot.empty)
                             return Promise.reject('A user already exists with that email.');
 
                         return db.collection('users').where('username', '==', user.username).get();

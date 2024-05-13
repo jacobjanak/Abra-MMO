@@ -16,7 +16,7 @@ class NavBar extends Component {
 
     handleLogout = () => {
         this.Auth.logout()
-        window.location.reload()
+        window.location.href = '/';
     };
 
     render() {

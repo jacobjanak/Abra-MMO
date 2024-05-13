@@ -36,15 +36,12 @@ class AuthService {
         })
     };
 
-    login = (email, password) => {
+    // Login via username or email
+    login = (id, password) => {
         return new Promise((resolve, reject) => {
-            // get token
-            axios.post('api/login', {
-                email: email,
-                password: password
-            })
+            axios.post('api/login', { id, password })
                 .then(res => {
-                    const {token, user} = res.data;
+                    const { token, user } = res.data;
                     localStorage.setItem('id_token', token);
                     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                     resolve(user)
@@ -54,7 +51,6 @@ class AuthService {
     };
 
     logout = () => {
-        // clear user token and profile data from localStorage
         axios.defaults.headers.common['Authorization'] = null;
         localStorage.removeItem('id_token');
         window.location.reload()

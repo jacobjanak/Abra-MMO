@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
+import { generateUsername } from 'friendly-username-generator';
 import AuthService from './AuthService';
+import API from '../API';
+import utils from '../utils';
 
 function withAuth(AuthComponent, props) {
     const Auth = new AuthService();
@@ -15,7 +18,14 @@ function withAuth(AuthComponent, props) {
             if (user) {
                 this.setState({user})
             } else {
-                window.location.href = '/login';
+                // Automatically create an account
+                const username = generateUsername();
+                const password = utils.randomString(40);
+
+                API.signUpUser({ username, password })
+                    .then(() => Auth.login(username, password))
+                    .then(() => window.location.reload())
+                    .catch(err => console.error(err));
             }
         }
 

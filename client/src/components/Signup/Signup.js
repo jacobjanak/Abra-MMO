@@ -10,8 +10,8 @@ class Signup extends Component {
         confirmError: false
     }
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.Auth = new AuthService();
     }
 

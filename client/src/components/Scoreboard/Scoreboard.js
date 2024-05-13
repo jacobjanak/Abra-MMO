@@ -19,66 +19,47 @@ class Scoreboard extends Component {
 
         return (
             <div id="scoreboard">
-                <h2>
-                    <span className="scoreboard-item-1 py-1">
-                        <a className="username" href={"/profile/" + player1.username}>
-                            {player1.username}
-                        </a>
-                    </span>
-                    <span
-                        id={activePlayer === 'player1' ? 'active-timer' : ''}
-                        className="scoreboard-item-2 py-1 timer"
-                    >
-                        {time && (
-                            <Timer
-                                timeLeft={time.player1}
-                                active={activePlayer === 'player1'}
-                                lastMove={time.lastMove}
-                                reloadGame={reloadGame}
-                                reportTimeout={reportTimeout}
-                            />
-                        )}
-                    </span>
-                    <span className="scoreboard-item-3 py-1">
-                        vs
-                    </span>
-                    <span
-                        id={activePlayer === 'player2' ? 'active-timer' : ''}
-                        className="scoreboard-item-4 py-1 timer"
-                    >
-                        {time && (
-                            <Timer
-                                timeLeft={time.player2}
-                                active={activePlayer === 'player2'}
-                                lastMove={time.lastMove}
-                                reloadGame={reloadGame}
-                                reportTimeout={reportTimeout}
-                            />
-                        )}
-                    </span>
-                    <span className="scoreboard-item-5 py-1">
-                        <a className="username" href={"/profile/" + player2.username}>
-                          {player2.username}
-                        </a>
-                    </span>
+                <h5 className="username">
+                    <a href={"/profile/" + player1.username}>
+                        {player1.username}
+                    </a>
+                </h5>
+                <h2
+                    id={activePlayer === 'player1' ? 'active-timer' : ''}
+                    className="timer"
+                >
+                    {time && (
+                        <Timer
+                            timeLeft={time.player1}
+                            active={activePlayer === 'player1'}
+                            lastMove={time.lastMove}
+                            reloadGame={reloadGame}
+                            reportTimeout={reportTimeout}
+                        />
+                    )}
                 </h2>
-
-                {/* <div id="move-controls">
-                  <span className="move-control">
-                    <i className="fas fa-fast-backward"></i>
-                  </span>
-                  <span className="move-control">
-                    <i className="fas fa-caret-left" style={{ fontSize: '1.5em' }}></i>
-                  </span>
-                  <span className="move-control">
-                    <i className="fas fa-caret-right" style={{ fontSize: '1.5em' }}></i>
-                  </span>
-                  <span className="move-control">
-                    <i className="fas fa-fast-forward"></i>
-                  </span>
-                </div>
-
-                <MoveList moves={moves} /> */}
+                <h2 className="vs">
+                    vs
+                </h2>
+                <h2
+                    id={activePlayer === 'player2' ? 'active-timer' : ''}
+                    className="timer"
+                >
+                    {time && (
+                        <Timer
+                            timeLeft={time.player2}
+                            active={activePlayer === 'player2'}
+                            lastMove={time.lastMove}
+                            reloadGame={reloadGame}
+                            reportTimeout={reportTimeout}
+                        />
+                    )}
+                </h2>
+                <h5 className="username">
+                    <a href={"/profile/" + player2.username}>
+                        {player2.username}
+                    </a>
+                </h5>
             </div>
         );
     }

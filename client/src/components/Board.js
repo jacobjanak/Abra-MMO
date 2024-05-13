@@ -119,7 +119,7 @@ class Board extends Component {
         const { tiles, tileSize, lastMove, dimensions: { top, left }} = this.state;
         const { winner, userIsActive, userIsPlayer1 } = this.props;
 
-        const topAdjust = (top + 1) * tileSize;
+        const topAdjust = (top + 1) * tileSize + 20;
         const leftAdjust = (left + 1) * tileSize;
 
         return (

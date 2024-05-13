@@ -2,152 +2,63 @@
     z-index: 100;
     position: absolute;
     top: 56px;
-    /* 320 is for scoreboard items, 12 for scrollbar */
-    /* left: calc(50% - 322px - 12px); */
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    text-align: center;
 }
 
 .username {
-    color: black;
-}
-
-.username:hover {
-    text-decoration: none;
-    color: black;
+    flex: 1;
 }
 
 .timer {
-    width: 200px
+    width: 90px;
+    padding: 4px 10px;
+}
+
+.vs {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.username:first-child {
+    padding-right: 10px;
+    text-align: right;
+}
+
+.username:last-child {
+    padding-left: 10px;
+    text-align: left;
+}
+
+.username a {
+    color: inherit;
+}
+
+.username a:hover {
+    text-decoration: none;
 }
 
 #active-timer {
     background: rgba(0, 255, 0, 0.6);
 }
 
-#scoreboard > h2 > span {
-    position: absolute;
-    top: 0;
-}
-
-@media screen and (min-width: 768px) {
-    #scoreboard {
-        left: calc(50% - 324px);
-    }
-
-    .scoreboard-item-1 {
-        width: 200px;
-        left: 0;
-        text-align: right;
-    }
-
-    .scoreboard-item-2 {
-        width: 84px;
-        left: 212px;
-        text-align: center;
-    }
-
-    .scoreboard-item-3 {
-        width: 56px;
-        left: 296px;
-        text-align: center;
-    }
-
-    .scoreboard-item-4 {
-        width: 84px;
-        left: 352px;
-        text-align: center;
-    }
-
-    .scoreboard-item-5 {
-        width: 200px;
-        left: 448px;
-        text-align: left;
-    }
-}
-
 @media screen and (max-width: 767px) {
-    #scoreboard {
-        /* 291 is for scoreboard items, 12 for scrollbar */
-        left: calc(50% - 291px - 12px);
+    .username {
+        padding: 0 !important;
+        text-align: center !important;
+        font-size: 0.8em;
     }
 
-    #scoreboard > h2 {
-        font-size: 1.5em;
+    .timer,
+    .vs {
+        font-size: 1.3em;
     }
 
-    .scoreboard-item-1 {
-        width: 200px;
-        left: 0;
-        text-align: right;
-    }
-
-    .scoreboard-item-2 {
+    .timer {
         width: 60px;
-        left: 212px;
-        text-align: center;
-    }
-
-    .scoreboard-item-3 {
-        width: 42px;
-        left: 272px;
-        text-align: center;
-    }
-
-    .scoreboard-item-4 {
-        width: 60px;
-        left: 314px;
-        text-align: center;
-    }
-
-    .scoreboard-item-5 {
-        width: 200px;
-        left: 386px;
-        text-align: left;
+        padding: 4px 6px;
     }
 }
-
-/* Move Controls */
-/* #move-controls {
-    display: flex;
-    height: 28px;
-    border: 1px solid black;
-    border-bottom: 0;
-}
-
-.move-control {
-    flex-grow: 1;
-    font-size: 18px;
-    text-align: center;
-}
-
-.vertical-align {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.move-control i {
-    cursor: pointer;
-}
-
-Move List
-#move-list-container {
-    padding-left: 8px;
-    padding-right: 8px;
-    border: 1px solid black;
-    height: 75px;
-    font-size: 12px;
-    overflow-y: scroll;
-}
-
-#move-list {
-
-}
-
-.move-row {
-    display: flex;
-}
-
-.move {
-    flex-grow: 1;
-    text-align: center;
-} */

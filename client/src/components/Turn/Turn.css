@@ -1,10 +1,15 @@
 #turn {
-    font-size: 24px;
     z-index: 100;
     position: absolute;
     top: 56px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
+    right: 0;
     text-align: center;
     pointer-events: none;
+}
+
+@media screen and (max-width: 767px) {
+    #turn {
+        font-size: 1.3em;
+    }
 }

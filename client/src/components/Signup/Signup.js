@@ -5,11 +5,6 @@ import API from '../../API';
 import './Signup.css';
 
 class Signup extends Component {
-    state = {
-        confirm: '',
-        confirmError: false
-    }
-
     constructor(props) {
         super(props);
         this.Auth = new AuthService();
@@ -23,37 +18,24 @@ class Signup extends Component {
 
     handleFormSubmit = event => {
         event.preventDefault();
-        if (this.state.password === this.state.confirm) {
-            API.signUpUser({
-                username: this.state.username,
-                email: this.state.email,
-                password: this.state.password
+
+        API.signUpUser({
+            username: this.state.username,
+            email: this.state.email,
+            password: this.state.password
+        })
+            .then(() => {
+                window.location.href = '/login';
             })
-                .then(() => {
-                    window.location.href = '/login';
-                })
-                .catch(err => alert(err));
-        } else {
-            this.setState({
-                confirm: '',
-                confirmError: true
-            })
-        }
+            .catch(err => alert(err));
     };
 
     handleChange = event => {
-        const {name, value} = event.target;
-        let fixingConfirm = this.state.confirmError && name === 'confirm';
-        if (fixingConfirm && value === this.state.password) {
-            this.setState({
-                confirm: value,
-                confirmError: false
-            })
-        } else {
-            this.setState({
-                [name]: value
-            });
-        }
+        const { name, value } = event.target;
+
+        this.setState({
+            [name]: value
+        });
     };
 
     render() {
@@ -98,24 +80,6 @@ class Signup extends Component {
                                id="password"
                                required
                                onChange={this.handleChange}/>
-                    </div>
-                    <div className="form-group">
-                        <label className="mb-0" htmlFor="confirm">
-                            Confirm password:
-                        </label>
-                        <input className="form-control"
-                               placeholder="Confirm password"
-                               name="confirm"
-                               type="password"
-                               id="confirm"
-                               required
-                               value={this.state.confirm}
-                               onChange={this.handleChange}/>
-                        {this.state.confirmError &&
-                            <small id="emailHelp" class="form-text text-danger">
-                                Passwords must match
-                            </small>
-                        }
                     </div>
                     <div className="mt-4">
                         <button type="submit" className="btn btn-primary">Create account</button>

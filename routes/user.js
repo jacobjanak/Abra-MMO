@@ -13,7 +13,7 @@ const isAuthenticated = exjwt({
 router.post('/api/login', (req, res) => {
     const idType = req.body.id.includes('@') ? 'email' : 'username';
 
-    db.User.findOne(idType, req.body.id)
+    db.User.findOne(idType, req.body.id, true)
         .then(user => {
             db.User.verifyPassword(user, req.body.password, (err, isMatch) => {
                 if (err || !isMatch) {

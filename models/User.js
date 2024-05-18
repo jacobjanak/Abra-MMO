@@ -51,12 +51,15 @@ module.exports = db => {
                             return;
                         }
 
-                        resolve(doc.data());
+                        const user = doc.data();
+                        delete user.password;
+
+                        resolve(user)
                     })
             })
         },
 
-        findOne: (field, value) => {
+        findOne: (field, value, unsafe = false) => {
             return new Promise((resolve, reject) => {
                 db.collection('users').where(field, '==', value).get()
                     .then(snapshot => {
@@ -65,7 +68,12 @@ module.exports = db => {
                             return;
                         }
 
-                        resolve(snapshot.docs[0].data())
+                        const user = snapshot.docs[0].data();
+
+                        if (!unsafe)
+                            delete user.password;
+
+                        resolve(user)
                     })
             });
         },

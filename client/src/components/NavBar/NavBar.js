@@ -24,7 +24,12 @@ class NavBar extends Component {
 
         return (
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-                <NavLink className="navbar-brand mr-4 ml-2" to="/">
+                <NavLink
+                    className="navbar-brand mr-4 ml-2"
+                    to="/"
+                    data-toggle="collapse"
+                    data-target=".navbar-collapse.show"
+                >
                     Abra
                 </NavLink>
                 <button
@@ -38,17 +43,32 @@ class NavBar extends Component {
                 <div className="collapse navbar-collapse" id="navbar">
                     <ul className="navbar-nav">
                         <li className="nav-item mr-3">
-                            <NavLink className="nav-item nav-link" to="/play">
+                            <NavLink
+                                className="nav-item nav-link"
+                                to="/play"
+                                data-toggle="collapse"
+                                data-target=".navbar-collapse.show"
+                            >
                                 Play Offline
                             </NavLink>
                         </li>
                         <li className="nav-item mr-3">
-                            <NavLink className="nav-item nav-link" to="/online">
+                            <NavLink
+                                className="nav-item nav-link"
+                                to="/online"
+                                data-toggle="collapse"
+                                data-target=".navbar-collapse.show"
+                            >
                                 Online
                             </NavLink>
                         </li>
                         <li className="nav-item mr-3">
-                            <NavLink className="nav-item nav-link" to="/rankings">
+                            <NavLink
+                                className="nav-item nav-link"
+                                to="/rankings"
+                                data-toggle="collapse"
+                                data-target=".navbar-collapse.show"
+                            >
                                 Rankings
                             </NavLink>
                         </li>

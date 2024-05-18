@@ -34,8 +34,8 @@ class Rankings extends Component {
                                 Player
                             </th>
                             <th>Rating</th>
-                            <th>Wins</th>
-                            <th>Losses</th>
+                            <th>Won</th>
+                            <th>Lost</th>
                         </tr>
                         </thead>
                         <tbody>

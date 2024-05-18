@@ -47,6 +47,11 @@ class NavBar extends Component {
                                 Online
                             </NavLink>
                         </li>
+                        <li className="nav-item mr-3">
+                            <NavLink className="nav-item nav-link" to="/rankings">
+                                Rankings
+                            </NavLink>
+                        </li>
                     </ul>
                     {username ? (
                         <ul className="navbar-nav ml-auto">

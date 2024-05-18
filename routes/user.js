@@ -94,4 +94,12 @@ router.get('/user/:username', (req, res) => {
         .catch(() => res.status(404).send('No user found'))
 })
 
+router.get('/users/rankings/:page', (req, res) => {
+    // Ignoring page for now, just show top 20
+    // const page = Math.max(parseInt(req.params.page), 1);
+    db.User.getRankings(1, 20)
+        .then(data => res.json(data))
+        .catch(() => res.json(null))
+})
+
 module.exports = router;

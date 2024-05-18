@@ -1,0 +1,55 @@
+#table-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 5vh;
+}
+
+table {
+    border-collapse: collapse;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+th,
+td {
+    padding: 15px;
+}
+
+thead th {
+    background-color: #343a40;
+    font-weight: normal;
+    color: white;
+}
+
+/*tbody tr:hover {*/
+/*     background-color: rgba(135, 206, 235, .3);*/
+/*}*/
+
+td {
+    position: relative;
+}
+
+/*td:hover:before {*/
+/*     content: "";*/
+/*     position: absolute;*/
+/*     left: 0;*/
+/*     right: 0;*/
+/*     top: -9999px;*/
+/*     bottom: -9999px;*/
+/*     background-color: rgba(135, 206, 235, .2);*/
+/*     z-index: -1;*/
+/*}*/
+
+table .username {
+    text-align: left;
+}
+
+table .username a {
+    color: inherit;
+}
+
+table .username a:hover {
+    text-decoration: none;
+}

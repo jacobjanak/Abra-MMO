@@ -9,6 +9,7 @@ import Profile from './Profile';
 import Signup from './Signup/';
 import GameOnline from './GameOnline';
 import GameComputer from './GameComputer';
+import Rankings from './Rankings';
 
 class App extends Component {
     render() {
@@ -22,6 +23,7 @@ class App extends Component {
                         <Route exact path="/profile/:username" element={<Profile/>}/>
                         <Route exact path="/play" element={<GameComputer/>}/>
                         <Route exact path="/online" element={<GameOnline/>}/>
+                        <Route exact path="/rankings" element={<Rankings/>}/>
                         <Route path="/*" element={<Home/>}/>
                     </Routes>
                 </div>

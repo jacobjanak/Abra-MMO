@@ -232,6 +232,8 @@ function finishGame(io, game) {
 
             winner.rating = newRating(winner.rating, loser.rating, 1);
             loser.rating = newRating(loser.rating, winner.rating, 0);
+            winner.wins++;
+            loser.losses++;
 
             db.User.save(winner)
             db.User.save(loser)

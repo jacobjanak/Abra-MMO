@@ -12,6 +12,8 @@ module.exports = db => {
                     username: data.username.trim(),
                     password: data.password,
                     rating: 1500,
+                    wins: 0,
+                    losses: 0,
                     lastGame: null,
                     createdAt: Date.now(),
                 };
@@ -75,6 +77,26 @@ module.exports = db => {
 
                         resolve(user)
                     })
+            });
+        },
+
+        getRankings: (page, limit) => {
+            return new Promise((resolve, reject) => {
+                const results = [];
+
+                db.collection('users').orderBy('rating', 'desc').limit(limit).get()
+                    .then(snapshot => {
+                        snapshot.forEach(doc => {
+                            const user = doc.data();
+                            delete user.password;
+                            results.push(user);
+                        });
+
+                        resolve(results);
+                    })
+                    .catch(error => {
+                        reject('Error getting documents: ' + error);
+                    });
             });
         },
 

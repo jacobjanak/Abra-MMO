@@ -51,6 +51,9 @@ const API = {
     },
     move: move => socket().emit('move', move),
     reportTimeout: () => socket().emit('reportTimeout'),
+    getRankings: page => {
+        return axios.get('/users/rankings/' + page);
+    },
 };
 
 export default API;

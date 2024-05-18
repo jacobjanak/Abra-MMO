@@ -218,22 +218,35 @@ function finishGame(io, game) {
 
     updatePlayerCount(io)
 
-    const winner = game.winner;
-    const loser = winner === 'player1' ? 'player2' : 'player1';
+    // const winner = game.winner;
+    // const loser = winner === 'player1' ? 'player2' : 'player1';
 
-    db.User.findById(game[winner])
+    let winner, loser;
+    db.User.findById(game[game.winner === 'player1' ? 'player2' : 'player1'])
         .then(user => {
-            user.wins++;
-            db.User.save(user)
+            loser = user;
+            return db.User.findById(game[game.winner]);
+        })
+        .then(user => {
+            winner = user;
+
+            winner.rating = newRating(winner.rating, loser.rating, 1);
+            loser.rating = newRating(loser.rating, winner.rating, 0);
+
+            db.User.save(winner)
+            db.User.save(loser)
         })
         .catch(err => console.error(err))
+}
 
-    db.User.findById(game[loser])
-        .then(user => {
-            user.losses++;
-            db.User.save(user)
-        })
-        .catch(err => console.error(err))
+// https://stanislav-stankovic.medium.com/elo-rating-system-6196cc59941e
+function newRating(currentRating, opponentRating, outcome) {
+    const qa = Math.pow(10, (currentRating / 400));
+    const qb = Math.pow(10, (opponentRating / 400));
+    const expected = qa / (qa + qb);
+    const newRating = currentRating + (outcome - expected) * 64;
+
+    return Math.max(Math.round(newRating), 400);
 }
 
 module.exports = socket;

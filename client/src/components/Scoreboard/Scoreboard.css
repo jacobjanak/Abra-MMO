@@ -9,7 +9,7 @@
     text-align: center;
 }
 
-.username {
+.user-info {
     flex: 1;
 }
 
@@ -23,33 +23,50 @@
     padding-right: 10px;
 }
 
-.username:first-child {
+.user-info:first-child {
     padding-right: 10px;
     text-align: right;
 }
 
-.username:last-child {
+.user-info:last-child {
     padding-left: 10px;
     text-align: left;
 }
 
-.username a {
+.user-info .username {
     color: inherit;
 }
 
-.username a:hover {
+.user-info .username:hover {
     text-decoration: none;
+}
+
+.user-info .rating {
+    margin: 0 8px;
+}
+
+#player1-rating-right {
+    display: none;
 }
 
 #active-timer {
     background: rgba(0, 255, 0, 0.6);
 }
 
-@media screen and (max-width: 767px) {
-    .username {
+@media screen and (max-width: 900px) {
+    .user-info {
         padding: 0 !important;
         text-align: center !important;
         font-size: 0.8em;
+    }
+
+    .user-info .rating,
+    #player1-rating-right {
+        display: block;
+    }
+
+    #player1-rating-left {
+        display: none;
     }
 
     .timer,

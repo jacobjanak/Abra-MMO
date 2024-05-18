@@ -19,10 +19,16 @@ class Scoreboard extends Component {
 
         return (
             <div id="scoreboard">
-                <h5 className="username">
-                    <a href={"/profile/" + player1.username}>
+                <h5 className="user-info">
+                    <span id="player1-rating-left" className="rating">
+                        ({player1.rating})
+                    </span>
+                    <a className="username" href={"/profile/" + player1.username}>
                         {player1.username}
                     </a>
+                    <span id="player1-rating-right" className="rating">
+                        ({player1.rating})
+                    </span>
                 </h5>
                 <h2
                     id={activePlayer === 'player1' ? 'active-timer' : ''}
@@ -55,10 +61,13 @@ class Scoreboard extends Component {
                         />
                     )}
                 </h2>
-                <h5 className="username">
-                    <a href={"/profile/" + player2.username}>
+                <h5 className="user-info">
+                    <a className="username" href={"/profile/" + player2.username}>
                         {player2.username}
                     </a>
+                    <span className="rating">
+                        ({player2.rating})
+                    </span>
                 </h5>
             </div>
         );

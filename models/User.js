@@ -11,8 +11,7 @@ module.exports = db => {
                     email: data.email ? data.email.toLowerCase().trim() : null,
                     username: data.username.trim(),
                     password: data.password,
-                    wins: 0,
-                    losses: 0,
+                    rating: 1500,
                     lastGame: null,
                     createdAt: Date.now(),
                 };

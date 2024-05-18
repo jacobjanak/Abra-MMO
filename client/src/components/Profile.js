@@ -6,8 +6,7 @@ import {Link} from 'react-router-dom';
 class Profile extends Component {
     state = {
         username: '',
-        wins: false,
-        losses: false,
+        rating: null,
     };
 
     componentDidMount() {
@@ -16,7 +15,7 @@ class Profile extends Component {
         API.getUser(username)
             .then(res => {
                 const user = res.data;
-                this.setState({...user})
+                this.setState({ ...user })
             })
     }
 
@@ -26,8 +25,7 @@ class Profile extends Component {
                 <p></p>
                 <h1>{this.state.username}</h1>
                 <p></p>
-                <p>Wins: {this.state.wins}</p>
-                <p>Losses: {this.state.losses}</p>
+                <p>Rating: {this.state.rating}</p>
                 <Link to="/">Go home</Link>
             </div>
         )

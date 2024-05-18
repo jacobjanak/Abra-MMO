@@ -8,7 +8,20 @@ const utils = {
         }
 
         return result;
-    }
+    },
+
+    getMonthAndYear: unix => {
+        const monthNames = [
+            'January', 'February', 'March', 'April', 'May', 'June', 'July',
+            'August', 'September', 'October', 'November', 'December'
+        ];
+
+        const date = new Date(unix);
+        const month = monthNames[date.getMonth()];
+        const year = date.getFullYear();
+
+        return `${month} ${year}`;
+    },
 };
 
 export default utils;

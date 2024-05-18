@@ -1,7 +1,20 @@
+#rankings-header {
+    display: flex;
+    margin: 20px 0;
+    justify-content: center;
+    align-items: center;
+}
+
+#rankings-header .trophy {
+    display: inline;
+    width: 24px;
+    height: 24px;
+    margin: 0 8px;
+}
+
 #table-container {
     display: flex;
     justify-content: center;
-    padding-top: 5vh;
 }
 
 table {
@@ -23,24 +36,24 @@ thead th {
     color: white;
 }
 
-/*tbody tr:hover {*/
-/*     background-color: rgba(135, 206, 235, .3);*/
-/*}*/
+tbody tr:hover {
+    background-color: rgba(52, 58, 64, .1);
+}
 
 td {
     position: relative;
 }
 
-/*td:hover:before {*/
-/*     content: "";*/
-/*     position: absolute;*/
-/*     left: 0;*/
-/*     right: 0;*/
-/*     top: -9999px;*/
-/*     bottom: -9999px;*/
-/*     background-color: rgba(135, 206, 235, .2);*/
-/*     z-index: -1;*/
-/*}*/
+td:hover:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -9999px;
+    bottom: -9999px;
+    background-color: rgba(52, 58, 64, .05  );
+    z-index: -1;
+}
 
 table .username {
     text-align: left;

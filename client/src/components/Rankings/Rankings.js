@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import API from '../../API';
 import './Rankings.css';
-import API from "../../API";
 
 class Rankings extends Component {
     state = {
@@ -20,6 +20,11 @@ class Rankings extends Component {
 
         return (
             <div>
+                <h2 id="rankings-header">
+                    <img className="trophy" src="../trophy.svg" alt="trophy" />
+                    Global Rankings
+                    <img className="trophy" src="../trophy.svg" alt="trophy" />
+                </h2>
                 <div id="table-container">
                     <table>
                         <thead>

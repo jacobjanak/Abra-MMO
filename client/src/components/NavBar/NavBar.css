@@ -9,6 +9,10 @@
 }
 
 @media screen and (max-width: 991px) {
+    .desktop-only {
+        display: none;
+    }
+
     .nav-item {
         margin-right: 0 !important;
     }
@@ -19,5 +23,11 @@
 
     .dropdown {
         margin-bottom: 12px;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .mobile-only {
+        display: none;
     }
 }

@@ -72,9 +72,56 @@ class NavBar extends Component {
                                 Rankings
                             </NavLink>
                         </li>
+                        {username ? (
+                            <React.Fragment>
+                                <li className="nav-item mr-3 mobile-only">
+                                    <NavLink
+                                        className="nav-item nav-link"
+                                        to={"/profile/" + username}
+                                        data-toggle="collapse"
+                                        data-target=".navbar-collapse.show"
+                                    >
+                                        Profile
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item mr-3 mobile-only">
+                                    <NavLink
+                                        className="nav-item nav-link"
+                                        to="/logout"
+                                        data-toggle="collapse"
+                                        data-target=".navbar-collapse.show"
+                                    >
+                                        Logout
+                                    </NavLink>
+                                </li>
+                            </React.Fragment>
+                        ) : (
+                            <React.Fragment>
+                                <li className="nav-item mr-3 mobile-only">
+                                    <NavLink
+                                        className="nav-item nav-link"
+                                        to="/signup"
+                                        data-toggle="collapse"
+                                        data-target=".navbar-collapse.show"
+                                    >
+                                        Sign up
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item mr-3 mobile-only">
+                                    <NavLink
+                                        className="nav-item nav-link"
+                                        to="/login"
+                                        data-toggle="collapse"
+                                        data-target=".navbar-collapse.show"
+                                    >
+                                        Login
+                                    </NavLink>
+                                </li>
+                            </React.Fragment>
+                        )}
                     </ul>
                     {username ? (
-                        <ul className="navbar-nav ml-auto">
+                        <ul className="navbar-nav ml-auto desktop-only">
                             <li className="nav-item dropdown">
                                 <a className="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
                                     {username}
@@ -91,7 +138,7 @@ class NavBar extends Component {
                             </li>
                         </ul>
                     ) : (
-                        <ul className="navbar-nav ml-auto">
+                        <ul className="navbar-nav ml-auto desktop-only">
                             <li className="nav-item">
                                 <NavLink className="btn btn-outline-light mr-2" to="/signup">
                                     Sign up

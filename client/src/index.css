@@ -50,17 +50,17 @@ body {
 }
 
 .tile.available.player-active:hover {
-    background-color: blue;
+    background-color: #3498DB;
     cursor: pointer;
 }
 
 .tile.last-move:before, .tile.last-move:after {
     position: absolute;
     content: '';
-    background: gold;
+    background: #FFD700;
     display: block;
     width: 75%;
-    height: 2px;
+    height: 3px;
     transform: rotate(-45deg);
     left: 0;
     right: 0;

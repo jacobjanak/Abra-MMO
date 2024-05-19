@@ -42,9 +42,9 @@ class Tile extends Component {
         if (owner) {
             // user is always blue and their opponent is red
             if (userIsPlayer1) {
-                style.backgroundColor = owner === 'player1' ? 'blue' : 'red';
+                style.backgroundColor = owner === 'player1' ? '#3498DB' : '#E74C3C';
             } else {
-                style.backgroundColor = owner === 'player1' ? 'red' : 'blue';
+                style.backgroundColor = owner === 'player1' ? '#E74C3C' : '#3498DB';
             }
         }
 

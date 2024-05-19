@@ -13,17 +13,18 @@ function socket() {
 }
 
 const API = {
+    url: process.env.NODE_ENV === 'development' ? '' : 'https://abra-2-db50d4975475.herokuapp.com/',
     getUser: (username = '') => {
-        return axios.get('/user/' + username);
+        return axios.get(API.url + '/user/' + username);
     },
     getGame: (id = '') => {
-        return axios.get('/game/' + id);
+        return axios.get(API.url + '/game/' + id);
     },
     getActiveGame: () => {
-        return axios.get('/user/game');
+        return axios.get(API.url + '/user/game');
     },
     signUpUser: user => {
-        return axios.post('/api/signup', user);
+        return axios.post(API.url + '/api/signup', user);
     },
     queue: cb => {
         const userId = Auth.user().id;
@@ -52,7 +53,7 @@ const API = {
     move: move => socket().emit('move', move),
     reportTimeout: () => socket().emit('reportTimeout'),
     getRankings: page => {
-        return axios.get('/users/rankings/' + page);
+        return axios.get(API.url + '/users/rankings/' + page);
     },
 };
 

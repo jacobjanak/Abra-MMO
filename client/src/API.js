@@ -13,7 +13,7 @@ function socket() {
 }
 
 const API = {
-    url: process.env.NODE_ENV === 'development' ? '' : 'https://abra-2-db50d4975475.herokuapp.com/',
+    url: process.env.NODE_ENV === 'development' ? '' : 'https://abra-2-db50d4975475.herokuapp.com',
     getUser: (username = '') => {
         return axios.get(API.url + '/user/' + username);
     },

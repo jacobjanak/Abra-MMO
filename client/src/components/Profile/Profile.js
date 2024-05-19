@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import withAuth from '../withAuth';
 import API from '../../API';
 import utils from '../../utils';
 import './Profile.css';
@@ -48,4 +47,4 @@ class Profile extends Component {
     }
 }
 
-export default withAuth(Profile);
+export default Profile;

@@ -35,12 +35,12 @@ class Login extends Component {
                 <form onSubmit={this.handleFormSubmit}>
                     <div className="form-group">
                         <label className="mb-0" htmlFor="email">
-                            Email address:
+                            Email or username:
                         </label>
                         <input className="form-control"
-                               placeholder="Email address"
+                               placeholder="Email or username"
                                name="email"
-                               type="email"
+                               type="text"
                                id="email"
                                required
                                onChange={this.handleChange}/>

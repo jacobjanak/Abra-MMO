@@ -31,7 +31,8 @@ function socket(server) {
                 player2: random ? queue.pop() : userId,
                 time: {
                     player1: 5 * 60 * 1000,
-                    player2: 5 * 60 * 1000
+                    player2: 5 * 60 * 1000,
+                    lastMove: new Date().getTime(),
                 }
             })
                 .then(localGame => {
@@ -170,6 +171,25 @@ function socket(server) {
 
                     if (game.winner)
                         finishGame(io, game)
+                })
+                .catch(err => console.error(err))
+        })
+
+        // Abort the game if either player fails to make their first move in 15 seconds
+        client.on('reportAbort', () => {
+            const gameId = Array.from(client.rooms)[1];
+            db.Game.findById(gameId)
+                .then(game => {
+                    if (!game || game.moves.length >= 4)
+                        return;
+
+                    const now = new Date().getTime();
+                    if (now - game.time.lastMove > 15 * 1000) {
+                        game.aborted = true;
+                        finishGame(io, game)
+                        // db.Game.save(game)
+                        // TODO: delete game from DB
+                    }
                 })
                 .catch(err => console.error(err))
         })

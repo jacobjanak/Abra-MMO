@@ -117,7 +117,9 @@ class Board extends Component {
 
     render() {
         const { tiles, tileSize, lastMove, dimensions: { top, left }} = this.state;
-        const { winner, userIsActive, userIsPlayer1 } = this.props;
+        const { winner, userIsActive, userIsPlayer1, aborted } = this.props;
+
+        const finished = winner || aborted;
 
         const topAdjust = (top + 1) * tileSize + 20;
         const leftAdjust = (left + 1) * tileSize;
@@ -132,7 +134,7 @@ class Board extends Component {
                             <Tile
                                 {...tile}
                                 move={move}
-                                winner={winner}
+                                finished={finished}
                                 userIsActive={userIsActive}
                                 userIsPlayer1={userIsPlayer1}
                                 isLastMove={move === lastMove}

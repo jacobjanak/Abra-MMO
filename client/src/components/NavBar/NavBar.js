@@ -69,7 +69,7 @@ class NavBar extends Component {
                                 data-toggle="collapse"
                                 data-target=".navbar-collapse.show"
                             >
-                                Rankings
+                                Leaderboard
                             </NavLink>
                         </li>
                         {username ? (

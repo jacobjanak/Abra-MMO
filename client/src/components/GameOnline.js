@@ -12,6 +12,7 @@ class Game extends Component {
         userIsPlayer1: false,
         moves: false,
         winner: false,
+        aborted: false,
         playerCount: false
     };
 
@@ -46,6 +47,7 @@ class Game extends Component {
                     this.setState({
                         moves: game.moves,
                         winner: game.winner,
+                        aborted: game.aborted,
                         time: game.time
                     })
                 }
@@ -99,6 +101,7 @@ class Game extends Component {
             userIsPlayer1,
             moves,
             winner,
+            aborted,
             time,
             queued,
             playerCount
@@ -122,6 +125,7 @@ class Game extends Component {
                         moves={moves}
                         time={time}
                         winner={winner}
+                        aborted={aborted}
                         reloadGame={this.reloadGame}
                         reportTimeout={this.reportTimeout}
                     />
@@ -130,6 +134,7 @@ class Game extends Component {
                         <Board
                             moves={moves}
                             winner={winner}
+                            aborted={aborted}
                             userIsActive={userIsActive}
                             userIsPlayer1={userIsPlayer1}
                             makeMove={this.makeMove}

@@ -3,14 +3,14 @@ import abraLogic from 'abra-logic';
 
 class Tile extends Component {
     handleClick = () => {
-        const { owner, winner, userIsActive, move, makeMove } = this.props;
+        const { owner, finished, userIsActive, move, makeMove } = this.props;
 
-        if (!owner && !winner && userIsActive)
+        if (!owner && !finished && userIsActive)
             makeMove(move)
     };
 
     getClassName = () => {
-        const { owner, winner, isLastMove, userIsActive } = this.props;
+        const { owner, finished, isLastMove, userIsActive } = this.props;
 
         const classes = ['tile'];
 
@@ -20,7 +20,7 @@ class Tile extends Component {
             if (isLastMove)
                 classes.push('last-move')
         }
-        else if (!winner) {
+        else if (!finished) {
             classes.push('available')
             classes.push(userIsActive ? 'player-active' : 'player-inactive')
         }

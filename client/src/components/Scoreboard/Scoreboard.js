@@ -10,12 +10,14 @@ class Scoreboard extends Component {
             moves,
             time,
             winner,
+            aborted,
             reloadGame,
             reportTimeout
         } = this.props;
 
         let activePlayer = moves.length % 2 ? 'player2' : 'player1';
-        if (winner) activePlayer = false;
+        if (winner || aborted)
+            activePlayer = false;
 
         return (
             <div id="scoreboard">

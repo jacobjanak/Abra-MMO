@@ -22,7 +22,7 @@ class Rankings extends Component {
             <div>
                 <h2 id="rankings-header">
                     <img className="trophy" src="../trophy.svg" alt="trophy" />
-                    Global Rankings
+                    Leaderboard
                     <img className="trophy" src="../trophy.svg" alt="trophy" />
                 </h2>
                 <div id="table-container">

@@ -25,6 +25,14 @@ class Profile extends Component {
     render() {
         const { username, wins, losses, rating, createdAt } = this.state;
 
+        if (!username) {
+            return (
+                <div>
+                    <h1>User not found</h1>
+                </div>
+            );
+        }
+
         return (
             <div className="profile-container">
                 <div className="profile-card">

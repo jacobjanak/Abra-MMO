@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import API from '../../API';
+import withInternet from '../withInternet';
 import './Rankings.css';
 
 class Rankings extends Component {
@@ -60,4 +61,4 @@ class Rankings extends Component {
     }
 }
 
-export default Rankings;
+export default withInternet(Rankings);

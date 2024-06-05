@@ -3,6 +3,8 @@ import { generateUsername } from 'friendly-username-generator';
 import AuthService from './AuthService';
 import API from '../API';
 import utils from '../utils';
+import withInternet from './withInternet';
+import Login from './Login';
 
 function withAuth(AuthComponent, props) {
     const Auth = new AuthService();

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import API from '../../API';
 import utils from '../../utils';
+import withInternet from '../withInternet';
 import './Profile.css';
 
 class Profile extends Component {
@@ -47,4 +48,4 @@ class Profile extends Component {
     }
 }
 
-export default Profile;
+export default withInternet(Profile);

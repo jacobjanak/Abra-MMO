@@ -115,6 +115,16 @@ class Board extends Component {
         };
     }
 
+    zoomIn = () => {
+        const { tileSize } = this.state;
+        this.setState({ tileSize: tileSize + 5 })
+    }
+
+    zoomOut = () => {
+        const { tileSize } = this.state;
+        this.setState({ tileSize: tileSize - 5 })
+    }
+
     render() {
         const { tiles, tileSize, lastMove, dimensions: { top, left }} = this.state;
         const { winner, userIsActive, userIsPlayer1, aborted } = this.props;
@@ -146,6 +156,11 @@ class Board extends Component {
                             />
                         ))}
                     </div>
+                </div>
+
+                <div id="zoom-controls">
+                    <img className="zoom-button" src="../trophy.svg" alt="trophy" onClick={this.zoomOut}  />
+                    <img className="zoom-button" src="../trophy.svg" alt="trophy" onClick={this.zoomIn} />
                 </div>
             </div>
         );

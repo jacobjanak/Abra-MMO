@@ -73,6 +73,22 @@ body {
     transform: rotate(45deg);
 }
 
+#zoom-controls {
+    position: fixed;
+    bottom: 2%;
+    right: 2%;
+}
+
+.zoom-button {
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+}
+
+.zoom-button:first-child {
+    margin-right: 10px;
+}
+
 /* Nav bar */
 @media screen and (max-width: 767px) {
     .nav-item > .btn {

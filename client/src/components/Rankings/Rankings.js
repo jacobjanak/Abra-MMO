@@ -7,6 +7,7 @@ class Rankings extends Component {
     state = {
         page: 1,
         users: [],
+        searchValue: '',
     };
 
     componentDidMount() {
@@ -14,13 +15,29 @@ class Rankings extends Component {
             .then(res => {
                 this.setState({ users: res.data })
             })
+            .catch(err => console.error(err))
     }
+
+    searchChange = event => {
+        this.setState({ searchValue: event.target.value })
+    };
+
+    handleSearch = () => {
+        window.location.href = '/profile/' + this.state.searchValue;
+    };
 
     render() {
         const { users } = this.state;
 
         return (
             <div>
+                <div>
+                    <h2>Search User</h2>
+                    <input onChange={this.searchChange} />
+                    <button onClick={this.handleSearch}>
+                        Search
+                    </button>
+                </div>
                 <h2 id="rankings-header">
                     <img className="trophy" src="../trophy.svg" alt="trophy" />
                     Leaderboard

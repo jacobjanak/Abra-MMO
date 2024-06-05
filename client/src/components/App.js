@@ -23,7 +23,7 @@ class App extends Component {
                         <Route exact path="/profile/:username" element={<Profile/>}/>
                         <Route exact path="/play" element={<GameComputer/>}/>
                         <Route exact path="/online" element={<GameOnline/>}/>
-                        <Route exact path="/rankings" element={<Rankings/>}/>
+                        <Route exact path="/users" element={<Rankings/>}/>
                         <Route path="/*" element={<Home/>}/>
                     </Routes>
                 </div>

@@ -65,7 +65,7 @@ class NavBar extends Component {
                         <li className="nav-item mr-3">
                             <NavLink
                                 className="nav-item nav-link"
-                                to="/rankings"
+                                to="/users"
                                 data-toggle="collapse"
                                 data-target=".navbar-collapse.show"
                             >

@@ -30,7 +30,7 @@ class NavBar extends Component {
                     data-toggle="collapse"
                     data-target=".navbar-collapse.show"
                 >
-                    Abra
+                    Diagazontal
                 </NavLink>
                 <button
                     className="navbar-toggler"

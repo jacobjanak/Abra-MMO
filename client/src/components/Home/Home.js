@@ -11,7 +11,7 @@ class Home extends Component {
 
         return (
             <div style={style}>
-                <h1 id="logo-subtext" className="display-6">Abra, the Strategy Game</h1>
+                <h1 id="logo-subtext" className="display-6">Diagazontal, a Strategy Game</h1>
 
                 <Link to={"/play"} id="play-now" className="btn btn-dark btn-lg">
                     Play now <i className="fas fa-play" style={{marginLeft: 4}}></i>

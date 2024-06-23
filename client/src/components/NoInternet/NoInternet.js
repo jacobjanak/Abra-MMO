@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import './NoInternet.css';
 
 class NoInternet extends Component {
     render() {
         return (
             <div>
-                <h1>No Internet Connection</h1>
+                <h2 id="no-internet-text">No Internet Connection!</h2>
             </div>
         );
     }

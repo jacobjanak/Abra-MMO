@@ -39,7 +39,7 @@ class Rankings extends Component {
                     </button>
                 </div>
 
-                { users.length && (
+                { !!users.length && (
                     <div>
                         <h4 id="rankings-header">
                             <img className="trophy" src="../trophy.svg" alt="trophy" />

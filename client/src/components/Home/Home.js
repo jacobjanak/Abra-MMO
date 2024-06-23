@@ -14,7 +14,8 @@ class Home extends Component {
                 <h1 id="logo-subtext" className="display-6">Diagazontal, a Strategy Game</h1>
 
                 <Link to={"/play"} id="play-now" className="btn btn-dark btn-lg">
-                    Play now <i className="fas fa-play" style={{marginLeft: 4}}></i>
+                    Play now
+                    <img id="play-icon" src="../play.svg" alt="Play" />
                 </Link>
             </div>
         );

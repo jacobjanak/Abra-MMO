@@ -4,7 +4,7 @@ import AuthService from './AuthService';
 import API from '../API';
 import utils from '../utils';
 import withInternet from './withInternet';
-import Login from './Login';
+import NoInternet from "./NoInternet";
 
 function withAuth(AuthComponent, props) {
     const Auth = new AuthService();
@@ -33,6 +33,9 @@ function withAuth(AuthComponent, props) {
 
         render() {
             const {user} = this.state;
+
+            if (!window.navigator.onLine)
+                return <NoInternet />;
 
             if (user) {
                 return <AuthComponent user={user} {...props} />;

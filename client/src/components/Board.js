@@ -159,8 +159,8 @@ class Board extends Component {
                 </div>
 
                 <div id="zoom-controls">
-                    <img className="zoom-button" src="../trophy.svg" alt="trophy" onClick={this.zoomOut}  />
-                    <img className="zoom-button" src="../trophy.svg" alt="trophy" onClick={this.zoomIn} />
+                    <img className="zoom-button" src="../zoom-out.svg" alt="Zoom in" onClick={this.zoomOut}  />
+                    <img className="zoom-button" src="../zoom-in.svg" alt="Zoom out" onClick={this.zoomIn} />
                 </div>
             </div>
         );

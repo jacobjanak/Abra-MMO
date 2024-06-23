@@ -6,6 +6,7 @@ import './Profile.css';
 
 class Profile extends Component {
     state = {
+        isInitialized: false,
         username: null,
         rating: null,
         wins: null,
@@ -20,10 +21,16 @@ class Profile extends Component {
                 const user = res.data;
                 this.setState({ ...user })
             })
+            .finally(() => {
+                this.setState({ isInitialized: true })
+            })
     }
 
     render() {
-        const { username, wins, losses, rating, createdAt } = this.state;
+        const { isInitialized, username, wins, losses, rating, createdAt } = this.state;
+
+        if (!isInitialized)
+            return null;
 
         if (!username) {
             return (

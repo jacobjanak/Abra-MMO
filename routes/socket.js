@@ -2,7 +2,6 @@ const { Server } = require('socket.io');
 const abraLogic = require('../abra-logic/');
 const db = require('../models');
 
-abraLogic.width = 39;
 const clients = {};
 const queue = [];
 
@@ -10,68 +9,51 @@ function socket(server) {
     const io = new Server(server);
 
     io.on('connection', client => {
+        const userId = client.handshake.query.userId;
 
-        client.on('queue', userId => {
-            client.userId = userId;
-            clients[userId] = client;
-            updatePlayerCount(io)
+        client.userId = userId;
+        clients[userId] = client;
+        updatePlayerCount(io)
 
+        client.on('queue', () => {
             leaveQueue(client)
 
             if (queue.length === 0) {
-                queue.push(userId);
+                queue.push(client.userId);
                 return;
             }
 
-            let game;
-
-            const random = Math.random() >= 0.5;
-            db.Game.create({
-                player1: random ? userId : queue.pop(),
-                player2: random ? queue.pop() : userId,
-                time: {
-                    player1: 5 * 60 * 1000,
-                    player2: 5 * 60 * 1000,
-                    lastMove: new Date().getTime(),
-                }
-            })
-                .then(localGame => {
-                    game = localGame;
-                    return db.User.findById(localGame.player1);
-                })
-                .then(user => {
-                    user.lastGame = game._id;
-                    db.User.save(user);
-
-                    game.player1 = user;
-                    return db.User.findById(game.player2);
-                })
-                .then(user => {
-                    user.lastGame = game._id;
-                    db.User.save(user);
-
-                    game.player2 = user;
-
-                    // Update current client
-                    leaveQueue(client)
-                    leaveRooms(client)
-                    client.join(game._id)
-                    client.emit('game', game)
-
-                    // Update the opponents client
-                    const opponentId = game.player1._id === userId ? game.player2._id : game.player1._id;
-                    leaveQueue(clients[opponentId]);
-                    leaveRooms(clients[opponentId])
-                    clients[opponentId].join(game._id)
-                    clients[opponentId].emit('game', game)
-                })
-                .catch(err => console.error(err))
+            startGame(client, client.userId, queue.pop())
         })
 
         client.on('dequeue', () => {
             leaveQueue(client)
             delete clients[client.userId];
-            updatePlayerCount(io)
+        })
+
+        client.on('createChallenge', userId => {
+            const opponentClient = clients[userId];
+            if (!opponentClient)
+                return;
+
+            leaveQueue(client)
+
+            db.User.findById(userId)
+                .then(user => {
+                    opponentClient.emit('newChallenge', user)
+                })
+        })
+
+        client.on('acceptChallenge', userId => {
+            const opponentClient = clients[userId];
+            if (!opponentClient)
+                return;
+
+            leaveQueue(client)
+            leaveQueue(opponentClient)
+
+            // TODO: they might not be on the right screen to start a game
+            startGame(client, client.userId, opponentClient.userId)
         })
 
         client.on('disconnect', () => {
@@ -88,7 +70,6 @@ function socket(server) {
         client.on('joinGame', data => {
             client.userId = data.userId;
             clients[client.userId] = client;
-            updatePlayerCount(io)
 
             let game;
             db.Game.findById(data.gameId)
@@ -217,6 +198,52 @@ function updatePlayerCount(io) {
     io.emit('playerCount', playerCount)
 }
 
+function startGame(client, userId1, userId2) {
+    let game;
+
+    const random = Math.random() >= 0.5;
+    db.Game.create({
+        player1: random ? userId1 : userId2,
+        player2: random ? userId2 : userId1,
+        time: {
+            player1: 5 * 60 * 1000,
+            player2: 5 * 60 * 1000,
+            lastMove: new Date().getTime(),
+        }
+    })
+        .then(localGame => {
+            game = localGame;
+            return db.User.findById(localGame.player1);
+        })
+        .then(user => {
+            user.lastGame = game._id;
+            db.User.save(user);
+
+            game.player1 = user;
+            return db.User.findById(game.player2);
+        })
+        .then(user => {
+            user.lastGame = game._id;
+            db.User.save(user);
+
+            game.player2 = user;
+
+            // Update current client
+            leaveQueue(client)
+            leaveRooms(client)
+            client.join(game._id)
+            client.emit('game', game)
+
+            // Update the opponents client
+            const opponentId = game.player1._id === userId1 ? game.player2._id : game.player1._id;
+            leaveQueue(clients[opponentId]);
+            leaveRooms(clients[opponentId])
+            clients[opponentId].join(game._id)
+            clients[opponentId].emit('game', game)
+        })
+        .catch(err => console.error(err))
+}
+
 function finishGame(io, game) {
     // Send game without user data because it will already be loaded
     const gamePartial = { ...game };
@@ -235,8 +262,6 @@ function finishGame(io, game) {
     leaveRooms(clients[game.player2])
     delete clients[game.player1];
     delete clients[game.player2];
-
-    updatePlayerCount(io)
 
     // const winner = game.winner;
     // const loser = winner === 'player1' ? 'player2' : 'player1';

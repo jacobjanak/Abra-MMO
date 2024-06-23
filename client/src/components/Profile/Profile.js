@@ -27,6 +27,10 @@ class Profile extends Component {
             })
     }
 
+    challenge = () => {
+        API.createChallenge(this.state._id)
+    }
+
     render() {
         const { isInitialized, username, wins, losses, rating, createdAt } = this.state;
 
@@ -46,6 +50,11 @@ class Profile extends Component {
                 <div className="profile-card">
                     <section>
                         <h2 className="username">{username}</h2>
+                    </section>
+                    <section>
+                        <button onClick={this.challenge}>
+                            Challenge
+                        </button>
                     </section>
                     <section className="rating-container">
                         <img className="trophy" src="../trophy.svg" alt="trophy" />

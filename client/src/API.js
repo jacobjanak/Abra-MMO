@@ -3,14 +3,21 @@ import openSocket from 'socket.io-client';
 import AuthService from './components/AuthService';
 
 const Auth = new AuthService();
+const userId = Auth.user().id;
 
-function socket() {
-    if (socket.instance)
-        return socket.instance;
+const socket = openSocket(window.location.origin, {
+    query: { userId }
+});
 
-    socket.instance = openSocket(window.location.origin);
-    return socket.instance;
-}
+socket.on('newChallenge', challenger => {
+    if (confirm('New challenge from ' + challenger.username)) {
+        console.log(challenger)
+        API.acceptChallenge(challenger._id)
+        window.location.href = '/online';
+    } else {
+        console.log('declined')
+    }
+})
 
 const API = {
     url: process.env.NODE_ENV === 'production' && window.cordova ? 'https://abra-2-db50d4975475.herokuapp.com' : '',
@@ -27,35 +34,36 @@ const API = {
         return axios.post(API.url + '/api/signup', user);
     },
     queue: cb => {
-        const userId = Auth.user().id;
-        socket().emit('queue', userId)
+        socket.emit('queue')
         API.openSocket(cb)
     },
     dequeue: () => {
-        socket().emit('dequeue')
+        socket.emit('dequeue')
     },
     joinGame: (gameId, cb) => {
         API.openSocket(cb)
         const userId = Auth.user().id;
-        socket().emit('joinGame', {
+        socket.emit('joinGame', {
             gameId,
             userId
         })
     },
     openSocket: cb => {
-        socket().on('game', game => cb(game, null))
-        socket().on('newMove', move => cb(null, move))
+        socket.on('game', game => cb(game, null))
+        socket.on('newMove', move => cb(null, move))
     },
     getPlayerCount: cb => {
-        socket().emit('getPlayerCount')
-        socket().on('playerCount', playerCount => cb(playerCount))
+        socket.emit('getPlayerCount')
+        socket.on('playerCount', playerCount => cb(playerCount))
     },
-    move: move => socket().emit('move', move),
-    reportTimeout: () => socket().emit('reportTimeout'),
-    reportAbort: () => socket().emit('reportAbort'),
+    move: move => socket.emit('move', move),
+    reportTimeout: () => socket.emit('reportTimeout'),
+    reportAbort: () => socket.emit('reportAbort'),
     getRankings: page => {
         return axios.get(API.url + '/users/rankings/' + page);
     },
+    createChallenge: userId => socket.emit('createChallenge', userId),
+    acceptChallenge: userId => socket.emit('acceptChallenge', userId),
 };
 
 export default API;

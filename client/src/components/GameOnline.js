@@ -153,7 +153,7 @@ class Game extends Component {
                     <h1 className="display-4">Play now</h1>
                     {(typeof playerCount === 'number') && (
                         <p className="lead mb-0">
-                            {playerCount} players currently playing
+                            {playerCount} players currently online
                         </p>
                     )}
                     <button

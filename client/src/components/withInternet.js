@@ -4,7 +4,7 @@ import NoInternet from './NoInternet';
 function withInternet(InternetComponent, props) {
     return class InternetWrapped extends Component {
         render() {
-            if (window.navigator.onLine) {
+            if (window.navigator.onLine || true) {
                 return <InternetComponent {...props} />;
             } else {
                 return <NoInternet />;

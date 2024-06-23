@@ -21,6 +21,7 @@ class Profile extends Component {
                 const user = res.data;
                 this.setState({ ...user })
             })
+            .catch(() => { /* user not found */ })
             .finally(() => {
                 this.setState({ isInitialized: true })
             })

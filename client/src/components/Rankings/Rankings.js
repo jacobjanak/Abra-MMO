@@ -31,18 +31,19 @@ class Rankings extends Component {
 
         return (
             <div>
-                <div>
-                    <h2>Search User</h2>
-                    <input onChange={this.searchChange} />
-                    <button onClick={this.handleSearch}>
+                <h4 id="search-header">Search User</h4>
+                <div id="search-container" className="input-group">
+                    <input type="text" className="form-control" onChange={this.searchChange} />
+                    <button className="btn btn-primary" type="button" onClick={this.handleSearch}>
                         Search
                     </button>
                 </div>
-                <h2 id="rankings-header">
+
+                <h4 id="rankings-header">
                     <img className="trophy" src="../trophy.svg" alt="trophy" />
                     Leaderboard
                     <img className="trophy" src="../trophy.svg" alt="trophy" />
-                </h2>
+                </h4>
                 <div id="table-container">
                     <table>
                         <thead>

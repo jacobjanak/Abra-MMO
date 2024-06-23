@@ -12,6 +12,17 @@
     margin: 0 8px;
 }
 
+#search-header {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#search-container {
+    width: 90%;
+    max-width: 300px;
+    margin: 0 auto 60px;
+}
+
 #table-container {
     display: flex;
     justify-content: center;

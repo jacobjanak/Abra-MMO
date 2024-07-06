@@ -53,7 +53,7 @@ router.post('/api/signup', (req, res) => {
             field: "username",
             message: "Username cannot be more than 20 characters long"
         })
-    } else if (email.length > 50) {
+    } else if (email && email.length > 50) {
         res.status(400).send({
             field: "email",
             message: "Email cannot be more than 50 characters long"

@@ -8,6 +8,11 @@ class Signup extends Component {
     constructor(props) {
         super(props);
         this.Auth = new AuthService();
+
+        this.state = {
+            errorField: null,
+            errorMessage: null,
+        };
     }
 
     UNSAFE_componentWillMount() {
@@ -27,7 +32,14 @@ class Signup extends Component {
             .then(() => {
                 window.location.href = '/login';
             })
-            .catch(err => alert(err));
+            .catch(err => {
+                const { field, message } = err.response.data;
+
+                this.setState({
+                    errorField: field,
+                    errorMessage: message,
+                })
+            });
     };
 
     handleChange = event => {
@@ -39,6 +51,8 @@ class Signup extends Component {
     };
 
     render() {
+        const { errorField, errorMessage } = this.state;
+
         return (
             <div id="signup-container" className="container">
                 <h1 className="mb-3">Sign up</h1>
@@ -54,7 +68,13 @@ class Signup extends Component {
                                id="email"
                                maxLength="50"
                                required
-                               onChange={this.handleChange}/>
+                               onChange={this.handleChange}
+                        />
+                        { errorField === 'email' && (
+                            <small className="text-danger">
+                                { errorMessage }
+                            </small>
+                        )}
                     </div>
                     <div className="form-group">
                         <label className="mb-0" htmlFor="username">
@@ -67,7 +87,13 @@ class Signup extends Component {
                                id="username"
                                maxLength="12"
                                required
-                               onChange={this.handleChange}/>
+                               onChange={this.handleChange}
+                        />
+                        { errorField === 'username' && (
+                            <small className="text-danger">
+                                { errorMessage }
+                            </small>
+                        )}
                     </div>
                     <div className="form-group">
                         <label className="mb-0" htmlFor="password">
@@ -79,7 +105,13 @@ class Signup extends Component {
                                type="password"
                                id="password"
                                required
-                               onChange={this.handleChange}/>
+                               onChange={this.handleChange}
+                        />
+                        { errorField === 'password' && (
+                            <small className="text-danger">
+                                { errorMessage }
+                            </small>
+                        )}
                     </div>
                     <div className="mt-4">
                         <button type="submit" className="btn btn-primary">Create account</button>

@@ -41,14 +41,38 @@ router.post('/api/login', (req, res) => {
 })
 
 router.post('/api/signup', (req, res) => {
-    if (req.body.username.length < 3) {
-        res.status(400).send({message: "Username cannot be less than 3 characters long"})
-    } else if (req.body.username.length > 20) {
-        res.status(400).send({message: "Username cannot be more than 20 characters long"})
-    } else if (req.body.password.length < 1) {
-        res.status(400).send({message: "Password cannot be less than 1 characters long"})
-    } else if (req.body.password.length > 50) {
-        res.status(400).send({message: "Password cannot be more than 50 characters long"})
+    const { username, email, password } = req.body;
+
+    if (username.length < 3) {
+        res.status(400).send({
+            field: "username",
+            message: "Username cannot be less than 3 characters long"
+        })
+    } else if (username.length > 20) {
+        res.status(400).send({
+            field: "username",
+            message: "Username cannot be more than 20 characters long"
+        })
+    } else if (email.length > 50) {
+        res.status(400).send({
+            field: "email",
+            message: "Email cannot be more than 50 characters long"
+        })
+    } else if (password.length < 6) {
+        res.status(400).send({
+            field: "password",
+            message: "Password cannot be less than 6 characters long"
+        })
+    } else if (password.length > 50) {
+        res.status(400).send({
+            field: "password",
+            message: "Password cannot be more than 50 characters long"
+        })
+    } else if (!/\d/.test(password) || !/[a-zA-Z]/.test(password) || !/[^a-zA-Z0-9]/.test(password)) {
+        res.status(400).send({
+            field: "password",
+            message: "Password must contain at least 1 letter, number, and symbol"
+        })
     } else {
         db.User.create(req.body)
             .then(user => res.json(user))

@@ -131,7 +131,35 @@ const abraLogic = {
         return availableMoveMap
     },
 
-    computerMove: (moves) => {
+    computerMove: moves => {
+        let { bestMoves, score } = abraLogic.findBestMove(moves);
+
+        // Instant win
+        if (score === 4)
+            return bestMoves[0];
+
+        // Random shuffle
+        // TODO: this can be improved
+        bestMoves.sort(() => 0.5 - Math.random());
+        bestMoves = bestMoves.slice(0, 5);
+
+        const badMoves = [];
+        for (const move of bestMoves) {
+            const opponentMove = abraLogic.findBestMove([...moves, move]);
+
+            if (opponentMove.score !== 4)
+                return move;
+
+            badMoves.push(move);
+        }
+
+        // No good moves were found
+        bestMoves = abraLogic.findBestMove(moves, badMoves).bestMoves;
+
+        return bestMoves[Math.floor(Math.random() * bestMoves.length)];
+    },
+
+    findBestMove: (moves, movesToSkip = []) => {
         const tiles = abraLogic.movesToTiles(moves);
         const availableMoveMap = abraLogic.getAvailableMoveMap(tiles);
         const computerPlayer = moves.length % 2 ? 'player2' : 'player1';
@@ -139,6 +167,9 @@ const abraLogic = {
         let bestMoves = [];
         let bestScore = 0;
         for (const move in availableMoveMap) {
+            if (movesToSkip.includes(move))
+                continue;
+
             const [x, y] = abraLogic.coords(move);
 
             for (const direction of ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']) {
@@ -193,8 +224,12 @@ const abraLogic = {
                     score++;
 
                     // look for instant wins
-                    if (!isDefensive && score === 4)
-                        return move;
+                    if (!isDefensive && score === 4) {
+                        return {
+                            bestMoves: [move],
+                            score,
+                        };
+                    }
 
                     // add bias to defensive moves
                     const adjustedScore = score + isDefensive * 0.1;
@@ -211,9 +246,11 @@ const abraLogic = {
             }
         }
 
-        const randomIndex = Math.floor(Math.random() * bestMoves.length);
-        return bestMoves[randomIndex];
-    }
+        return {
+            bestMoves,
+            score: bestScore,
+        };
+    },
 };
 
 module.exports = abraLogic;

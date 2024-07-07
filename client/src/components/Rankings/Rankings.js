@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+import Loading from '../Loading';
 import API from '../../API';
 import withInternet from '../withInternet';
 import './Rankings.css';
@@ -40,7 +41,9 @@ class Rankings extends Component {
                     </button>
                 </div>
 
-                { !!users.length && (
+                { !users.length ? (
+                    <Loading></Loading>
+                ) : (
                     <div>
                         <h4 id="rankings-header">
                             <img className="trophy" src="../trophy.svg" alt="trophy" />

@@ -32,7 +32,7 @@ class Profile extends Component {
         const { isInitialized, username, wins, losses, rating, createdAt } = this.state;
 
         if (!isInitialized)
-            return <Loading></Loading>;
+            return <Loading fullPage={true}></Loading>;
 
         if (!username) {
             return (

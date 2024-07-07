@@ -59,6 +59,20 @@ class Game extends Component {
     }
 
     makeMove = move => {
+        this.setState(state => {
+            const now = new Date().getTime();
+            const player = state.userIsPlayer1 ? 'player1' : 'player2';
+
+            return {
+                moves: [...state.moves, move],
+                time: {
+                    ...state.time,
+                    lastMove: now,
+                    [player]: state.time[player] - (now - state.time.lastMove),
+                }
+            };
+        })
+
         // server checks if the move is legal
         API.move(move)
     };
@@ -85,10 +99,15 @@ class Game extends Component {
         }
 
         if (newMove) {
-            this.setState(state => ({
-                moves: [...state.moves, newMove.move],
-                time: newMove.time
-            }))
+            // For the user's moves, we just push them in rather than waiting for the server
+            if (this.state.moves.includes(newMove.move)) {
+                this.setState({ time: newMove.time })
+            } else {
+                this.setState(state => ({
+                    moves: [...state.moves, newMove.move],
+                    time: newMove.time
+                }))
+            }
         }
     };
 

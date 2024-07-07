@@ -13,10 +13,30 @@ class Home extends Component {
             <div style={style}>
                 <h1 id="logo-subtext" className="display-6">Diagazontal, a Strategy Game</h1>
 
-                <Link to={"/play"} id="play-now" className="btn btn-dark btn-lg">
-                    Play now
-                    <img id="play-icon" src="../play.svg" alt="Play" />
-                </Link>
+                <div id="play-button-container">
+                    <Link to={"/play"} id="play-now" className="btn btn-dark btn-lg">
+                        Play now
+                        <img id="play-icon" src="../play.svg" alt="Play"/>
+                    </Link>
+                </div>
+
+                <div id="social-icon-container">
+                    <a href="https://www.reddit.com/r/Diagazontal/" target="_blank">
+                        <img
+                            className="social-icon"
+                            src="../reddit-logo.png"
+                            alt="Reddit"
+                        />
+                    </a>
+
+                    <a href="https://discord.gg/fXSS9Xe4" target="_blank">
+                        <img
+                            className="social-icon"
+                            src="../discord-logo.png"
+                            alt="Reddit"
+                        />
+                    </a>
+                </div>
             </div>
         );
     }

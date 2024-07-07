@@ -60,6 +60,9 @@ class Game extends Component {
 
     makeMove = move => {
         this.setState(state => {
+            if (state.moves.includes(move))
+                return;
+
             const now = new Date().getTime();
             const player = state.userIsPlayer1 ? 'player1' : 'player2';
 

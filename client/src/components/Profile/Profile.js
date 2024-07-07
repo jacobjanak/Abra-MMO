@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Loading from '../Loading';
 import API from '../../API';
 import utils from '../../utils';
 import withInternet from '../withInternet';
@@ -31,7 +32,7 @@ class Profile extends Component {
         const { isInitialized, username, wins, losses, rating, createdAt } = this.state;
 
         if (!isInitialized)
-            return null;
+            return <Loading></Loading>;
 
         if (!username) {
             return (

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 import API from '../../API';
 import withInternet from '../withInternet';
 import './Rankings.css';
@@ -64,9 +65,9 @@ class Rankings extends Component {
                                     <tr key={user._id}>
                                         <td>{i + 1}.</td>
                                         <td className="username">
-                                            <a href={"/profile/" + user.username}>
+                                            <NavLink to={"/profile/" + user.username}>
                                                 {user.username}
-                                            </a>
+                                            </NavLink>
                                         </td>
                                         <td>{user.rating}</td>
                                         <td>{user.wins}</td>

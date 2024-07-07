@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 import Timer from '../Timer';
 import './Scoreboard.css';
 
@@ -25,9 +26,12 @@ class Scoreboard extends Component {
                     <span id="player1-rating-left" className="rating">
                         ({player1.rating})
                     </span>
-                    <a className="username" href={"/profile/" + player1.username}>
+                    <NavLink
+                        className="username"
+                        to={"/profile/" + player1.username}
+                    >
                         {player1.username}
-                    </a>
+                    </NavLink>
                     <span id="player1-rating-right" className="rating">
                         ({player1.rating})
                     </span>
@@ -64,9 +68,12 @@ class Scoreboard extends Component {
                     )}
                 </h2>
                 <h5 className="user-info">
-                    <a className="username" href={"/profile/" + player2.username}>
+                    <NavLink
+                        className="username"
+                        to={"/profile/" + player2.username}
+                    >
                         {player2.username}
-                    </a>
+                    </NavLink>
                     <span className="rating">
                         ({player2.rating})
                     </span>

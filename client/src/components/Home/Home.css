@@ -17,6 +17,18 @@
     transform: translateY(-2px);
 }
 
+#privacy-policy-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#privacy-policy {
+    font-size: 12px;
+    color: dimgrey;
+}
+
 #social-icon-container {
     position: fixed;
     bottom: 20px;
@@ -33,5 +45,11 @@
     #logo-subtext {
         font-size: 24px;
         letter-spacing: 2px;
+    }
+
+    #privacy-policy-container {
+        bottom: 38px;
+        left: 20px;
+        transform: none;
     }
 }

@@ -20,6 +20,12 @@ class Home extends Component {
                     </Link>
                 </div>
 
+                <div id="privacy-policy-container">
+                    <Link to={"/privacy-policy"} id="privacy-policy">
+                        Privacy
+                    </Link>
+                </div>
+
                 <div id="social-icon-container">
                     <a href="https://www.reddit.com/r/Diagazontal/" target="_blank">
                         <img

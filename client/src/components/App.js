@@ -11,6 +11,7 @@ import GameOnline from './GameOnline';
 import GameComputer from './GameComputer';
 import Rankings from './Rankings';
 import Privacy from './Privacy';
+import DeleteAccount from './DeleteAccount';
 
 class App extends Component {
     render() {
@@ -26,6 +27,7 @@ class App extends Component {
                         <Route exact path="/online" element={<GameOnline/>}/>
                         <Route exact path="/users" element={<Rankings/>}/>
                         <Route exact path="/privacy-policy" element={<Privacy/>}/>
+                        <Route exact path="/delete-account" element={<DeleteAccount/>}/>
                         <Route path="/*" element={<Home/>}/>
                     </Routes>
                 </div>

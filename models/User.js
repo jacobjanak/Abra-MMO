@@ -3,7 +3,7 @@ const generateId = require('./generateId');
 
 
 module.exports = db => {
-    return {
+    const User = {
         create: data => {
             return new Promise((resolve, reject) => {
                 const user = {
@@ -54,7 +54,7 @@ module.exports = db => {
                         }
 
                         const user = doc.data();
-                        delete user.password;
+                        User.clean(user);
 
                         resolve(user)
                     })
@@ -73,7 +73,7 @@ module.exports = db => {
                         const user = snapshot.docs[0].data();
 
                         if (!unsafe)
-                            delete user.password;
+                            User.clean(user);
 
                         resolve(user)
                     })
@@ -88,7 +88,7 @@ module.exports = db => {
                     .then(snapshot => {
                         snapshot.forEach(doc => {
                             const user = doc.data();
-                            delete user.password;
+                            User.clean(user);
                             results.push(user);
                         });
 
@@ -103,5 +103,12 @@ module.exports = db => {
         save: user => {
             db.collection('users').doc(user._id).set(user)
         },
+
+        clean: user => {
+            delete user.password;
+            delete user.email;
+        },
     };
+
+    return User;
 };

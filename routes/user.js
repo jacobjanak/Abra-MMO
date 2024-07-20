@@ -1,9 +1,15 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
-const {expressjwt: exjwt} = require('express-jwt');
+const { expressjwt: exjwt } = require('express-jwt');
+const { RegExpMatcher, englishDataset, englishRecommendedTransformers } = require('obscenity');
 const db = require('../models');
 
 const secret = process.env.NODE_ENV === 'production' ? process.env.SECRET : 'secret';
+
+const obscenityMatcher = new RegExpMatcher({
+    ...englishDataset.build(),
+    ...englishRecommendedTransformers,
+});
 
 const isAuthenticated = exjwt({
     secret: secret,
@@ -52,6 +58,11 @@ router.post('/api/signup', (req, res) => {
         res.status(400).send({
             field: "username",
             message: "Username cannot be more than 20 characters long"
+        })
+    } else if (obscenityMatcher.hasMatch(username)) {
+        res.status(400).send({
+            field: "username",
+            message: "Username contains profanity"
         })
     } else if (email && email.length > 50) {
         res.status(400).send({

@@ -139,8 +139,7 @@ const abraLogic = {
             return bestMoves[0];
 
         // Random shuffle
-        // TODO: this can be improved
-        bestMoves.sort(() => 0.5 - Math.random());
+        abraLogic.shuffle(bestMoves);
         bestMoves = bestMoves.slice(0, 5);
 
         const badMoves = [];
@@ -152,6 +151,11 @@ const abraLogic = {
 
             badMoves.push(move);
         }
+
+        // Often times the user creates a situation where they have 2+ winning options
+        // The computer can't possibly win, so we might as well just block 1 option
+        if (badMoves.length >= 2)
+            return bestMoves[0];
 
         // No good moves were found
         bestMoves = abraLogic.findBestMove(moves, badMoves).bestMoves;
@@ -250,6 +254,13 @@ const abraLogic = {
             bestMoves,
             score: bestScore,
         };
+    },
+
+    shuffle: arr => {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
     },
 };
 

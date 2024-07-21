@@ -50,10 +50,10 @@ const API = {
             socket().on('newMove', move => cb(null, move))
     },
     getPlayerCount: cb => {
-        socket().emit('getPlayerCount')
-
-        if (!socket().listeners('playerCount').length)
+        if (!socket().listeners('playerCount').length) {
+            socket().emit('getPlayerCount')
             socket().on('playerCount', cb)
+        }
     },
     move: move => socket().emit('move', move),
     reportTimeout: () => socket().emit('reportTimeout'),

@@ -73,16 +73,45 @@ body {
     transform: rotate(45deg);
 }
 
-#zoom-controls {
+#action-bar-container {
+    pointer-events: none;
     position: fixed;
-    bottom: 2%;
-    right: 2%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 80px;
+    padding: 0 40px 20px; /* TODO: small screen */
+}
+
+#action-bar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+#action-bar .center {
+    margin: auto;
+}
+
+#action-bar .right {
+    position: absolute;
+    right: 0;
+}
+
+#action-bar .center > * {
+    pointer-events: auto;
+}
+
+#action-bar .right > * {
+    pointer-events: auto;
 }
 
 .zoom-button {
     height: 50px;
     width: 50px;
     cursor: pointer;
+    transform: translateY(-3px);
 }
 
 .zoom-button:first-child {
@@ -95,7 +124,9 @@ body {
         margin-top: .5rem;
     }
 
-    .zoom-button {
-
+    #action-bar .center {
+        position: absolute;
+        margin: 0;
+        left: 0;
     }
 }

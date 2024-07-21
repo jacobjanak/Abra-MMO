@@ -48,7 +48,7 @@ const API = {
     },
     getPlayerCount: cb => {
         socket().emit('getPlayerCount')
-        socket().on('playerCount', playerCount => cb(playerCount))
+        socket().on('playerCount', cb)
     },
     move: move => socket().emit('move', move),
     reportTimeout: () => socket().emit('reportTimeout'),

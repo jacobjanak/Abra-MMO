@@ -4,17 +4,23 @@ import API from '../API';
 import Board from './Board';
 import Scoreboard from './Scoreboard';
 
+
+const originalState = {
+    queued: false,
+    player1: false,
+    player2: false,
+    userIsPlayer1: false,
+    moves: false,
+    time: null,
+    winner: false,
+    aborted: false,
+    playerCount: false,
+    boardKey: 1,
+    timerKey: -1,
+};
+
 class Game extends Component {
-    state = {
-        queued: false,
-        player1: false,
-        player2: false,
-        userIsPlayer1: false,
-        moves: false,
-        winner: false,
-        aborted: false,
-        playerCount: false
-    };
+    state = { ...originalState };
 
     interval;
 
@@ -25,9 +31,7 @@ class Game extends Component {
                 if (game) {
                     API.joinGame(game._id, this.socketCallback)
                 } else {
-                    API.getPlayerCount(playerCount => {
-                        this.setState({playerCount})
-                    })
+                    this.getPlayerCount()
                 }
             })
     }
@@ -39,19 +43,10 @@ class Game extends Component {
         }
     }
 
-    reloadGame = () => {
-        API.getGame(this.state._id)
-            .then(res => {
-                const game = res.data;
-                if (game) {
-                    this.setState({
-                        moves: game.moves,
-                        winner: game.winner,
-                        aborted: game.aborted,
-                        time: game.time
-                    })
-                }
-            })
+    getPlayerCount = () => {
+        API.getPlayerCount(playerCount => {
+            this.setState({ playerCount })
+        })
     }
 
     reportTimeout = () => {
@@ -83,7 +78,7 @@ class Game extends Component {
     queue = () => {
         if (!this.state.queued) {
             API.queue(this.socketCallback)
-            this.setState({queued: true})
+            this.setState({ queued: true })
         } else {
             // they want to leave the queue so we'll refresh the window
             window.location.reload()
@@ -114,8 +109,19 @@ class Game extends Component {
         }
     };
 
+    restart = () => {
+        originalState.boardKey++;
+        originalState.timerKey--;
+        originalState.playerCount = this.state.playerCount;
+
+        this.setState(originalState, () => {
+            this.getPlayerCount()
+            this.queue()
+        })
+    };
+
     render() {
-        const {user} = this.props;
+        const { user } = this.props;
 
         const {
             player1,
@@ -126,7 +132,9 @@ class Game extends Component {
             aborted,
             time,
             queued,
-            playerCount
+            playerCount,
+            boardKey,
+            timerKey,
         } = this.state;
 
         // game in progress
@@ -142,24 +150,26 @@ class Game extends Component {
             return (
                 <div>
                     <Scoreboard
+                        key={timerKey}
                         player1={player1}
                         player2={player2}
                         moves={moves}
                         time={time}
                         winner={winner}
                         aborted={aborted}
-                        reloadGame={this.reloadGame}
                         reportTimeout={this.reportTimeout}
                     />
 
                     {moves && (
                         <Board
+                            key={boardKey}
                             moves={moves}
                             winner={winner}
                             aborted={aborted}
                             userIsActive={userIsActive}
                             userIsPlayer1={userIsPlayer1}
                             makeMove={this.makeMove}
+                            restart={this.restart}
                         />
                     )}
                 </div>

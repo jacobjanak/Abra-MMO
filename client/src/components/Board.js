@@ -3,20 +3,17 @@ import abraLogic from 'abra-logic';
 import Tile from './Tile';
 
 class Board extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            tiles: {},
-            tileSize: 50,
-            lastMove: -1,
-            dimensions: {
-                top: 0,
-                bottom: 0,
-                right: 0,
-                left: 0,
-            },
-        };
-    }
+    state = {
+        tiles: {},
+        tileSize: 50,
+        lastMove: -1,
+        dimensions: {
+            top: 0,
+            bottom: 0,
+            right: 0,
+            left: 0,
+        },
+    };
 
     componentDidMount() {
         this.updateSelf(this.props.moves)
@@ -127,7 +124,7 @@ class Board extends Component {
 
     render() {
         const { tiles, tileSize, lastMove, dimensions: { top, left }} = this.state;
-        const { winner, userIsActive, userIsPlayer1, aborted } = this.props;
+        const { winner, userIsActive, userIsPlayer1, aborted, restart } = this.props;
 
         const finished = winner || aborted;
 
@@ -158,9 +155,21 @@ class Board extends Component {
                     </div>
                 </div>
 
-                <div id="zoom-controls">
-                    <img className="zoom-button" src="../zoom-out.svg" alt="Zoom in" onClick={this.zoomOut}  />
-                    <img className="zoom-button" src="../zoom-in.svg" alt="Zoom out" onClick={this.zoomIn} />
+                <div id="action-bar-container">
+                    <div id="action-bar">
+                        { winner && (
+                            <div className="center">
+                                <button className="btn btn-lg btn-dark" onClick={restart}>
+                                    New Game
+                                </button>
+                            </div>
+                        )}
+
+                        <div className="right">
+                            <img className="zoom-button" src="../zoom-out.svg" alt="Zoom in" onClick={this.zoomOut} />
+                            <img className="zoom-button" src="../zoom-in.svg" alt="Zoom out" onClick={this.zoomIn} />
+                        </div>
+                    </div>
                 </div>
             </div>
         );

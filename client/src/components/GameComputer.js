@@ -3,16 +3,16 @@ import Board from './Board';
 import Turn from './Turn/';
 import abraLogic from "abra-logic";
 
+const originalState = {
+    userIsPlayer1: true,
+    userIsActive: true,
+    winner: false,
+    moves: ['0,0', '0,1'],
+    restartKey: 1,
+};
+
 class Game extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            userIsPlayer1: true,
-            userIsActive: true,
-            winner: false,
-            moves: ['0,0', '0,1']
-        };
-    }
+    state = { ...originalState };
 
     componentWillUnmount() {
         this.setState({
@@ -50,12 +50,18 @@ class Game extends Component {
         }
     };
 
+    restart = () => {
+        originalState.restartKey++;
+        this.setState(originalState);
+    };
+
     render() {
         const {
             userIsPlayer1,
             userIsActive,
             moves,
             winner,
+            restartKey,
         } = this.state;
 
         return (
@@ -65,7 +71,9 @@ class Game extends Component {
                     userIsActive={userIsActive}
                     winner={winner}
                 />
+
                 <Board
+                    key={restartKey}
                     computer={true}
                     moves={moves}
                     winner={winner}
@@ -73,6 +81,7 @@ class Game extends Component {
                     userIsPlayer1={userIsPlayer1}
                     declareWinner={this.declareWinner}
                     makeMove={this.makeMove}
+                    restart={this.restart}
                 />
             </div>
         );

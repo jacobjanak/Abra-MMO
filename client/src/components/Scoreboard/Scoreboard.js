@@ -12,7 +12,6 @@ class Scoreboard extends Component {
             time,
             winner,
             aborted,
-            reloadGame,
             reportTimeout
         } = this.props;
 
@@ -45,7 +44,6 @@ class Scoreboard extends Component {
                             timeLeft={time.player1}
                             active={activePlayer === 'player1'}
                             lastMove={time.lastMove}
-                            reloadGame={reloadGame}
                             reportTimeout={reportTimeout}
                         />
                     )}
@@ -62,7 +60,6 @@ class Scoreboard extends Component {
                             timeLeft={time.player2}
                             active={activePlayer === 'player2'}
                             lastMove={time.lastMove}
-                            reloadGame={reloadGame}
                             reportTimeout={reportTimeout}
                         />
                     )}

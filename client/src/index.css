@@ -80,7 +80,7 @@ body {
     right: 0;
     bottom: 0;
     height: 80px;
-    padding: 0 40px 20px; /* TODO: small screen */
+    padding: 0 40px 20px;
 }
 
 #action-bar {
@@ -122,6 +122,11 @@ body {
     .nav-item > .btn {
         width: 100%;
         margin-top: .5rem;
+    }
+
+    #action-bar-container {
+        height: 60px;
+        padding: 0 20px 10px;
     }
 
     #action-bar .center {

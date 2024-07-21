@@ -205,7 +205,7 @@ function leaveQueue(client) {
 }
 
 function leaveRooms(client) {
-    for (const room in client.rooms) {
+    for (const room of client.rooms) {
         if (client.id !== room) {
             client.leave(room)
         }
@@ -233,13 +233,6 @@ function finishGame(io, game) {
     // Close socket connection
     leaveRooms(clients[game.player1])
     leaveRooms(clients[game.player2])
-    delete clients[game.player1];
-    delete clients[game.player2];
-
-    updatePlayerCount(io)
-
-    // const winner = game.winner;
-    // const loser = winner === 'player1' ? 'player2' : 'player1';
 
     let winner, loser;
     db.User.findById(game[game.winner === 'player1' ? 'player2' : 'player1'])

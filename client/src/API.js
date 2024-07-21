@@ -43,12 +43,17 @@ const API = {
         })
     },
     openSocket: cb => {
-        socket().on('game', game => cb(game, null))
-        socket().on('newMove', move => cb(null, move))
+        if (!socket().listeners('game').length)
+            socket().on('game', game => cb(game, null))
+
+        if (!socket().listeners('newMove').length)
+            socket().on('newMove', move => cb(null, move))
     },
     getPlayerCount: cb => {
         socket().emit('getPlayerCount')
-        socket().on('playerCount', cb)
+
+        if (!socket().listeners('playerCount').length)
+            socket().on('playerCount', cb)
     },
     move: move => socket().emit('move', move),
     reportTimeout: () => socket().emit('reportTimeout'),

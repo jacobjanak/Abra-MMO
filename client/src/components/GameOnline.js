@@ -103,7 +103,7 @@ class Game extends Component {
             } else {
                 this.setState(state => ({
                     moves: [...state.moves, newMove.move],
-                    time: newMove.time
+                    time: newMove.time,
                 }))
             }
         }
@@ -112,11 +112,10 @@ class Game extends Component {
     restart = () => {
         originalState.boardKey++;
         originalState.timerKey--;
-        originalState.playerCount = this.state.playerCount;
 
         this.setState(originalState, () => {
-            this.getPlayerCount()
             this.queue()
+            this.getPlayerCount()
         })
     };
 

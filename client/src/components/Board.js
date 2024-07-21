@@ -5,7 +5,7 @@ import Tile from './Tile';
 class Board extends Component {
     state = {
         tiles: {},
-        tileSize: 50,
+        tileSize: typeof window === 'object' && window.innerWidth > 768 ? 50 : 40,
         lastMove: -1,
         dimensions: {
             top: 0,
@@ -13,7 +13,7 @@ class Board extends Component {
             right: 0,
             left: 0,
         },
-    };
+    }
 
     componentDidMount() {
         this.updateSelf(this.props.moves)

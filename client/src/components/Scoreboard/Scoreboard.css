@@ -1,7 +1,7 @@
 #scoreboard {
     z-index: 100;
     position: absolute;
-    top: 56px;
+    top: 62px;
     left: 0;
     right: 0;
     display: flex;
@@ -9,12 +9,20 @@
     text-align: center;
 }
 
+#scoreboard * {
+    margin-bottom: 0;
+}
+
 .user-info {
     flex: 1;
 }
 
+.timer,
+.vs {
+    font-family: Menlo, 'Courier New', monospace;
+}
+
 .timer {
-    width: 90px;
     padding: 4px 10px;
 }
 
@@ -55,9 +63,20 @@
 
 @media screen and (max-width: 900px) {
     .user-info {
+        display: flex;
+        flex-direction: column;
+        margin: 0 8px;
         padding: 0 !important;
         text-align: center !important;
-        font-size: 0.8em;
+    }
+
+    .username {
+        font-size: 11px;
+        margin-bottom: 2px !important;
+    }
+
+    .rating {
+        font-size: 11px;
     }
 
     .user-info .rating,
@@ -69,13 +88,12 @@
         display: none;
     }
 
-    .timer,
     .vs {
-        font-size: 1.3em;
+        display: none;
     }
 
     .timer {
-        width: 60px;
+        font-size: 18px;
         padding: 4px 6px;
     }
 }

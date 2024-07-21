@@ -21,7 +21,7 @@ class Scoreboard extends Component {
 
         return (
             <div id="scoreboard">
-                <h5 className="user-info">
+                <h6 className="user-info">
                     <span id="player1-rating-left" className="rating">
                         ({player1.rating})
                     </span>
@@ -34,8 +34,8 @@ class Scoreboard extends Component {
                     <span id="player1-rating-right" className="rating">
                         ({player1.rating})
                     </span>
-                </h5>
-                <h2
+                </h6>
+                <h4
                     id={activePlayer === 'player1' ? 'active-timer' : ''}
                     className="timer"
                 >
@@ -47,11 +47,11 @@ class Scoreboard extends Component {
                             reportTimeout={reportTimeout}
                         />
                     )}
-                </h2>
-                <h2 className="vs">
+                </h4>
+                <h4 className="vs">
                     vs
-                </h2>
-                <h2
+                </h4>
+                <h4
                     id={activePlayer === 'player2' ? 'active-timer' : ''}
                     className="timer"
                 >
@@ -63,8 +63,8 @@ class Scoreboard extends Component {
                             reportTimeout={reportTimeout}
                         />
                     )}
-                </h2>
-                <h5 className="user-info">
+                </h4>
+                <h6 className="user-info">
                     <NavLink
                         className="username"
                         to={"/profile/" + player2.username}
@@ -74,7 +74,7 @@ class Scoreboard extends Component {
                     <span className="rating">
                         ({player2.rating})
                     </span>
-                </h5>
+                </h6>
             </div>
         );
     }

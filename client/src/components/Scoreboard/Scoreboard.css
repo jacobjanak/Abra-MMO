@@ -19,7 +19,8 @@
 
 .timer,
 .vs {
-    font-family: Menlo, 'Courier New', monospace;
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-weight: 500;
 }
 
 .timer {
